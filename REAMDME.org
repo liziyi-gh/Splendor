@@ -68,6 +68,39 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 *** API ID = 4: GAME_START
 所有玩家准备就绪之后由服务器广播给所有玩家，消息体包含全局游戏信息
 
+*** API ID = 5: NEW_TURN
+新的一个回合，由服务器发给所有玩家，指定该回合进行操作的玩家
+
+*** API ID = 6: PLAYER_OPERATION
+表示玩家进行的操作，经服务器检验有效后向所有客户端广播该操作，
+
+| API ID | 玩家编号   | 消息长度(单位为 bytes) | 保留 | 消息体 |
+|--------+------------+------------------------+------+--------|
+|      6 | 运行时计算 | 运行时计算             |    0 | string |
+如
+#+begin_src json
+  {
+    "player_id": 1,
+    "operation_type": "get_chips",
+    "operation_info": [
+      {
+      "chips_type": "sapphire",
+      "chips_number": 1
+      },
+      {
+      "chips_type": "ruby",
+      "chips_number": 1
+      },
+      {
+      "chips_type": "diamond",
+      "chips_number": 1
+      }
+    ]
+  }
+
+#+end_src
+即玩家选择拿走一个蓝宝石，一个红宝石，一个钻石
+
 
 
 
