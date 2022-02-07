@@ -124,3 +124,10 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 
 *** 空行
 类方法之间空一行，普通函数空两行
+
+** 运行
+
+*** 运行服务器
+#+begin_src sh
+python3 startServer.py
+#+end_src
