@@ -1,3 +1,6 @@
+import json
+from gem_type import Gemstone
+
 class Player:
     def __init__(self):
         self.player_id = 0
@@ -12,10 +15,13 @@ class Player:
         self.obsidian = 0
 
         self.chips = {
-            "golden": 0,
-            "ruby": 0,
-            "diamond": 0,
-            "sapphire": 0,
-            "emerald": 0,
-            "obsidian": 0,
+            Gemstone.GOLDEN: 0,
+            Gemstone.RUBY: 0,
+            Gemstone.DIAMOND: 0,
+            Gemstone.SAPPHIRE: 0,
+            Gemstone.EMERALD: 0,
+            Gemstone.OBSIDIAN: 0,
         }
+
+    def __str__(self):
+        return json.dumps(self.__dict__)
