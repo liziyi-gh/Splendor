@@ -1,10 +1,9 @@
 import socket
 import threading
-import struct
-import json
-from collections import namedtuple
-from constants import HEADER_LENGTH, HEADER_FORMAT
+
+from constants import HEADER_LENGTH
 from game_room import GameRoom
+from message_helper import unpackHeader, unpackBody
 
 
 class API_ID:
@@ -14,18 +13,6 @@ class API_ID:
     GAME_START = 4
     NEW_TURN = 5
     PLAYER_OPERATION = 6
-
-
-Header = namedtuple("Header", ["api_id", "player_id", "msg_len", "reserve"])
-
-def unpackHeader(header_data)-> Header:
-    api_id, player_id, msg_len, reserve = struct.unpack(HEADER_FORMAT,
-                                                        header_data.decode())
-    return Header(api_id, player_id, msg_len, reserve)
-
-
-def unpackBody(body_data):
-    return json.loads(body_data.decode())
 
 
 # TODO: better way to get GameRoom
@@ -57,6 +44,7 @@ def startListen():
         client_sock, addr = sock.accept()
         t = threading.Thread(target=handleClient, args=(client_sock, addr))
         t.start()
+
 
 def start():
     startListen()
