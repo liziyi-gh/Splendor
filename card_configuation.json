@@ -1,5 +1,6 @@
 [
   {
+  "number": 1,
   "level": 1,
   "points": 0,
   "gem_type": "ruby",
@@ -12,6 +13,7 @@
   }
 },
   {
+  "number": 2,
   "level": 1,
   "points": 0,
   "gem_type": "diamond",
