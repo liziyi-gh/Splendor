@@ -1,5 +1,5 @@
 import json
-from gem_type import Gemstone
+from gemstone import Gemstone
 
 class Card:
     @classmethod
