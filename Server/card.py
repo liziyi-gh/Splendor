@@ -6,10 +6,12 @@ class Card:
     def createFromJson(cls, j_str):
         j_dict = json.loads(j_str)
 
-        return cls(j_dict["level"], j_dict["points"], j_dict["gem_type"],
-                   j_dict["chips"])
+        return cls(j_dict["number"], j_dict["level"], j_dict["points"],
+                   j_dict["gem_type"], j_dict["chips"])
 
-    def __init__(self, level=0, points=0, gem_type=Gemstone.NIL, dict_chips=None):
+    def __init__(self, number=0, level=0, points=0,
+                 gem_type=Gemstone.NIL, dict_chips=None):
+        self.number = number
         self.level = level
         self.points = points
         self.gem_type = gem_type
