@@ -2,7 +2,8 @@ import json
 from gemstone import Gemstone
 
 class Player:
-    def __init__(self):
+    def __init__(self, sock):
+        self.sock = sock
         self.player_id = 0
         self.points = 0
         self.cards = []
@@ -24,4 +25,9 @@ class Player:
         }
 
     def __str__(self):
-        return json.dumps(self.__dict__)
+        tmp = self.__dict__
+        tmp.pop("sock")
+        return json.dumps(tmp)
+
+    def sendMsg(self, msg):
+        pass
