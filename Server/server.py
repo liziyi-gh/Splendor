@@ -21,16 +21,23 @@ current_game_room = GameRoom()
 
 def handleClient(client_sock:socket.socket, addr):
     # TODO: if client_sock has been connect
-    header_data = client_sock.recv(HEADER_LENGTH)
-    header = unpackHeader(header_data)
-    msg_body_len = header.msg_len - HEADER_LENGTH
-    if msg_body_len > 0:
-        body_data = client_sock.recv(msg_body_len)
-        body = unpackBody(body_data)
+    while True:
+        header_data = client_sock.recv(HEADER_LENGTH)
+        header = unpackHeader(header_data)
+        msg_body_len = header.msg_len - HEADER_LENGTH
+        if msg_body_len > 0:
+            body_data = client_sock.recv(msg_body_len)
+            body = unpackBody(body_data)
 
-    # TODO: refactor this
-    if header.api_id == API_ID.INIT:
-        current_game_room.addPlayer(client_sock)
+        # TODO: refactor this
+        if header.api_id == API_ID.INIT:
+            current_game_room.addPlayer(client_sock)
+
+        if header.api_id == API_ID.PLAYER_READY:
+            pass
+
+        if header.api_id == API_ID.PLAYER_OPERATION:
+            pass
 
 
 
