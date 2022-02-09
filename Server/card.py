@@ -1,5 +1,6 @@
 import json
-from gemstone import Gemstone
+
+from Server.gemstone import Gemstone
 
 class Card:
     @classmethod

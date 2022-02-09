@@ -1,9 +1,9 @@
 import socket
 import threading
 
-from constants import HEADER_LENGTH
-from game_room import GameRoom
-from message_helper import unpackHeader, unpackBody
+from Server.constants import HEADER_LENGTH
+from Server.game_room import GameRoom
+from Server.message_helper import unpackHeader, unpackBody
 
 
 class API_ID:

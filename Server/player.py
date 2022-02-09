@@ -1,5 +1,5 @@
 import json
-from gemstone import Gemstone
+from Server.gemstone import Gemstone
 
 class Player:
     def __init__(self, sock):
@@ -27,6 +27,7 @@ class Player:
     def __str__(self):
         tmp = self.__dict__
         tmp.pop("sock")
+
         return json.dumps(tmp)
 
     def sendMsg(self, msg):

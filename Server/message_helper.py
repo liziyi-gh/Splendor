@@ -1,8 +1,8 @@
 import json
 import struct
-
 from collections import namedtuple
-from constants import HEADER_FORMAT
+
+from Server.constants import HEADER_FORMAT
 
 Header = namedtuple("Header", ["api_id", "player_id", "msg_len", "reserve"])
 
