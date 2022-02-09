@@ -1,0 +1,17 @@
+C:\Users\lzy52\source\repos\Clinet\Clinet\bin\Debug\net6.0\Clinet.exe
+C:\Users\lzy52\source\repos\Clinet\Clinet\bin\Debug\net6.0\Clinet.deps.json
+C:\Users\lzy52\source\repos\Clinet\Clinet\bin\Debug\net6.0\Clinet.runtimeconfig.json
+C:\Users\lzy52\source\repos\Clinet\Clinet\bin\Debug\net6.0\Clinet.dll
+C:\Users\lzy52\source\repos\Clinet\Clinet\bin\Debug\net6.0\ref\Clinet.dll
+C:\Users\lzy52\source\repos\Clinet\Clinet\bin\Debug\net6.0\Clinet.pdb
+C:\Users\lzy52\source\repos\Clinet\Clinet\obj\Debug\net6.0\Clinet.csproj.AssemblyReference.cache
+C:\Users\lzy52\source\repos\Clinet\Clinet\obj\Debug\net6.0\Clinet.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lzy52\source\repos\Clinet\Clinet\obj\Debug\net6.0\Clinet.AssemblyInfoInputs.cache
+C:\Users\lzy52\source\repos\Clinet\Clinet\obj\Debug\net6.0\Clinet.AssemblyInfo.cs
+C:\Users\lzy52\source\repos\Clinet\Clinet\obj\Debug\net6.0\Clinet.csproj.CoreCompileInputs.cache
+C:\Users\lzy52\source\repos\Clinet\Clinet\obj\Debug\net6.0\Clinet.dll
+C:\Users\lzy52\source\repos\Clinet\Clinet\obj\Debug\net6.0\ref\Clinet.dll
+C:\Users\lzy52\source\repos\Clinet\Clinet\obj\Debug\net6.0\Clinet.pdb
+C:\Users\lzy52\source\repos\Clinet\Clinet\obj\Debug\net6.0\Clinet.genruntimeconfig.cache
+C:\Users\lzy52\source\repos\Clinet\Clinet\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\lzy52\source\repos\Clinet\Clinet\obj\Debug\net6.0\Clinet.csproj.CopyComplete

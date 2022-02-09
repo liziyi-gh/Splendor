@@ -1,0 +1,31 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "cd93d69a-69ad-4450-9c20-af5101b0039f": {
+      "ProjectGuid": "cd93d69a-69ad-4450-9c20-af5101b0039f",
+      "DisplayName": "Clinet",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "杂项文件",
+      "ColorIndex": -1
+    },
+    "eb8db980-5af6-4b28-94c6-028fdb9bee97": {
+      "ProjectGuid": "eb8db980-5af6-4b28-94c6-028fdb9bee97",
+      "DisplayName": "ServerSample",
+      "ColorIndex": 1
+    },
+    "7dffadf0-56e5-4e59-aaf9-5f10d34f4135": {
+      "ProjectGuid": "7dffadf0-56e5-4e59-aaf9-5f10d34f4135",
+      "DisplayName": "ServerSample",
+      "ColorIndex": 2
+    },
+    "5e0dc60b-cff1-48a3-a95d-13c2f4810657": {
+      "ProjectGuid": "5e0dc60b-cff1-48a3-a95d-13c2f4810657",
+      "DisplayName": "ServerSample",
+      "ColorIndex": 3
+    }
+  },
+  "NextColorIndex": 4
+}
