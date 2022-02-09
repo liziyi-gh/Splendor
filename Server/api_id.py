@@ -1,0 +1,7 @@
+class API_ID:
+    INIT = 1
+    INIT_RESP = 2
+    PLAYER_READY = 3
+    GAME_START = 4
+    NEW_TURN = 5
+    PLAYER_OPERATION = 6

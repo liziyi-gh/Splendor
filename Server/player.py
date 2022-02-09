@@ -1,10 +1,13 @@
 import json
+import socket
+
 from Server.gemstone import Gemstone
 
 class Player:
-    def __init__(self, sock):
+    def __init__(self, sock:socket.socket, player_id:int):
         self.sock = sock
-        self.player_id = 0
+        self.ready = False
+        self.player_id = player_id
         self.points = 0
         self.cards = []
         self.fold_cards = []
@@ -31,4 +34,7 @@ class Player:
         return json.dumps(tmp)
 
     def sendMsg(self, msg):
-        pass
+        self.sock.send(msg)
+
+    def setReady(self):
+        self.ready = True

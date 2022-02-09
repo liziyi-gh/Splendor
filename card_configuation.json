@@ -1,6 +1,7 @@
 [
   {
   "number": 1,
+  "card_type": "normal",
   "level": 1,
   "points": 0,
   "gem_type": "ruby",
@@ -14,15 +15,14 @@
 },
   {
   "number": 2,
-  "level": 1,
-  "points": 0,
-  "gem_type": "diamond",
+  "card_type": "noble",
+  "points": 3,
   "chips": {
     "ruby": 0,
-    "diamond": 1,
+    "diamond": 4,
     "sapphire":0,
-    "emerald": 2,
-    "obsidian": 0
+    "emerald": 0,
+    "obsidian": 4
   }
 }
 ]
