@@ -70,6 +70,13 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 
 *** API ID = 5: NEW_TURN
 新的一个回合，由服务器发给所有玩家，指定该回合进行操作的玩家
+#+begin_src json
+  {
+    "new_turn_player": 1
+  }
+
+#+end_src
+表示下一个进行操作的玩家为 player_id 为 1 的玩家
 
 *** API ID = 6: PLAYER_OPERATION
 表示玩家进行的操作，经服务器检验有效后向所有客户端广播该操作，

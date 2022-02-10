@@ -31,3 +31,7 @@ def packInitResp(new_player_id, allocated_player_id):
     header_data = packHeader(API_ID.INIT_RESP, new_player_id, len(body_data))
 
     return header_data + body_data
+
+def packPlayerOperationInvalid(player_id):
+    header_data = packHeader(API_ID.PLAYER_OPERATION_INVALID, player_id)
+    return header_data

@@ -2,8 +2,9 @@ import socket
 import threading
 
 from Server.gemstone import Gemstone
-from Server.message_helper import Header
+from Server.message_helper import Header, packPlayerOperationInvalid
 from Server.player import Player
+from Server.operation import Operation
 
 def thread_safe(function):
 
@@ -21,6 +22,9 @@ class GameRoom:
         self.players = []
         self.allocated_id = []
         self.allow_player_id = (1, 2, 3, 4)
+        # TODO: init card_board
+        self.card_board = [[], [], []]
+        self.last_operation = {}
         self.chips = {
             Gemstone.GOLDEN: 0,
             Gemstone.RUBY: 0,
@@ -63,6 +67,35 @@ class GameRoom:
         player = self.findPlayerByID(player_id)
         player.setReady()
 
+
+    @thread_safe
+    def checkGetChipsLegal(self, body):
+        # check all chips player want is more than ask
+        for k, v in self.chips.items():
+            if body[k] > self.chips[k]:
+                return False
+
+        # # check chips
+        # for
+
+
+
+        return True
+
     @thread_safe
     def doPlayerOperation(self, header:Header, body):
+        player = self.findPlayerByID(header.player_id)
+        operation_type = body["operation_type"]
+
+        if operation_type == Operation.GET_CHIPS:
+            legal = self.checkGetChipsLegal(body)
+            if not legal:
+                msg = packPlayerOperationInvalid(player.player_id)
+                player.sendMsg(msg)
+
+        if operation_type == Operation.GET_CARD:
+            pass
+
+    @thread_safe
+    def startGame(self):
         pass
