@@ -73,18 +73,18 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
     "nobels_info": [
       {
       "nobel_number": 1
-      }，
+      },
       {
       "nobel_number": 2
-      }，
+      },
       {
       "nobel_number": 3
-      }，
+      },
       {
       "nobel_number": 4
       }
     ],
-    "levelOneCards_number": 15
+    "levelOneCards_number": 15,
     "levelOneCards": [
       {
       "card_number": 5
@@ -99,7 +99,7 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
       "card_number": 8
       }
     ],
-    "levelTwoCards_number": 15
+    "levelTwoCards_number": 15,
     "levelTwoCards": [
       {
       "card_number": 5
@@ -114,7 +114,7 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
       "card_number": 8
       }
     ],
-    "levelThreeCards_number": 15
+    "levelThreeCards_number": 15,
     "levelThreeCards": [
       {
       "card_number": 5
