@@ -69,66 +69,15 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 所有玩家准备就绪之后由服务器广播给所有玩家，消息体包含全局游戏信息
 #+begin_src json
   {
+    "players_number": 4,    
     "nobels_number": 4,
-    "nobels_info": [
-      {
-      "nobel_number": 1
-      },
-      {
-      "nobel_number": 2
-      },
-      {
-      "nobel_number": 3
-      },
-      {
-      "nobel_number": 4
-      }
-    ],
-    "levelOneCards_number": 15,
-    "levelOneCards_info": [
-      {
-      "card_number": 5
-      },
-      {
-      "card_number": 6
-      },
-      {
-      "card_number": 7
-      },
-      {
-      "card_number": 8
-      }
-    ],
-    "levelTwoCards_number": 15,
-    "levelTwoCards_info": [
-      {
-      "card_number": 9
-      },
-      {
-      "card_number": 10
-      },
-      {
-      "card_number": 11
-      },
-      {
-      "card_number": 12
-      }
-    ],
-    "levelThreeCards_number": 15,
-    "levelThreeCards_info": [
-      {
-      "card_number": 13
-      },
-      {
-      "card_number": 14
-      },
-      {
-      "card_number": 15
-      },
-      {
-      "card_number": 16
-      }
-    ]
+    "nobels_info": [1, 2, 3, 4],
+    "levelOneCards_last_number": 15,
+    "levelOneCards_info": [5, 6, 7, 8],
+    "levelTwoCards_last_number": 15,
+    "levelTwoCards_info": [9, 10, 11, 12],
+    "levelThreeCards_last_number": 15,
+    "levelThreeCards_info": [13, 14, 15, 16]
   }
 
 #+end_src
