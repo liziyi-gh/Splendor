@@ -70,27 +70,27 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 #+begin_src json
   {
     "players_number": 4, 
-    "players_sequence": [1, 2, 3, 4],\
+    "players_sequence": [1, 2, 3, 4],
     "chips_info": [
       {
-      "chips_type": "sapphire",
-      "chips_number": 1
-      },
-      {
-      "chips_type": "ruby",
-      "chips_number": 1
-      },
-      {
       "chips_type": "diamond",
-      "chips_number": 1
+      "chips_number": 7
       },
       {
-      "chips_type": "obsibian",
-      "chips_number": 1
+      "chips_type": "emerald",
+      "chips_number": 7
+      },
+      {
+      "chips_type": "obsidian",
+      "chips_number": 7
       },
       {
       "chips_type": "ruby",
-      "chips_number": 1
+      "chips_number": 7
+      },
+      {
+      "chips_type": "sapphire",
+      "chips_number": 7
       },
       {
       "chips_type": "golden",
