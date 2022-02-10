@@ -4,7 +4,8 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using Newtonsoft.Json;
-using MessageTools;
+using MsgTools;
+using MsgStruct;
 
 namespace Transmission
 {
@@ -21,6 +22,30 @@ namespace Transmission
             Thread th = new Thread(delegate() { Receive(socket); });
             th.Start();
         }
+        public static void Receive(Socket socket)
+        {
+            while (true)
+            {
+                byte[] buffer = new byte[1024];
+                int len = socket.Receive(buffer, buffer.Length, 0);
+                int api_id = BitConverter.ToInt32(buffer, 0);
+                if (api_id == 4)
+                {
+                    RoomMsgs roomMsgs =  Tools.RoomMsgsProcess(buffer);
+                    //
+                }
+                else
+                {
+                    //
+                }
+            }
+
+
+        }
+        public static void Send(Socket socket)
+        {
+            //
+        }
         public static void JsonStringTest()
         {
             string jsonText = @"{""input"" : ""value"", ""output"" : ""result""}";
@@ -35,24 +60,11 @@ namespace Transmission
         }
         public static void TextTest()
         {
-            long numText = 1024L;
-            byte[] text = Tools.LongConvertHex(numText);
-            byte[] cutSample = text.Skip(4).Take(4).ToArray();
-            Console.WriteLine(Tools.HexConvertInt(cutSample));
-        }
-        public static void Receive(Socket socket)
-        {
-            while(true)
-            {
-                byte[] buffer = new byte[1024];
-                int len = socket.Receive(buffer, buffer.Length, 0);
-            }
-            
-
+            //
         }
         public static void Main()
         {
-            TextTest();
+            JsonStringTest();
         }
     }
 }
