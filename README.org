@@ -69,8 +69,8 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 所有玩家准备就绪之后由服务器广播给所有玩家，消息体包含全局游戏信息
 #+begin_src json
   {
-    "players_number": 4, 
-    "players_sequence": [1, 2, 3, 4],
+    "players_number": 3, 
+    "players_sequence": [1, 2, 3],
     "nobels_info": [1, 2, 3, 4],
     "levelOneCards_info": [5, 6, 7, 8],
     "levelTwoCards_info": [9, 10, 11, 12],
