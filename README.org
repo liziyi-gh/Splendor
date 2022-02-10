@@ -70,50 +70,64 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 #+begin_src json
   {
     "nobels_number": 4,
-    "nobels": [
+    "nobels_info": [
       {
-      "nobel_number": 1,
-      "nobel_point": 3,
-      "nobel_costs": [
-        {
-        "cards_type": "sapphire",
-        "cards_number": 3
-        },
-        {
-        "cards_type": "ruby",
-        "cards_number": 3
-        },
-        {
-        "cards_type": "diamond",
-        "cards_number": 1
-        }
-      ]
+      "nobel_number": 1
+      }，
+      {
+      "nobel_number": 2
+      }，
+      {
+      "nobel_number": 3
+      }，
+      {
+      "nobel_number": 4
       }
     ],
+    "levelOneCards_number": 15
     "levelOneCards": [
       {
-      "card_number": 1,
-      "card_point": 1,
-      "card_type": "sapphire",
-      "card_costs": [
-        {
-        "chips_type": "sapphire",
-        "chips_number": 1
-        },
-        {
-        "chips_type": "ruby",
-        "chips_number": 1
-        },
-        {
-        "chips_type": "diamond",
-        "chips_number": 1
-        }
-      ]
+      "card_number": 5
+      },
+      {
+      "card_number": 6
+      },
+      {
+      "card_number": 7
+      },
+      {
+      "card_number": 8
       }
     ],
+    "levelTwoCards_number": 15
     "levelTwoCards": [
+      {
+      "card_number": 5
+      },
+      {
+      "card_number": 6
+      },
+      {
+      "card_number": 7
+      },
+      {
+      "card_number": 8
+      }
     ],
+    "levelThreeCards_number": 15
     "levelThreeCards": [
+      {
+      "card_number": 5
+      },
+      {
+      "card_number": 6
+      },
+      {
+      "card_number": 7
+      },
+      {
+      "card_number": 8
+      }
     ]
   }
 
