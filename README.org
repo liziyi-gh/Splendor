@@ -85,7 +85,7 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
       }
     ],
     "levelOneCards_number": 15,
-    "levelOneCards": [
+    "levelOneCards_info": [
       {
       "card_number": 5
       },
@@ -100,7 +100,7 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
       }
     ],
     "levelTwoCards_number": 15,
-    "levelTwoCards": [
+    "levelTwoCards_info": [
       {
       "card_number": 9
       },
@@ -115,7 +115,7 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
       }
     ],
     "levelThreeCards_number": 15,
-    "levelThreeCards": [
+    "levelThreeCards_info": [
       {
       "card_number": 13
       },
