@@ -71,39 +71,9 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
   {
     "players_number": 4, 
     "players_sequence": [1, 2, 3, 4],
-    "chips_info": [
-      {
-      "chips_type": "diamond",
-      "chips_number": 7
-      },
-      {
-      "chips_type": "emerald",
-      "chips_number": 7
-      },
-      {
-      "chips_type": "obsidian",
-      "chips_number": 7
-      },
-      {
-      "chips_type": "ruby",
-      "chips_number": 7
-      },
-      {
-      "chips_type": "sapphire",
-      "chips_number": 7
-      },
-      {
-      "chips_type": "golden",
-      "chips_number": 5
-      },
-    ],
-    "nobels_number": 4,
     "nobels_info": [1, 2, 3, 4],
-    "levelOneCards_last_number": 15,
     "levelOneCards_info": [5, 6, 7, 8],
-    "levelTwoCards_last_number": 15,
     "levelTwoCards_info": [9, 10, 11, 12],
-    "levelThreeCards_last_number": 15,
     "levelThreeCards_info": [13, 14, 15, 16]
   }
 
