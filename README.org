@@ -69,10 +69,52 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 所有玩家准备就绪之后由服务器广播给所有玩家，消息体包含全局游戏信息
 #+begin_src json
   {
-    "nobels": [1, 2, 3, 4, 5]
-    "levelOneCards": [1, 2, 3, 4]
-    "levelTwoCards": [5, 6, 7, 8]
-    "levelThreeCards": [9, 10, 11, 12]
+    "nobels_number": 4,
+    "nobels": [
+      {
+      "nobel_number": 1,
+      "nobel_point": 3,
+      "nobel_costs": [
+        {
+        "cards_type": "sapphire",
+        "cards_number": 3
+        },
+        {
+        "cards_type": "ruby",
+        "cards_number": 3
+        },
+        {
+        "cards_type": "diamond",
+        "cards_number": 1
+        }
+      ]
+      }
+    ],
+    "levelOneCards": [
+      {
+      "card_number": 1,
+      "card_point": 1,
+      "card_type": "sapphire",
+      "card_costs": [
+        {
+        "chips_type": "sapphire",
+        "chips_number": 1
+        },
+        {
+        "chips_type": "ruby",
+        "chips_number": 1
+        },
+        {
+        "chips_type": "diamond",
+        "chips_number": 1
+        }
+      ]
+      }
+    ],
+    "levelTwoCards": [
+    ],
+    "levelThreeCards": [
+    ]
   }
 
 #+end_src
