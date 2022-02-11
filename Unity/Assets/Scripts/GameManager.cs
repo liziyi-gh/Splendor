@@ -1,15 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+
+public enum State
+{
+    start,
+    buyingCard,
+    takingMoney,
+    flipingCard,
+    waiting,
+
+}
 
 public class GameManager : MonoBehaviour
 {
-    public bool isBuyingCard;
-    public bool isTakingMoney;
+    public State state;
     
     void Start()
     {
-        
+        state = State.start;
     }
 
     
@@ -20,11 +28,13 @@ public class GameManager : MonoBehaviour
 
     public void Reset()
     {
-        isTakingMoney = false;
-        isBuyingCard = false;
+        state = State.start;
 
         Transform stones = GameObject.Find("Stones").transform;
         Transform money = GameObject.Find("Money").transform;
+        GameObject highLight = GameObject.Find("HighLight");
+        if (highLight)
+            highLight.SetActive(false);
         for (int i = 0; i < 5; i++)
         {
             stones.GetChild(i).GetComponent<Stone>().resetAll();

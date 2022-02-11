@@ -16,7 +16,7 @@ public class Stone : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-        if (gameManeger.isBuyingCard)
+        if (gameManeger.state!=State.start && gameManeger.state != State.takingMoney)
             return;
 
         if (pointerEventData.button == PointerEventData.InputButton.Left)
@@ -42,7 +42,7 @@ public class Stone : MonoBehaviour, IPointerClickHandler
             moneyText.text = (int.Parse(moneyText.text) + 1).ToString();
             moneyText.color = Color.yellow;
 
-            gameManeger.isTakingMoney = true;
+            gameManeger.state=State.takingMoney;
         }
 
         if (pointerEventData.button == PointerEventData.InputButton.Right)
@@ -63,7 +63,7 @@ public class Stone : MonoBehaviour, IPointerClickHandler
                 for (int i = 0; i < 5; i++)
                     if (transform.parent.GetChild(i).GetChild(0).GetComponent<Text>().color != Color.white)
                         return;
-                gameManeger.isTakingMoney = false;
+                gameManeger.state = State.start;
 
             }
         }

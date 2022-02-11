@@ -14,7 +14,7 @@ public class Money : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-        if (!gameManeger.isBuyingCard)
+        if (gameManeger.state!=State.buyingCard)
             return;
 
         if (pointerEventData.button == PointerEventData.InputButton.Left)
