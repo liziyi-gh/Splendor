@@ -1,15 +1,27 @@
 import socket
 import threading
 
+from Server import message_helper
 from Server.gemstone import Gemstone
-from Server.message_helper import Header, packPlayerOperationInvalid
+from Server.message_helper import Header
 from Server.player import Player
 from Server.operation import Operation
+from Server.card_board import CardBoard
+
+def static_vars(**kwargs):
+
+    def decorate(func):
+        for k in kwargs:
+            setattr(func, k, kwargs[k])
+        return func
+
+    return decorate
 
 def thread_safe(function):
 
+    @static_vars(lock=threading.Lock())
     def async_wrapper(self, *args, **kwargs):
-        with self.lock:
+        with async_wrapper.lock:
             ret = function(self, *args, **kwargs)
             return ret
 
@@ -18,12 +30,10 @@ def thread_safe(function):
 
 class GameRoom:
     def __init__(self) -> None:
-        self.lock = threading.Lock()
         self.players = []
         self.allocated_id = []
         self.allow_player_id = (1, 2, 3, 4)
-        # TODO: init card_board
-        self.card_board = [[], [], []]
+        self.card_board = CardBoard()
         self.last_operation = {}
         self.chips = {
             Gemstone.GOLDEN: 0,
@@ -34,7 +44,7 @@ class GameRoom:
             Gemstone.OBSIDIAN: 0,
         }
 
-    def findPlayerByID(self, player_id)->Player | None:
+    def findPlayerByID(self, player_id)->Player:
         for player in self.players:
             if player.player_id == player_id:
                 return player
@@ -51,8 +61,8 @@ class GameRoom:
         new_player_id = self.newPlayerID()
         new_player = Player(sock, new_player_id)
         self.players.append(new_player)
-        # TODO:
-        # new_player.sendMsg(msg)
+        msg = message_helper.packInitResp(new_player_id, self.allocated_id)
+        new_player.sendMsg(msg)
 
     @thread_safe
     def boardcastMsg(self, msg):
@@ -66,10 +76,12 @@ class GameRoom:
         player_id = header.player_id
         player = self.findPlayerByID(player_id)
         player.setReady()
+        msg = message_helper.packPlayerReady(player_id)
+        self.boardcastMsg(msg)
 
 
     @thread_safe
-    def checkGetChipsLegal(self, body):
+    def checkGetChipsLegal(self, body)->bool:
         # check all chips player want is more than ask
         for k, v in self.chips.items():
             if body[k] > self.chips[k]:
@@ -83,17 +95,48 @@ class GameRoom:
         return True
 
     @thread_safe
+    def checkBuyCardLegal(self, body)->bool:
+        # TODO:
+        return True
+
+    @thread_safe
+    def checkFoldCardLegal(self, body)->bool:
+        # TODO:
+        return True
+
+    @thread_safe
+    def playerOperationInvalid(self, player:Player):
+        msg = message_helper.packPlayerOperationInvalid(player.player_id)
+        player.sendMsg(msg)
+
+    @thread_safe
     def doPlayerOperation(self, header:Header, body):
         player = self.findPlayerByID(header.player_id)
         operation_type = body["operation_type"]
+        operation_info = body["operation_info"]
 
         if operation_type == Operation.GET_CHIPS:
             legal = self.checkGetChipsLegal(body)
             if not legal:
-                msg = packPlayerOperationInvalid(player.player_id)
-                player.sendMsg(msg)
+                self.playerOperationInvalid(player)
 
-        if operation_type == Operation.GET_CARD:
+            for item in operation_info:
+                chip_type = item["chips_type"]
+                self.chips[chip_type] += item["chips_number"]
+                player.chips[chip_type] -= item["chips_number"]
+
+        if operation_type == Operation.BUY_CARD:
+            legal = self.checkBuyCardLegal(body)
+            if not legal:
+                self.playerOperationInvalid(player)
+
+            card_number = operation_type["card_number"]
+            card = self.card_board.getCardByNumber(card_number)
+            player.addCard(card)
+            self.card_board.removeCardByNumber(card_number)
+            # TODO: boardcastMsg
+
+        if operation_type == Operation.FOLD_CARD:
             pass
 
     @thread_safe

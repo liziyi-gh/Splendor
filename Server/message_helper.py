@@ -9,8 +9,7 @@ from Server.constants import HEADER_FORMAT, HEADER_LENGTH
 Header = namedtuple("Header", ["api_id", "player_id", "msg_len", "reserve"])
 
 def unpackHeader(header_data)-> Header:
-    api_id, player_id, msg_len, reserve = struct.unpack(HEADER_FORMAT,
-                                                        header_data.decode())
+    api_id, player_id, msg_len, reserve = struct.unpack(HEADER_FORMAT, header_data)
     return Header(api_id, player_id, msg_len, reserve)
 
 
@@ -32,6 +31,14 @@ def packInitResp(new_player_id, allocated_player_id):
 
     return header_data + body_data
 
+
 def packPlayerOperationInvalid(player_id):
     header_data = packHeader(API_ID.PLAYER_OPERATION_INVALID, player_id)
+
+    return header_data
+
+
+def packPlayerReady(player_id):
+    header_data = packHeader(API_ID.PLAYER_READY, player_id)
+
     return header_data

@@ -2,6 +2,7 @@ import json
 import socket
 
 from Server.gemstone import Gemstone
+from Server.card import Card
 
 class Player:
     def __init__(self, sock:socket.socket, player_id:int):
@@ -38,3 +39,6 @@ class Player:
 
     def setReady(self):
         self.ready = True
+
+    def addCard(self, card:Card):
+        pass

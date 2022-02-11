@@ -1,3 +1,4 @@
 class Operation:
     GET_CHIPS = "get_chips"
-    GET_CARD = "get_card"
+    BUY_CARD = "buy_card"
+    FOLD_CARD = "fold_card"

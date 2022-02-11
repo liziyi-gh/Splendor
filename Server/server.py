@@ -7,7 +7,7 @@ from Server.message_helper import unpackHeader,unpackBody
 from Server.api_id import API_ID
 
 
-def handleClient(current_game_room:GameRoom,client_sock:socket.socket, addr):
+def handleClient(current_game_room:GameRoom, client_sock:socket.socket, addr):
     # TODO: if client_sock has been connect
     while True:
         header_data = client_sock.recv(HEADER_LENGTH)
@@ -19,6 +19,8 @@ def handleClient(current_game_room:GameRoom,client_sock:socket.socket, addr):
             body = unpackBody(body_data)
 
         # TODO: refactor this
+        # TODO: check player_id match socket?
+        # TODO: what if socket change?
         if header.api_id == API_ID.INIT:
             current_game_room.addPlayer(client_sock)
 
