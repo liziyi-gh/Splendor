@@ -1,19 +1,22 @@
 ﻿using System;
+using Gems;
 
 namespace MsgStruct
 {
     public struct Msgs
     {
-        public int api_id = 0, player_id = 0, card_num = 0;
+        public uint api_id = 0;
+        public int card_num = 0, nobel_num = 0;
+        public ulong player_id = 0L;
         public string? operation_type;
-        public Dictionary<string, int> chips = new Dictionary<string, int> 
+        public Dictionary<string, int> gems = new Dictionary<string, int> 
         { 
-            { "ruby", 0 }, 
-            { "diamond", 0 }, 
-            { "sapphire", 0 }, 
-            { "emerald", 0 }, 
-            { "obsidian", 0 }, 
-            { "golden", 0 } 
+            { GEM.DIAMOND, 0 }, 
+            { GEM.EMERALD, 0 }, 
+            { GEM.OBSIDIAN, 0 }, 
+            { GEM.SAPPHIRE, 0 }, 
+            { GEM.RUBY, 0 }, 
+            { GEM.GOLDEN, 0 } 
         };
     };
     public struct RoomMsgs

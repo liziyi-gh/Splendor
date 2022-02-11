@@ -1,4 +1,5 @@
 ﻿using System;
+using Gems;
 
 namespace Players
 {
@@ -6,26 +7,26 @@ namespace Players
     {
         public int id, point, foldCards_num;
         public int[]? cards, foldCards, nobels;
-        public Dictionary<string, int> cardsType;
-        public Dictionary<string, int> chips;
+        public Dictionary<string, int> cards_type;
+        public Dictionary<string, int> gems;
         public Player()
         {
-            cardsType = new Dictionary<string, int>
+            cards_type = new Dictionary<string, int>
             {
-                { "ruby", 0 },
-                { "diamond", 0 },
-                { "sapphire", 0 },
-                { "emerald", 0 },
-                { "obsidian", 0 }
+                { GEM.DIAMOND, 0 },
+                { GEM.EMERALD, 0 },
+                { GEM.OBSIDIAN, 0 },
+                { GEM.RUBY, 0 },
+                { GEM.SAPPHIRE, 0 }
             };
-            chips = new Dictionary<string, int>
+            gems = new Dictionary<string, int>
             {
-                { "ruby", 0 },
-                { "diamond", 0 },
-                { "sapphire", 0 },
-                { "emerald", 0 },
-                { "obsidian", 0 },
-                { "golden", 0 }
+                { GEM.DIAMOND, 0 },
+                { GEM.EMERALD, 0 },
+                { GEM.OBSIDIAN, 0 },
+                { GEM.RUBY, 0 },
+                { GEM.SAPPHIRE, 0 },
+                { GEM.GOLDEN, 0 }
             };
             id = 0;
             point = 0;
