@@ -102,19 +102,19 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 #+begin_src json
   {
     "player_id": 1,
-    "operation_type": "get_chips",
+    "operation_type": "get_gems",
     "operation_info": [
       {
-      "chips_type": "sapphire",
-      "chips_number": 1
+      "gems_type": "sapphire",
+      "gems_number": 1
       },
       {
-      "chips_type": "ruby",
-      "chips_number": 1
+      "gems_type": "ruby",
+      "gems_number": 1
       },
       {
-      "chips_type": "diamond",
-      "chips_number": 1
+      "gems_type": "diamond",
+      "gems_number": 1
       }
     ]
   }
@@ -132,16 +132,16 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
       "card_number": 1
       },
       {
-      "chips_type": "sapphire",
-      "chips_number": 1
+      "gems_type": "sapphire",
+      "gems_number": 1
       },
       {
-      "chips_type": "ruby",
-      "chips_number": 1
+      "gems_type": "ruby",
+      "gems_number": 1
       },
       {
-      "chips_type": "diamond",
-      "chips_number": 1
+      "gems_type": "diamond",
+      "gems_number": 1
       }
     ]
   }
@@ -159,8 +159,8 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
       "card_number": 1
       },
       {
-      "chips_type": "golden"
-      "chips_number": 1
+      "gems_type": "golden"
+      "gems_number": 1
       }
     ]
   }
