@@ -157,10 +157,6 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
     "operation_info": [
       {
       "card_number": 1
-      },
-      {
-      "gems_type": "golden"
-      "gems_number": 1
       }
     ]
   }
