@@ -7,41 +7,49 @@ public class Money : MonoBehaviour, IPointerClickHandler
     string oriText=null;
     int oriNum;
     GameManager gameManeger;
+    Text holdingText;
+    Text takingText;
+    
     private void Start()
     {
         gameManeger = GameObject.Find("GameManager").GetComponent<GameManager>();
+        holdingText = transform.GetChild(0).GetComponent<Text>();
+        takingText = transform.GetChild(1).GetComponent<Text>();
     }
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
+        //若不是在买卡则不能点击持有筹码
         if (gameManeger.state!=State.buyingCard)
             return;
 
+        //左键加码
         if (pointerEventData.button == PointerEventData.InputButton.Left)
-        {
-            Text text = transform.GetChild(0).GetComponent<Text>();
-            if (oriText==null)
-            {
-                oriText = text.text;
-                oriNum = int.Parse(oriText);                
-            }
-            if (int.Parse(text.text)==0)           
+        {            
+            //如果该持有筹码数已为零则不能再加码
+            if (int.Parse(holdingText.text)==0)           
                 return;
-            
-            text.text = (int.Parse(text.text) - 1).ToString();
-            text.color = Color.red;
-            
+            //加码
+            holdingText.text = (int.Parse(holdingText.text) - 1).ToString();
+            holdingText.color = Color.red;
+            takingText.text = (int.Parse(takingText.text) + 1).ToString();
+            takingText.color = Color.yellow;
         }
 
+        //右键减码
         if (pointerEventData.button == PointerEventData.InputButton.Right)
         {
-            Text text = transform.GetChild(0).GetComponent<Text>();
-            if (text.color == Color.red)
+            //若已加过码则可以减码
+            if (takingText.text != "0")
             {
-                text.text = (int.Parse(text.text) + 1).ToString();
-                if (int.Parse(text.text) == oriNum)
-                    text.color = Color.white;                  
-                
+                holdingText.text = (int.Parse(holdingText.text) + 1).ToString();                
+                takingText.text = (int.Parse(takingText.text) - 1).ToString();
+                //若已把筹码全部取回，则颜色恢复
+                if (takingText.text == "0")
+                {
+                    holdingText.color = Color.white;
+                    takingText.color = Color.clear;
+                }                
             }
         }
 
@@ -49,11 +57,12 @@ public class Money : MonoBehaviour, IPointerClickHandler
 
     public void resetAll()
     {
-        if (oriText != null)
+        if (takingText.text != "0")
         {
-            transform.GetChild(0).GetComponent<Text>().text = oriText;
-            oriText = null;
-        }
-        transform.GetChild(0).GetComponent<Text>().color = Color.white;
+            holdingText.text = (int.Parse(takingText.text)+ int.Parse(holdingText.text)).ToString();
+            takingText.text = "0";
+            holdingText.color = Color.white;
+            takingText.color = Color.clear;
+        }        
     }
 }

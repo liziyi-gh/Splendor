@@ -14,7 +14,8 @@ public enum State
 public class GameManager : MonoBehaviour
 {
     public State state;
-    
+    [SerializeField] GameObject highLight1, highLight2;
+
     void Start()
     {
         state = State.start;
@@ -32,10 +33,10 @@ public class GameManager : MonoBehaviour
 
         Transform stones = GameObject.Find("Stones").transform;
         Transform money = GameObject.Find("Money").transform;
-        GameObject highLight = GameObject.Find("HighLight");
-        if (highLight)
-            highLight.SetActive(false);
-        for (int i = 0; i < 5; i++)
+
+        highLight1.SetActive(false); highLight2.SetActive(false);
+
+        for (int i = 0; i < 6; i++)
         {
             stones.GetChild(i).GetComponent<Stone>().resetAll();
             money.GetChild(i).GetChild(1).GetComponent<Money>().resetAll();
