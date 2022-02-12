@@ -6,8 +6,9 @@ namespace MsgStruct
     public struct Msgs
     {
         public uint api_id = 0;
+        public ulong player_id = 0L, msg_len = 0L;
+        public List<uint> other_player_id = new List<uint>();
         public int card_num = 0, nobel_num = 0;
-        public ulong player_id = 0L;
         public string? operation_type;
         public Dictionary<string, int> gems = new Dictionary<string, int> 
         { 
@@ -21,7 +22,7 @@ namespace MsgStruct
     };
     public struct RoomMsgs
     {
-        public int players_number;
-        public int[] players_sequence, nobels_info, levelOneCards_info, levelTwoCards_info, levelThreeCards_info;
+        public int players_number = 0;
+        public int[]? players_sequence, nobels_info, levelOneCards_info, levelTwoCards_info, levelThreeCards_info;
     };
 }
