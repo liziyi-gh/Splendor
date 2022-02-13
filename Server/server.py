@@ -1,5 +1,6 @@
 import socket
 import threading
+import logging
 
 from Server.constants import HEADER_LENGTH
 from Server.game_room import GameRoom
@@ -9,6 +10,7 @@ from Server.api_id import API_ID
 
 def handleClient(current_game_room:GameRoom, client_sock:socket.socket, addr):
     # TODO: if client_sock has been connect
+    logging.info("Start handling New socket, addr is {}".format(addr))
     while True:
         header_data = client_sock.recv(HEADER_LENGTH)
         header = unpackHeader(header_data)
@@ -18,7 +20,6 @@ def handleClient(current_game_room:GameRoom, client_sock:socket.socket, addr):
             body_data = client_sock.recv(msg_body_len)
             body = unpackBody(body_data)
 
-        # TODO: refactor this
         # TODO: check player_id match socket?
         # TODO: what if socket change?
         if header.api_id == API_ID.INIT:
@@ -41,12 +42,21 @@ def startListen(current_game_room:GameRoom):
     sock.listen()
     while True:
         client_sock, addr = sock.accept()
+        logging.info("New socket connect")
         t = threading.Thread(target=handleClient, args=(current_game_room,
                                                         client_sock, addr))
         t.start()
 
 
+def init_log():
+    logging.basicConfig(filename="./server.log", encoding='utf-8',
+                        level=logging.DEBUG)
+    logging.info("___________________________________________________________")
+    logging.info("Server starting")
+    logging.info("___________________________________________________________")
+
+
 def start():
-    # TODO: better way to get GameRoom
+    init_log()
     current_game_room = GameRoom()
     startListen(current_game_room)

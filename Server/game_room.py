@@ -1,6 +1,7 @@
 import socket
 import random
 import threading
+import logging
 
 from Server import message_helper
 from Server.gemstone import Gemstone
@@ -31,6 +32,7 @@ def thread_safe(function):
 
 class GameRoom:
     def __init__(self) -> None:
+        logging.debug("Game room init")
         self.players = []
         self.allocated_id = []
         self.allow_player_id = (1, 2, 3, 4)
@@ -80,9 +82,10 @@ class GameRoom:
 
     @thread_safe
     def boardcastMsg(self, msg):
-        # TODO: may need Multithreading
         for player in self.players:
             player.sendMsg(msg)
+
+        logging.debug("boardcast msg")
 
     @thread_safe
     def playerReady(self, header:Header, body):
@@ -236,10 +239,8 @@ class GameRoom:
     @thread_safe
     def startNewTurn(self, player_id):
         idx = self.players_sequence.index(player_id)
-        if idx == len(self.players_sequence) - 1:
-            idx = 0
-        else:
-            idx += 1
+        idx = 0 if idx == len(self.players_sequence) - 1 else idx + 1
         next_player_id = self.players_sequence[idx]
         msg = message_helper.packNewTurn(next_player_id)
         self.boardcastMsg(msg)
+        logging.info("Start new turn")

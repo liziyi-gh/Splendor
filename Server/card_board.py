@@ -1,4 +1,5 @@
 import json
+import logging
 import random
 
 from Server.card import Card, CardType
@@ -32,6 +33,8 @@ class CardBoard():
             if item.level==card_level:
                 self.card_repo.remove(item)
                 return item
+
+        logging.debug("Can not find next level{} card in repo".format(card_level))
 
     def addPlayer(self):
         new_card = self.nextCardInRepo(0)
