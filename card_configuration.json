@@ -1,28 +1,66 @@
-[
-  {
-  "number": 1,
-  "card_type": "normal",
-  "level": 1,
-  "points": 0,
-  "gem_type": "ruby",
+[{
+  "number": "1",
+  "card_type": " normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": " sapphire",
   "chips": {
-    "ruby": 1,
-    "diamond": 1,
-    "sapphire":3,
-    "emerald": 0,
-    "obsidian": 0
+    "ruby": "4",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "0"
   }
-},
-  {
-  "number": 2,
-  "card_type": "noble",
-  "points": 3,
+},{
+  "number": "2",
+  "card_type": " normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": " sapphire",
   "chips": {
-    "ruby": 0,
-    "diamond": 4,
-    "sapphire":0,
-    "emerald": 0,
-    "obsidian": 4
+    "ruby": "0",
+    "diamond": "4",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "0"
   }
-}
-]
+},{
+  "number": "3",
+  "card_type": " normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": " sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "4",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "4",
+  "card_type": " normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": " sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "4",
+    "obsidian": "0"
+  }
+},{
+  "number": "5",
+  "card_type": " normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": " sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "4"
+  }
+}]

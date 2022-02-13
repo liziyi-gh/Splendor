@@ -1,0 +1,6 @@
+# number, type, level, points, gem_type, chips:ruby, chips:diamond, chips:sapphire, chips:emerald, chips:obsidian
+1, normal,1,0, sapphire,4,0,0,0,0
+2, normal,1,0, sapphire,0,4,0,0,0
+3, normal,1,0, sapphire,0,0,4,0,0
+4, normal,1,0, sapphire,0,0,0,4,0
+5, normal,1,0, sapphire,0,0,0,0,4
