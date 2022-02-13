@@ -187,8 +187,8 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 示例1：
 #+begin_src json
   {
-    “player_id": 1,
-    “nobel_number”: [1]
+    "player_id": 1,
+    "nobel_number": [1]
   }
 
 #+end_src
