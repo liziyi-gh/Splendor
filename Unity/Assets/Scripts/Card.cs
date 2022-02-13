@@ -10,10 +10,14 @@ public class Card : MonoBehaviour, IPointerClickHandler
     [SerializeField] bool isCoverCard;
     [SerializeField] bool isCards;
     GameObject Gold;
+    Transform money;
+    
 
     private void Start()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();        
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        money = GameObject.Find("Money").transform;
+        Gold = GameObject.Find("YellowStone");
     }
 
     public void OnPointerClick(PointerEventData pointerEventData)
@@ -32,6 +36,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
             //高光显示选中的卡；
             HighlightTheCard(Color.green);
 
+            //reset黄金筹码池UI；
+            Gold.GetComponent<Stone>().resetAll();
+
             //状态设定为买卡中；
             gameManager.state = State.buyingCard;
         }
@@ -44,8 +51,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
                 return;
 
             //Reset持有筹码区UI；
-            Transform money = GameObject.Find("Money").transform;
-            for (int i = 0; i < 5; i++)            
+            for (int i = 0; i < 6; i++)            
                 money.GetChild(i).GetChild(1).GetComponent<Money>().resetAll();            
 
             //高光显示选中的卡；
@@ -56,8 +62,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
             {
                 //状态设定为盖卡中；
                 gameManager.state = State.flipingCard;
-
-                Gold = GameObject.Find("YellowStone");
+                                
                 Text text = Gold.transform.GetChild(0).GetComponent<Text>();
                 Text text0 = Gold.transform.GetChild(1).GetComponent<Text>();
 
