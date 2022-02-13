@@ -16,7 +16,7 @@
   "card_type": " normal",
   "level": "1",
   "points": "0",
-  "gem_type": " sapphire",
+  "gem_type": "diamond",
   "chips": {
     "ruby": "0",
     "diamond": "4",
@@ -29,7 +29,20 @@
   "card_type": " normal",
   "level": "1",
   "points": "0",
-  "gem_type": " sapphire",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "4"
+  }
+},{
+  "number": "4",
+  "card_type": " normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "emerald",
   "chips": {
     "ruby": "0",
     "diamond": "0",
@@ -38,11 +51,11 @@
     "obsidian": "0"
   }
 },{
-  "number": "4",
+  "number": "5",
   "card_type": " normal",
   "level": "1",
   "points": "0",
-  "gem_type": " sapphire",
+  "gem_type": " ruby",
   "chips": {
     "ruby": "0",
     "diamond": "0",
@@ -51,16 +64,68 @@
     "obsidian": "0"
   }
 },{
-  "number": "5",
+  "number": "6",
   "card_type": " normal",
   "level": "1",
   "points": "0",
   "gem_type": " sapphire",
   "chips": {
+    "ruby": "1",
+    "diamond": "0",
+    "sapphire": "1",
+    "emerald": "3",
+    "obsidian": "0"
+  }
+},{
+  "number": "7",
+  "card_type": " normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "diamond",
+  "chips": {
     "ruby": "0",
+    "diamond": "3",
+    "sapphire": "1",
+    "emerald": "0",
+    "obsidian": "1"
+  }
+},{
+  "number": "8",
+  "card_type": " normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "3",
     "diamond": "0",
     "sapphire": "0",
+    "emerald": "1",
+    "obsidian": "1"
+  }
+},{
+  "number": "9",
+  "card_type": " normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "0",
+    "diamond": "1",
+    "sapphire": "3",
+    "emerald": "1",
+    "obsidian": "0"
+  }
+},{
+  "number": "10",
+  "card_type": " normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": " ruby",
+  "chips": {
+    "ruby": "1",
+    "diamond": "1",
+    "sapphire": "0",
     "emerald": "0",
-    "obsidian": "4"
+    "obsidian": "3"
   }
 }]
