@@ -2,26 +2,35 @@ import json
 
 from Server.gemstone import Gemstone
 
+
 class CardType:
-        NORMAL = "normal"
-        NOBLE = "noble"
+    NORMAL = "normal"
+    NOBLE = "noble"
 
 
 class Card:
+
     @classmethod
     def createFromJson(cls, j_dict):
         # TODO: refactor this
         card_type = j_dict["card_type"]
         if card_type == CardType.NOBLE:
-            return cls(card_type, j_dict["number"],
-                       points=j_dict["points"], chips=j_dict["chips"])
+            return cls(card_type,
+                       j_dict["number"],
+                       points=j_dict["points"],
+                       chips=j_dict["chips"])
 
         if card_type == CardType.NORMAL:
-            return cls(card_type, j_dict["number"], j_dict["level"], j_dict["points"],
-                       j_dict["gem_type"], j_dict["chips"])
+            return cls(card_type, j_dict["number"], j_dict["level"],
+                       j_dict["points"], j_dict["gem_type"], j_dict["chips"])
 
-    def __init__(self, card_type, number=0, level=0, points=0,
-                 gem_type=Gemstone.NIL, chips=None):
+    def __init__(self,
+                 card_type,
+                 number=0,
+                 level=0,
+                 points=0,
+                 gem_type=Gemstone.NIL,
+                 chips=None):
         self.card_type = card_type
         self.number = number
         self.level = level

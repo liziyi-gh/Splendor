@@ -28,13 +28,14 @@ class CardBoard():
             self.addNewCardToBoard(2, position=i)
             self.addNewCardToBoard(3, position=i)
 
-    def nextCardInRepo(self, card_level)->Card:
+    def nextCardInRepo(self, card_level) -> Card:
         for item in self.card_repo:
-            if item.level==card_level:
+            if item.level == card_level:
                 self.card_repo.remove(item)
                 return item
 
-        logging.debug("Can not find next level{} card in repo".format(card_level))
+        logging.debug(
+            "Can not find next level{} card in repo".format(card_level))
 
     def addPlayer(self):
         new_card = self.nextCardInRepo(0)
@@ -89,7 +90,7 @@ class CardBoard():
         else:
             self.addNewCardToBoard(card.level, card)
 
-    def checkAvailbaleNobleCard(self, player:Player)->list[Card]:
+    def checkAvailbaleNobleCard(self, player: Player) -> list[Card]:
         cards = []
         for item in self.nobles_info:
             if player.checkAvailbaleNobleCard(item):

@@ -10,6 +10,7 @@ from Server.player import Player
 from Server.operation import Operation
 from Server.card_board import CardBoard
 
+
 def static_vars(**kwargs):
 
     def decorate(func):
@@ -18,6 +19,7 @@ def static_vars(**kwargs):
         return func
 
     return decorate
+
 
 def thread_safe(function):
 
@@ -31,6 +33,7 @@ def thread_safe(function):
 
 
 class GameRoom:
+
     def __init__(self) -> None:
         logging.debug("Game room init")
         self.players = []
@@ -54,20 +57,20 @@ class GameRoom:
         self.players_sequence = self.allocated_id
 
     @thread_safe
-    def findPlayerByID(self, player_id)->Player:
+    def findPlayerByID(self, player_id) -> Player:
         for player in self.players:
             if player.player_id == player_id:
                 return player
 
     @thread_safe
-    def newPlayerID(self)-> int:
+    def newPlayerID(self) -> int:
         for i in self.allow_player_id:
             if i not in self.allocated_id:
                 self.allocated_id.append(i)
                 return i
 
     @thread_safe
-    def addPlayer(self, sock:socket.socket):
+    def addPlayer(self, sock: socket.socket):
         new_player_id = self.newPlayerID()
         new_player = Player(sock, new_player_id)
         self.players.append(new_player)
@@ -75,7 +78,8 @@ class GameRoom:
             if key not in Gemstone.GOLDEN:
                 self.chips[key] += 1
         self.card_board.addPlayer()
-        init_resp_msg = message_helper.packInitResp(new_player_id, self.allocated_id)
+        init_resp_msg = message_helper.packInitResp(new_player_id,
+                                                    self.allocated_id)
         new_player.sendMsg(init_resp_msg)
         new_player_msg = message_helper.packNewPlayer(new_player_id)
         self.boardcastMsg(new_player_msg)
@@ -88,7 +92,7 @@ class GameRoom:
         logging.debug("boardcast msg")
 
     @thread_safe
-    def playerReady(self, header:Header, body):
+    def playerReady(self, header: Header, body):
         player_id = header.player_id
         player = self.findPlayerByID(player_id)
         player.setReady()
@@ -96,7 +100,7 @@ class GameRoom:
         self.boardcastMsg(msg)
 
     @thread_safe
-    def checkGetChipsLegal(self, operation_info)->bool:
+    def checkGetChipsLegal(self, operation_info) -> bool:
         for item in operation_info:
             gems_type = operation_info["gems_type"]
             if self.chips[gems_type] < item[gems_type]:
@@ -108,7 +112,7 @@ class GameRoom:
         return True
 
     @thread_safe
-    def checkBuyCardLegal(self, operation_info, player:Player)->bool:
+    def checkBuyCardLegal(self, operation_info, player: Player) -> bool:
         card_number = operation_info[0]["card_number"]
         if not self.card_board.getCardByNumber(card_number):
             return False
@@ -123,7 +127,7 @@ class GameRoom:
         return True
 
     @thread_safe
-    def checkFoldCardLegal(self, operation_info, player:Player)->bool:
+    def checkFoldCardLegal(self, operation_info, player: Player) -> bool:
         if len(player.fold_cards) >= 3:
             return False
 
@@ -143,12 +147,12 @@ class GameRoom:
         return True
 
     @thread_safe
-    def playerOperationInvalid(self, player:Player):
+    def playerOperationInvalid(self, player: Player):
         msg = message_helper.packPlayerOperationInvalid(player.player_id)
         player.sendMsg(msg)
 
     @thread_safe
-    def doPlayerOperation(self, header:Header, body):
+    def doPlayerOperation(self, header: Header, body):
         player = self.findPlayerByID(header.player_id)
         operation_type = body["operation_type"]
         operation_info = body["operation_info"]
@@ -213,14 +217,14 @@ class GameRoom:
                 return
 
             if len(available_cards) > 1:
-                msg = message_helper.packAskPlayerGetNoble(player.player_id,
-                                                           available_cards)
+                msg = message_helper.packAskPlayerGetNoble(
+                    player.player_id, available_cards)
                 player.sendMsg(msg)
 
                 return
 
     @thread_safe
-    def doPlayerGetNoble(self, header:Header, body):
+    def doPlayerGetNoble(self, header: Header, body):
         player = self.findPlayerByID(header.player_id)
         card_number = body["noble_number"]
         card = self.card_board.getCardByNumber(card_number)
@@ -232,7 +236,8 @@ class GameRoom:
     def startGame(self):
         self.generatePlayerSequence()
         players_number = len(self.allocated_id)
-        msg = message_helper.packGameStart(players_number, self.players_sequence,
+        msg = message_helper.packGameStart(players_number,
+                                           self.players_sequence,
                                            self.card_board)
         self.boardcastMsg(msg)
 
