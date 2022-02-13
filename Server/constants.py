@@ -1,2 +1,3 @@
 HEADER_LENGTH = 28
 HEADER_FORMAT = "L3Q"
+CARD_CONFIGUATION_FILE_PATH = "card_configuration.json"
