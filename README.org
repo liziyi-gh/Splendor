@@ -55,7 +55,7 @@ string 是 json 格式字符串，一个示例如下
   }
 #+end_src
 这样表明客户端分配到的玩家编号为3，以后的消息就要将 3 填入玩家编号字段，
-这盘游戏已经有两个玩家了，他们的编号是 2，3
+这盘游戏已经有两个玩家了，他们的编号是 1，2
 
 *** API ID = 3: PLAYER_READY
 PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服务器转发给其它玩家，
@@ -164,6 +164,22 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 #+end_src
 即玩家1选择盖住1号卡牌
 
+示例4：
+#+begin_src json
+  {
+    "player_id": 1,
+    "operation_type": "fold_card_unknown",
+    "operation_info": [
+      {
+      "card_level": 1
+      "card_number" : 10001
+      }
+    ]
+  }
+
+#+end_src
+即玩家1选择盖住1级牌库的1张牌
+
 *** API ID = 7: PLAYER_OPERATION_INVALID
 用以指示客户端上次发送的操作请求不合法
 | API ID | 玩家编号   | 消息长度(单位为 bytes) | 保留 | 消息体 |
@@ -204,6 +220,7 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 
 #+end_src
 服务器发送：服务器告知客户端玩家1可选择1号和2号贵族牌并要求回复
+
 
 
 ** Code Style
