@@ -1,5 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using MsgStruct;
+using Transmission;
 
 public enum State
 {
@@ -18,16 +22,29 @@ public enum State
 
 public class GameManager : MonoBehaviour
 {
+    static GameManager current;
+
     public State state;
     [SerializeField] GameObject highLight1, highLight2;
     Transform stones;
     Transform money;
+    Transform players;
+    int playerID=0;
+    Msgs msg=new Msgs();
+
+    private void Awake()
+    {
+        if (current != null)
+            return;
+        current = this;
+    }
 
     void Start()
     {
         state = State.start;
         stones = GameObject.Find("Stones").transform;
         money = GameObject.Find("Money").transform;
+        players = GameObject.Find("Players").transform;
     }
 
     
@@ -63,9 +80,21 @@ public class GameManager : MonoBehaviour
             case State.choosingNobel:
                 break;
             case State.unready:
+                //发送准备消息至服务端；
+                msg.api_id = 3;
+                msg.player_id = (ulong)playerID;
+                Client.Send(msg);
+
+                //UI显示准备；
+                players.GetChild(playerID).GetChild(1).GetComponent<Text>().color = Color.green;
+
                 break;
         }
     }
 
+    public static void GetPlayerID(int i)
+    {
+        current.playerID = i;
+    }
 
 }
