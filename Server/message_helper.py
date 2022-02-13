@@ -3,6 +3,7 @@ import struct
 
 from collections import namedtuple
 from Server.api_id import API_ID
+from Server.card_board import CardBoard
 
 from Server.constants import HEADER_FORMAT, HEADER_LENGTH
 
@@ -42,3 +43,19 @@ def packPlayerReady(player_id):
     header_data = packHeader(API_ID.PLAYER_READY, player_id)
 
     return header_data
+
+
+def packGameStart(players_number, players_sequence,
+                  card_board:CardBoard):
+    tmp_dict = {
+        "players_number", players_number,
+        "players_sequence", players_sequence,
+        "nobels_info", card_board.nobels_info,
+        "levelOneCards_info", card_board.levelOneCards_info,
+        "levelTwoCards_info", card_board.levelTwoCards_info,
+        "levelThreeCards_info", card_board.levelThreeCards_info,
+    }
+    body_data = json.dumps(tmp_dict).encode()
+    header_data = packHeader(API_ID.GAME_START, 0, len(body_data))
+
+    return header_data + body_data

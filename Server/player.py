@@ -40,5 +40,20 @@ class Player:
     def setReady(self):
         self.ready = True
 
-    def addCard(self, card:Card):
-        pass
+    def addCard(self, card:Card, operation_info):
+        if card.level == 0:
+            # Noble card
+            self.points += card.points
+        else:
+            # Normal card
+            if card in self.fold_cards:
+                self.fold_cards.remove(card)
+            if card.gem_type in Gemstone.__dict__.values():
+                for item in operation_info:
+                    if "gems_type" in item.keys():
+                        gems_type = item["gems_type"]
+                        self.chips[gems_type] -= item["gems_number"]
+                setattr(self, card.gem_type, getattr(self, card.gem_type)+1)
+
+    def addFoldCard(self, card:Card):
+        self.fold_cards.append(card)
