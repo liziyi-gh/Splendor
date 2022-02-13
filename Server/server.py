@@ -30,6 +30,9 @@ def handleClient(current_game_room:GameRoom, client_sock:socket.socket, addr):
         if header.api_id == API_ID.PLAYER_OPERATION:
             current_game_room.doPlayerOperation(header, body)
 
+        if header.api_id == API_ID.PLAYER_GET_NOBLE:
+            current_game_room.doPlayerGetNoble(header, body)
+
 
 def startListen(current_game_room:GameRoom):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

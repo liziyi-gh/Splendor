@@ -3,6 +3,7 @@ import random
 
 from Server.card import Card, CardType
 from Server.constants import CARD_CONFIGUATION_FILE_PATH
+from Server.player import Player
 
 
 class CardBoard():
@@ -58,19 +59,25 @@ class CardBoard():
         card = self.nextCardInRepo(card_level)
 
         if card_level == 1:
-            if not position:
+            if position is None:
                 position = self.levelOneCards_info.index(original_card)
-            self.levelOneCards_info[position] = card
+                self.levelOneCards_info[position] = card
+            else:
+                self.levelOneCards_info.append(card)
 
         if card_level == 2:
-            if not position:
+            if position is None:
                 position = self.levelTwoCards_info.index(original_card)
-            self.levelTwoCards_info[position] = card
+                self.levelTwoCards_info[position] = card
+            else:
+                self.levelTwoCards_info.append(card)
 
         if card_level == 3:
-            if not position:
+            if position is None:
                 position = self.levelThreeCards_info.index(original_card)
-            self.levelThreeCards_info[position] = card
+                self.levelThreeCards_info[position] = card
+            else:
+                self.levelThreeCards_info.append(card)
 
     def removeCardByNumberThenAddNewCard(self, card_number: int):
         card = self.getCardByNumber(card_number)
@@ -78,3 +85,11 @@ class CardBoard():
             self.nobels_info.remove(card)
         else:
             self.addNewCardToBoard(card.level, card)
+
+    def checkAvailbaleNobleCard(self, player:Player)->list[Card]:
+        cards = []
+        for item in self.nobels_info:
+            if player.checkAvailbaleNobleCard(item):
+                cards.append(item)
+
+        return cards

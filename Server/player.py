@@ -32,6 +32,7 @@ class Player:
         tmp = self.__dict__
         tmp.pop("sock")
 
+        # FIXME: method will in tmp?
         return json.dumps(tmp)
 
     def sendMsg(self, msg):
@@ -40,7 +41,7 @@ class Player:
     def setReady(self):
         self.ready = True
 
-    def addCard(self, card:Card, operation_info):
+    def addCard(self, card:Card, operation_info=None):
         if card.level == 0:
             # Noble card
             self.points += card.points
@@ -57,3 +58,11 @@ class Player:
 
     def addFoldCard(self, card:Card):
         self.fold_cards.append(card)
+
+    def checkAvailbaleNobleCard(self, card:Card)->bool:
+        for gemstone in card.chips.keys():
+            gem_numbers = getattr(self, gemstone)
+            if gem_numbers < card.chips[gemstone]:
+                return False
+
+        return True
