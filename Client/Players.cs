@@ -5,10 +5,12 @@ namespace Players
 {
     public class Player
     {
-        public int id, point, foldCards_num;
-        public int[]? cards, foldCards, nobels;
+        public ulong id;
+        public int point, foldCards_num;
+        public List<int> cards, foldCards, nobles;
         public Dictionary<string, int> cards_type;
         public Dictionary<string, int> gems;
+    
         public Player()
         {
             cards_type = new Dictionary<string, int>
