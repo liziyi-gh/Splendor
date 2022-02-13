@@ -52,7 +52,7 @@ def packGameStart(players_number, players_sequence,
     tmp_dict = {
         "players_number", players_number,
         "players_sequence", players_sequence,
-        "nobels_info", card_board.nobels_info,
+        "nobles_info", card_board.nobles_info,
         "levelOneCards_info", card_board.levelOneCards_info,
         "levelTwoCards_info", card_board.levelTwoCards_info,
         "levelThreeCards_info", card_board.levelThreeCards_info,

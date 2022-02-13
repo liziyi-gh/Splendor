@@ -74,7 +74,7 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
   {
     "players_number": 3, 
     "players_sequence": [1, 2, 3],
-    "nobels_info": [1, 2, 3, 4],
+    "nobles_info": [1, 2, 3, 4],
     "levelOneCards_info": [5, 6, 7, 8],
     "levelTwoCards_info": [9, 10, 11, 12],
     "levelThreeCards_info": [13, 14, 15, 16]

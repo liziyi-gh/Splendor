@@ -19,7 +19,7 @@ class CardBoard():
             self.card_repo.append(card)
         random.shuffle(self.card_repo)
 
-        self.nobels_info = [self.nextCardInRepo(0)]
+        self.nobles_info = [self.nextCardInRepo(0)]
         self.levelOneCards_info = []
         self.levelTwoCards_info = []
         self.levelThreeCards_info = []
@@ -38,7 +38,7 @@ class CardBoard():
 
     def addPlayer(self):
         new_card = self.nextCardInRepo(0)
-        self.nobels_info.append(new_card)
+        self.nobles_info.append(new_card)
 
     def getCardByNumber(self, card_number: int) -> Card:
         # TODO: more pythonic
@@ -49,7 +49,7 @@ class CardBoard():
         target_card = [
             item
             for item in self.levelOneCards_info + self.levelTwoCards_info +
-            self.levelThreeCards_info + self.nobels_info
+            self.levelThreeCards_info + self.nobles_info
             if item.number == card_number
         ]
 
@@ -84,14 +84,14 @@ class CardBoard():
 
     def removeCardByNumberThenAddNewCard(self, card_number: int):
         card = self.getCardByNumber(card_number)
-        if card in self.nobels_info:
-            self.nobels_info.remove(card)
+        if card in self.nobles_info:
+            self.nobles_info.remove(card)
         else:
             self.addNewCardToBoard(card.level, card)
 
     def checkAvailbaleNobleCard(self, player:Player)->list[Card]:
         cards = []
-        for item in self.nobels_info:
+        for item in self.nobles_info:
             if player.checkAvailbaleNobleCard(item):
                 cards.append(item)
 
