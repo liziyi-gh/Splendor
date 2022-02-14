@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using MsgStruct;
 using Transmission;
 using Gems;
+using GameRooms;
+using Players;
 
 public enum State
 {
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour
     Transform players;
     Transform nobles;
     Transform cards;
+    Transform foldCards;
 
     [Header("预制体")]
     [SerializeField] GameObject playerPrefab;
@@ -41,8 +44,10 @@ public class GameManager : MonoBehaviour
 
     [Header("Sprite")]
     [SerializeField] List<Sprite> allCardSprites;
+    [SerializeField] List<Sprite> cardBackSprites;
 
     ulong playerID = 0;
+    Player player;
 
     Msgs msg = new Msgs();
 
@@ -65,6 +70,7 @@ public class GameManager : MonoBehaviour
         players = GameObject.Find("Players").transform;
         nobles = GameObject.Find("Nobles").transform;
         cards = GameObject.Find("CardGroup").transform;
+        foldCards = GameObject.Find("FoldCards").transform;
 
         //连接服务器；
         Client.Connect();
@@ -295,38 +301,11 @@ public class GameManager : MonoBehaviour
         switch (msgs.operation_type)
         {
             case "get_gems":
-                /*
-                for (int i = 0; i < 5; i++)
-                {
-                    Text text = current.stones.GetChild(i).GetChild(0).GetComponent<Text>();
-                    text.text = (int.Parse(text.text) - msgs.gems[current.gems[i]]).ToString();
-                }
-                if (msgs.player_id == current.playerID)
-                {
-                    for (int i = 0; i < 5; i++)
-                    {
-                        Text text = current.money.GetChild(i).GetChild(1).GetChild(0).GetComponent<Text>();
-                        text.text = (int.Parse(text.text) + msgs.gems[current.gems[i]]).ToString();
-                        Text textStone = current.stones.GetChild(i).GetChild(1).GetComponent<Text>();
-                        textStone.text = "0";
-                        textStone.color = Color.clear;
-                    }
-                }*/                    
+                                 
                 break;
 
             case "buy_card":
-                /*
-                if (msgs.player_id == current.playerID)
-                {
-                    for (int i = 0; i < 6; i++)
-                    {
-                        Text text = current.money.GetChild(i).GetChild(1).GetChild(0).GetComponent<Text>();
-                        text.text = (int.Parse(text.text) - msgs.gems[current.gems[i]]).ToString();
-                        Text text1 = current.money.GetChild(i).GetChild(1).GetChild(1).GetComponent<Text>();
-                        text1.text = "0";
-                        text1.color = Color.clear;
-                    }
-                }*/
+                
                 break;
 
             case "fold_card":
@@ -335,6 +314,38 @@ public class GameManager : MonoBehaviour
             case "fold_card_unknown":
                 break;
         }
+    }
+
+    public void LoadGameRoomInfomation()
+    {
+        player = GameRoom.GetPlayer(playerID);
+
+        for (int i = 0; i < 6; i++)
+        {            
+            stones.GetChild(i).GetChild(0).GetComponent<Text>().text = GameRoom.gems_last_num[gems[i]].ToString();
+            
+            stones.GetChild(i).GetChild(1).GetComponent<Text>().text = "0";
+
+            money.GetChild(i).GetChild(0).GetComponent<Text>().text = i == 6 ? player.point.ToString()
+                : player.cards_type[gems[i]].ToString();            
+
+            money.GetChild(i).GetChild(1).GetChild(0).GetComponent<Text>().text = player.gems[gems[i]].ToString();            
+
+            money.GetChild(i).GetChild(1).GetChild(1).GetComponent<Text>().text = "0";            
+        }
+
+        for(int i=0;i < player.foldCards_num; i++)
+        {
+            int foldCardLevel = player.foldCards[i] < 41 ? 0 : 1;
+            if (player.foldCards[i] > 60)
+                foldCardLevel = 2;
+            foldCards.GetChild(i).GetComponent<Image>().sprite = cardBackSprites[foldCardLevel];
+            foldCards.GetChild(i).GetComponent<Recover>().cardback= cardBackSprites[foldCardLevel];
+            foldCards.GetChild(i).GetComponent<Recover>().card = allCardSprites[player.foldCards[i]];
+        }                
+
+        Reset();
+        state = State.waiting;
     }
 
     //模拟收信测试用函数；

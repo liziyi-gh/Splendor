@@ -3532,7 +3532,7 @@ GameObject:
   - component: {fileID: 505740847}
   - component: {fileID: 505740848}
   m_Layer: 5
-  m_Name: CoverCard
+  m_Name: FoldCards
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7631,6 +7631,10 @@ MonoBehaviour:
   - {fileID: -9102182387091809116, guid: 0c2f90cfd43337d4dacdcef4372e2400, type: 3}
   - {fileID: -560593008187299100, guid: 0c2f90cfd43337d4dacdcef4372e2400, type: 3}
   - {fileID: -1255729806640643963, guid: 0c2f90cfd43337d4dacdcef4372e2400, type: 3}
+  cardBackSprites:
+  - {fileID: 21300000, guid: 2e7d39b9aedd06a41ad44c63533065de, type: 3}
+  - {fileID: 21300000, guid: ccf392f7978dba34dbbb4dae09625a92, type: 3}
+  - {fileID: 21300000, guid: 43230cf8350296040aac260af4520e9c, type: 3}
 --- !u!4 &1235078370
 Transform:
   m_ObjectHideFlags: 0

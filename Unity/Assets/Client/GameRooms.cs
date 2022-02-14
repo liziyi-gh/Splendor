@@ -52,5 +52,15 @@ namespace GameRooms
                 players[i].id = players_sequence[i];
             }
         }
+
+        public static Player GetPlayer(ulong playerID)
+        {
+            foreach(Player player in players)
+            {
+                if (player.id == playerID)
+                    return player;
+            }
+            return null;
+        }
     }
 }
