@@ -10,7 +10,6 @@ from Server.api_id import API_ID
 
 def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
                  addr):
-    # TODO: if client_sock has been connect
     logging.info("Start handling New socket, addr is {}".format(addr))
     while True:
         header_data = client_sock.recv(HEADER_LENGTH)

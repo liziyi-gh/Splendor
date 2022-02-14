@@ -1,4 +1,5 @@
 import json
+import logging
 import socket
 
 from Server.gemstone import Gemstone
@@ -39,6 +40,7 @@ class Player:
         self.sock.send(msg)
 
     def setReady(self):
+        logging.info("Player {} ready".format(self.player_id))
         self.ready = True
 
     def addCard(self, card:Card, operation_info=None):
@@ -56,8 +58,11 @@ class Player:
                         self.chips[gems_type] -= item["gems_number"]
                 setattr(self, card.gem_type, getattr(self, card.gem_type)+1)
 
+        logging.info("Player {} got card {}".format(self.player_id, card.number))
+
     def addFoldCard(self, card:Card):
         self.fold_cards.append(card)
+        logging.info("Player {} fold card {}".format(self.player_id, card.number))
 
     def checkAvailbaleNobleCard(self, card:Card)->bool:
         for gemstone in card.chips.keys():

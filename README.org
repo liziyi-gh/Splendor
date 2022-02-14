@@ -221,6 +221,34 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 
 #+end_src
 服务器发送：服务器告知客户端玩家1可选择1号和2号贵族牌并要求回复
+** 交互流程图
+#+begin_src plantuml :file example_procedure.png
+  @startuml
+  actor client1 as c1
+  entity server as s
+  actor client2 as c2
+
+  c1 -> s : INIT
+  s -> c1 : INIT_RESP
+  c2 -> s : INIT
+  s -> c2 : INIT_REP
+  c1 -> s : PLAYER_READY
+  s -> c1 : PLAYER_READY
+  s -> c2 : PLAYER_READY
+  c2 -> s : PLAYER_READY
+  s -> c1 : PLAYER_READY
+  s -> c2 : PLAYER_READY
+  s -> c1 : GAME_START
+  s -> c2 : GAME_START
+  s -> c1 : NEW_TURN(client1 先走)
+  s -> c2 : NEW_TURN(client1 先走)
+
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:example_procedure.png]]
+
 ** Code Style
 
 *** 一行不宜超过 80 列 

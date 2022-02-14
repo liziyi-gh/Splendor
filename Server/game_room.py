@@ -133,6 +133,7 @@ class GameRoom:
 
     @thread_safe
     def playerOperationInvalid(self, player: Player):
+        logging.debug("Player {} Operation invalid".format(player.player_id))
         msg = message_helper.packPlayerOperationInvalid(player.player_id)
         player.sendMsg(msg)
 
@@ -226,6 +227,7 @@ class GameRoom:
                                            self.players_sequence,
                                            self.card_board)
         self.boardcastMsg(msg)
+        logging.info("Game start!")
         self.startNewTurn(self.players_sequence[0])
 
     @thread_safe
@@ -235,4 +237,4 @@ class GameRoom:
         next_player_id = self.players_sequence[idx]
         msg = message_helper.packNewTurn(next_player_id)
         self.boardcastMsg(msg)
-        logging.info("Start new turn")
+        logging.info("Start new turn with player {}".format(next_player_id))
