@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
                 msg.player_id = playerID;
                 msg.operation_type = "buy_card";
                 GameObject hl = highLight1.activeSelf ? highLight1 : highLight2;
-                msg.card_num = allCardSprites.IndexOf(hl.transform.parent.GetComponent<Image>().sprite);
+                msg.card_id = allCardSprites.IndexOf(hl.transform.parent.GetComponent<Image>().sprite);
                 for (int i = 0; i < 6; i++)
                     msg.gems[gems[i]] = int.Parse(money.GetChild(i).GetChild(1).GetChild(1).GetComponent<Text>().text);
                 Client.Send(msg);
@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviour
                 if (highLight1.transform.parent.name.Contains("Card"))
                 {
                     msg.operation_type = "fold_card";
-                    msg.card_num = allCardSprites.IndexOf(highLight1.transform.parent.GetComponent<Image>().sprite);
+                    msg.card_id = allCardSprites.IndexOf(highLight1.transform.parent.GetComponent<Image>().sprite);
                 }
                 else
                 {

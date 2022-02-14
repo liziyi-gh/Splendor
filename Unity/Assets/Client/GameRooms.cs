@@ -4,9 +4,17 @@ using MsgStruct;
 using Gems;
 using JsonClasses;
 using System.Collections.Generic;
+using CardLevelTypes;
 
 namespace GameRooms
 {
+
+    public class CardPosition
+    {
+        public string cardLevel;
+        public int cardIndex;
+    }
+
     public static class GameRoom
     {
         public static int players_number;
@@ -33,17 +41,17 @@ namespace GameRooms
             };
             cards_last_num = new Dictionary<string, int>
             {
-                {"levelOneCards", 40 },
-                {"levelTwoCards", 30 },
-                {"levelThreeCards", 20 },
-                {"nobles", players_number+1 }
+                {CardLevelType.levelOneCards, 40 },
+                {CardLevelType.levelTwoCards, 30 },
+                {CardLevelType.levelThreeCards, 20 },
+                {CardLevelType.nobles, players_number+1 }
             };
             cards_info = new Dictionary<string, int[]>
             {
-                {"levelOneCards", msg.levelOneCards_info },
-                {"levelTwoCards", msg.levelTwoCards_info },
-                {"levelThreeCards", msg.levelThreeCards_info },
-                {"nobles", msg.nobles_info }
+                {CardLevelType.levelOneCards, msg.levelOneCards_info },
+                {CardLevelType.levelTwoCards, msg.levelTwoCards_info },
+                {CardLevelType.levelThreeCards, msg.levelThreeCards_info },
+                {CardLevelType.nobles, msg.nobles_info }
             };
             players = new List<Player>();
             for (int i = 0; i < players_number; i++)
@@ -53,13 +61,22 @@ namespace GameRooms
             }
         }
 
-        public static Player GetPlayer(ulong playerID)
+        public static Player GetPlayer(ulong player_id)
         {
-            foreach(Player player in players)
-            {
-                if (player.id == playerID)
-                    return player;
-            }
+            return players[Array.BinarySearch(players_sequence, player_id)];
+        }
+
+        public static CardPosition GetCardPosition(int card_id)
+        {
+            CardPosition cardPos = new CardPosition();
+            foreach (var i in cards_info.Keys.ToArray<string>())
+                foreach (var j  in cards_info[i])
+                    if (j == card_id)
+                    {
+                        cardPos.cardLevel = i;
+                        cardPos.cardIndex = j;
+                        return cardPos;
+                    }
             return null;
         }
     }

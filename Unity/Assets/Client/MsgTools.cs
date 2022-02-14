@@ -98,20 +98,20 @@ namespace MsgTools
                     break;
 
                 case Operation.BUY_CARD:
-                    msg.card_num = (int)body_data["operation_type"][0]["card_number"];
+                    msg.card_id = (int)body_data["operation_type"][0]["card_number"];
                     for (i = 1; i < body_data["operation_info"].Count(); i++)
                         msg.gems[(string)body_data["operation_info"][i]["gems_type"]]
                             = (int)body_data["operation_info"][i]["gems_number"];
                     break;
 
                 case Operation.FOLD_CARD:
-                    msg.card_num = (int)body_data["operation_info"][0]["card_number"];
+                    msg.card_id = (int)body_data["operation_info"][0]["card_number"];
                     if (GameRoom.gems_last_num[GEM.GOLDEN] != 0) msg.gems[GEM.GOLDEN] = 1;
                     break;
 
                 case Operation.FOLD_CARD_UNKNOWN:
                     msg.card_level = (int)body_data["operation_info"][0]["card_level"];
-                    msg.card_num = (int)body_data["operation_info"][0]["card_number"];
+                    msg.card_id = (int)body_data["operation_info"][0]["card_number"];
                     break;
 
                 default:
@@ -126,7 +126,7 @@ namespace MsgTools
             JObject body_data = JObject.Parse(body_str);
             msg.player_id = (ulong)body_data["player_id"];
             foreach (var i in body_data["noble_number"])
-                msg.noble_num.Add((int)i);
+                msg.nobles_id.Add((int)i);
             return msg;
         }
 
@@ -147,7 +147,7 @@ namespace MsgTools
                     break;
 
                 case Operation.BUY_CARD:
-                    operationInfo.Add(new JObject(new JProperty("card_number", msg.card_num)));
+                    operationInfo.Add(new JObject(new JProperty("card_number", msg.card_id)));
                     foreach (var i in typeof(GEM).GetProperties())
                         if (msg.gems[i.Name] != 0)
                             operationInfo.Add(new JObject(new JProperty("gems_type", i.Name),
@@ -155,12 +155,12 @@ namespace MsgTools
                     break;
 
                 case Operation.FOLD_CARD:
-                    operationInfo.Add(new JObject(new JProperty("card_number", msg.card_num)));
+                    operationInfo.Add(new JObject(new JProperty("card_number", msg.card_id)));
                     break;
 
                 case Operation.FOLD_CARD_UNKNOWN:
                     operationInfo.Add(new JObject(new JProperty("card_level", msg.card_level),
-                                                  new JProperty("card_number", msg.card_num)));
+                                                  new JProperty("card_number", msg.card_id)));
                     break;
 
                 default:
@@ -180,7 +180,7 @@ namespace MsgTools
             
             JObject body_data = new JObject();
             body_data.Add("player_id", msg.player_id);
-            body_data.Add(new JArray(msg.noble_num[0]));
+            body_data.Add(new JArray(msg.nobles_id[0]));
             byte[] body_msg =  Encoding.UTF8.GetBytes(body_data.ToString());
             buffer.AddRange(MsgHeadPack(msg, (ulong)body_msg.Length));
             buffer.AddRange(body_msg);

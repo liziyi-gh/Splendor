@@ -11,10 +11,10 @@ namespace MsgStruct
                      msg_len = 0L,
                      reserve = 0L;
         public int card_level = 0,
-                   card_num = 0;
+                   card_id = 0;
         public string? operation_type;
         public List<ulong> other_player_id = new List<ulong>();
-        public List<int> noble_num = new List<int>();
+        public List<int> nobles_id = new List<int>();
         public Dictionary<string, int> gems = new Dictionary<string, int>
         {
             { GEM.DIAMOND, 0 },

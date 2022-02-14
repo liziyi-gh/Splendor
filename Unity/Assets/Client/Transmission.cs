@@ -12,6 +12,7 @@ using ApiID;
 using GameRooms;
 using PlayerOperations;
 using Gems;
+using CardLevelTypes;
 
 namespace Transmission
 {
@@ -61,11 +62,12 @@ namespace Transmission
 
                     case API_ID.NEW_TURN:
                         body_msg = Tools.MsgNEW_TURN(body_str);
-                        //
+                        GameManager.NewTurn(body_msg);
                         break;
 
                     case API_ID.PLAYER_OPERATION:
                         body_msg = Tools.MsgPLAYER_OPERATION(body_str);
+                        CardPosition cardPos = GameRoom.GetCardPosition(body_msg.card_id);
                         switch (body_msg.operation_type)
                         {
                             case Operation.GET_GEMS:
@@ -78,10 +80,18 @@ namespace Transmission
 
                             case Operation.BUY_CARD:
                                 foreach (var i in typeof(GEM).GetProperties())
+                                {
                                     GameRoom.players[Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id)].gems[i.Name] -= body_msg.gems[i.Name];
+                                    GameRoom.gems_last_num[i.Name] += body_msg.gems[i.Name];
+                                }
+                                GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
                                 break;
 
                             case Operation.FOLD_CARD:
+                                GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
+                                GameRoom.players[Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id)].gems[GEM.GOLDEN] += body_msg.gems[GEM.GOLDEN];
+                                GameRoom.gems_last_num[GEM.GOLDEN] -= body_msg.gems[GEM.GOLDEN];
+                                //
                                 break;
 
                             case Operation.FOLD_CARD_UNKNOWN:
@@ -103,11 +113,11 @@ namespace Transmission
 
                     case API_ID.PLAYER_GET_NOBLE:
                         body_msg= Tools.MsgPLAYER_GET_NOBLE(body_str);
-                        switch (body_msg.noble_num.Count())
+                        switch (body_msg.nobles_id.Count())
                         {
                             case 1:
                                 GameRoom.players[Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id)].point += 3;
-                                GameRoom.players[Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id)].nobles.Add(body_msg.noble_num[0]);
+                                GameRoom.players[Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id)].nobles.Add(body_msg.nobles_id[0]);
                                 break;
 
                             default:
