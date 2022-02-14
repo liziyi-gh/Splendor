@@ -2,7 +2,7 @@
   "number": "1",
   "card_type": "normal",
   "level": "1",
-  "points": "0",
+  "points": "1",
   "gem_type": "sapphire",
   "chips": {
     "ruby": "4",
@@ -15,7 +15,7 @@
   "number": "2",
   "card_type": "normal",
   "level": "1",
-  "points": "0",
+  "points": "1",
   "gem_type": "diamond",
   "chips": {
     "ruby": "0",
@@ -28,7 +28,7 @@
   "number": "3",
   "card_type": "normal",
   "level": "1",
-  "points": "0",
+  "points": "1",
   "gem_type": "obsidian",
   "chips": {
     "ruby": "0",
@@ -41,7 +41,7 @@
   "number": "4",
   "card_type": "normal",
   "level": "1",
-  "points": "0",
+  "points": "1",
   "gem_type": "emerald",
   "chips": {
     "ruby": "0",
@@ -54,7 +54,7 @@
   "number": "5",
   "card_type": "normal",
   "level": "1",
-  "points": "0",
+  "points": "1",
   "gem_type": "ruby",
   "chips": {
     "ruby": "0",
@@ -126,6 +126,1176 @@
     "diamond": "1",
     "sapphire": "0",
     "emerald": "0",
+    "obsidian": "3"
+  }
+},{
+  "number": "11",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "2",
+    "diamond": "1",
+    "sapphire": "0",
+    "emerald": "2",
+    "obsidian": "0"
+  }
+},{
+  "number": "12",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "2",
+    "emerald": "2",
+    "obsidian": "1"
+  }
+},{
+  "number": "13",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "1",
+    "diamond": "2",
+    "sapphire": "2",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "14",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "2",
+    "diamond": "0",
+    "sapphire": "1",
+    "emerald": "0",
+    "obsidian": "2"
+  }
+},{
+  "number": "15",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "0",
+    "diamond": "2",
+    "sapphire": "0",
+    "emerald": "1",
+    "obsidian": "2"
+  }
+},{
+  "number": "16",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "2",
+    "diamond": "1",
+    "sapphire": "0",
+    "emerald": "1",
+    "obsidian": "1"
+  }
+},{
+  "number": "17",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "1",
+    "diamond": "0",
+    "sapphire": "1",
+    "emerald": "2",
+    "obsidian": "1"
+  }
+},{
+  "number": "18",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "1",
+    "diamond": "1",
+    "sapphire": "2",
+    "emerald": "1",
+    "obsidian": "0"
+  }
+},{
+  "number": "19",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "1",
+    "diamond": "1",
+    "sapphire": "1",
+    "emerald": "0",
+    "obsidian": "2"
+  }
+},{
+  "number": "20",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "0",
+    "diamond": "2",
+    "sapphire": "1",
+    "emerald": "1",
+    "obsidian": "1"
+  }
+},{
+  "number": "21",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "2",
+    "obsidian": "2"
+  }
+},{
+  "number": "22",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "2",
+    "emerald": "0",
+    "obsidian": "2"
+  }
+},{
+  "number": "23",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "0",
+    "diamond": "2",
+    "sapphire": "0",
+    "emerald": "2",
+    "obsidian": "0"
+  }
+},{
+  "number": "24",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "2",
+    "diamond": "0",
+    "sapphire": "2",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "25",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "2",
+    "diamond": "2",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "26",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "1",
+    "diamond": "1",
+    "sapphire": "0",
+    "emerald": "1",
+    "obsidian": "1"
+  }
+},{
+  "number": "27",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "1",
+    "diamond": "0",
+    "sapphire": "1",
+    "emerald": "1",
+    "obsidian": "1"
+  }
+},{
+  "number": "28",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "1",
+    "diamond": "1",
+    "sapphire": "1",
+    "emerald": "1",
+    "obsidian": "0"
+  }
+},{
+  "number": "29",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "1",
+    "diamond": "1",
+    "sapphire": "1",
+    "emerald": "0",
+    "obsidian": "1"
+  }
+},{
+  "number": "30",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "0",
+    "diamond": "1",
+    "sapphire": "1",
+    "emerald": "1",
+    "obsidian": "1"
+  }
+},{
+  "number": "31",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "3"
+  }
+},{
+  "number": "32",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "3",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "33",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "3",
+    "obsidian": "0"
+  }
+},{
+  "number": "34",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "3",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "35",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "0",
+    "diamond": "3",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "36",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "1",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "2"
+  }
+},{
+  "number": "37",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "2",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "1"
+  }
+},{
+  "number": "38",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "1",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "2",
+    "obsidian": "0"
+  }
+},{
+  "number": "39",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "0",
+    "diamond": "2",
+    "sapphire": "1",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "40",
+  "card_type": "normal",
+  "level": "1",
+  "points": "0",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "2",
+    "emerald": "1",
+    "obsidian": "0"
+  }
+},{
+  "number": "41",
+  "card_type": "normal",
+  "level": "2",
+  "points": "3",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "6",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "42",
+  "card_type": "normal",
+  "level": "2",
+  "points": "3",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "0",
+    "diamond": "6",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "43",
+  "card_type": "normal",
+  "level": "2",
+  "points": "3",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "6"
+  }
+},{
+  "number": "44",
+  "card_type": "normal",
+  "level": "2",
+  "points": "3",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "6",
+    "obsidian": "0"
+  }
+},{
+  "number": "45",
+  "card_type": "normal",
+  "level": "2",
+  "points": "3",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "6",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "46",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "5",
+    "sapphire": "3",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "47",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "5",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "3"
+  }
+},{
+  "number": "48",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "3",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "5",
+    "obsidian": "0"
+  }
+},{
+  "number": "49",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "5",
+    "emerald": "3",
+    "obsidian": "0"
+  }
+},{
+  "number": "50",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "0",
+    "diamond": "3",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "5"
+  }
+},{
+  "number": "51",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "5",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "52",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "5",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "53",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "0",
+    "diamond": "5",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "54",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "5",
+    "obsidian": "0"
+  }
+},{
+  "number": "55",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "5"
+  }
+},{
+  "number": "56",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "1",
+    "diamond": "2",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "4"
+  }
+},{
+  "number": "57",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "4",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "1",
+    "obsidian": "2"
+  }
+},{
+  "number": "58",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "2",
+    "diamond": "0",
+    "sapphire": "1",
+    "emerald": "4",
+    "obsidian": "0"
+  }
+},{
+  "number": "59",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "0",
+    "diamond": "4",
+    "sapphire": "2",
+    "emerald": "0",
+    "obsidian": "1"
+  }
+},{
+  "number": "60",
+  "card_type": "normal",
+  "level": "2",
+  "points": "2",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "0",
+    "diamond": "1",
+    "sapphire": "4",
+    "emerald": "2",
+    "obsidian": "0"
+  }
+},{
+  "number": "61",
+  "card_type": "normal",
+  "level": "2",
+  "points": "1",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "2",
+    "emerald": "3",
+    "obsidian": "3"
+  }
+},{
+  "number": "62",
+  "card_type": "normal",
+  "level": "2",
+  "points": "1",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "3",
+    "diamond": "2",
+    "sapphire": "3",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "63",
+  "card_type": "normal",
+  "level": "2",
+  "points": "1",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "0",
+    "diamond": "3",
+    "sapphire": "0",
+    "emerald": "3",
+    "obsidian": "2"
+  }
+},{
+  "number": "64",
+  "card_type": "normal",
+  "level": "2",
+  "points": "1",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "3",
+    "diamond": "3",
+    "sapphire": "0",
+    "emerald": "2",
+    "obsidian": "0"
+  }
+},{
+  "number": "65",
+  "card_type": "normal",
+  "level": "2",
+  "points": "1",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "2",
+    "diamond": "0",
+    "sapphire": "3",
+    "emerald": "0",
+    "obsidian": "3"
+  }
+},{
+  "number": "66",
+  "card_type": "normal",
+  "level": "2",
+  "points": "1",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "3",
+    "diamond": "0",
+    "sapphire": "2",
+    "emerald": "2",
+    "obsidian": "0"
+  }
+},{
+  "number": "67",
+  "card_type": "normal",
+  "level": "2",
+  "points": "1",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "2",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "3",
+    "obsidian": "2"
+  }
+},{
+  "number": "68",
+  "card_type": "normal",
+  "level": "2",
+  "points": "1",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "0",
+    "diamond": "3",
+    "sapphire": "2",
+    "emerald": "2",
+    "obsidian": "0"
+  }
+},{
+  "number": "69",
+  "card_type": "normal",
+  "level": "2",
+  "points": "1",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "0",
+    "diamond": "2",
+    "sapphire": "3",
+    "emerald": "0",
+    "obsidian": "2"
+  }
+},{
+  "number": "70",
+  "card_type": "normal",
+  "level": "2",
+  "points": "1",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "2",
+    "diamond": "2",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "3"
+  }
+},{
+  "number": "71",
+  "card_type": "normal",
+  "level": "3",
+  "points": "5",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "7",
+    "sapphire": "3",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "72",
+  "card_type": "normal",
+  "level": "3",
+  "points": "5",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "0",
+    "diamond": "3",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "7"
+  }
+},{
+  "number": "73",
+  "card_type": "normal",
+  "level": "3",
+  "points": "5",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "7",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "3"
+  }
+},{
+  "number": "74",
+  "card_type": "normal",
+  "level": "3",
+  "points": "5",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "7",
+    "emerald": "3",
+    "obsidian": "0"
+  }
+},{
+  "number": "75",
+  "card_type": "normal",
+  "level": "3",
+  "points": "5",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "3",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "7",
+    "obsidian": "0"
+  }
+},{
+  "number": "76",
+  "card_type": "normal",
+  "level": "3",
+  "points": "4",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "7",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "77",
+  "card_type": "normal",
+  "level": "3",
+  "points": "4",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "7"
+  }
+},{
+  "number": "78",
+  "card_type": "normal",
+  "level": "3",
+  "points": "4",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "7",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "79",
+  "card_type": "normal",
+  "level": "3",
+  "points": "4",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "7",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "80",
+  "card_type": "normal",
+  "level": "3",
+  "points": "4",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "7",
+    "obsidian": "0"
+  }
+},{
+  "number": "81",
+  "card_type": "normal",
+  "level": "3",
+  "points": "4",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "0",
+    "diamond": "6",
+    "sapphire": "3",
+    "emerald": "0",
+    "obsidian": "3"
+  }
+},{
+  "number": "82",
+  "card_type": "normal",
+  "level": "3",
+  "points": "4",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "3",
+    "diamond": "3",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "6"
+  }
+},{
+  "number": "83",
+  "card_type": "normal",
+  "level": "3",
+  "points": "4",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "6",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "3",
+    "obsidian": "3"
+  }
+},{
+  "number": "84",
+  "card_type": "normal",
+  "level": "3",
+  "points": "4",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "0",
+    "diamond": "3",
+    "sapphire": "6",
+    "emerald": "3",
+    "obsidian": "0"
+  }
+},{
+  "number": "85",
+  "card_type": "normal",
+  "level": "3",
+  "points": "4",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "3",
+    "diamond": "0",
+    "sapphire": "3",
+    "emerald": "6",
+    "obsidian": "0"
+  }
+},{
+  "number": "86",
+  "card_type": "normal",
+  "level": "3",
+  "points": "3",
+  "gem_type": "sapphire",
+  "chips": {
+    "ruby": "3",
+    "diamond": "3",
+    "sapphire": "0",
+    "emerald": "3",
+    "obsidian": "5"
+  }
+},{
+  "number": "87",
+  "card_type": "normal",
+  "level": "3",
+  "points": "3",
+  "gem_type": "diamond",
+  "chips": {
+    "ruby": "5",
+    "diamond": "0",
+    "sapphire": "3",
+    "emerald": "3",
+    "obsidian": "3"
+  }
+},{
+  "number": "88",
+  "card_type": "normal",
+  "level": "3",
+  "points": "3",
+  "gem_type": "obsidian",
+  "chips": {
+    "ruby": "3",
+    "diamond": "3",
+    "sapphire": "3",
+    "emerald": "5",
+    "obsidian": "0"
+  }
+},{
+  "number": "89",
+  "card_type": "normal",
+  "level": "3",
+  "points": "3",
+  "gem_type": "emerald",
+  "chips": {
+    "ruby": "3",
+    "diamond": "5",
+    "sapphire": "3",
+    "emerald": "0",
+    "obsidian": "3"
+  }
+},{
+  "number": "90",
+  "card_type": "normal",
+  "level": "3",
+  "points": "3",
+  "gem_type": "ruby",
+  "chips": {
+    "ruby": "0",
+    "diamond": "3",
+    "sapphire": "5",
+    "emerald": "3",
+    "obsidian": "3"
+  }
+},{
+  "number": "91",
+  "card_type": "noble",
+  "level": "0",
+  "points": "3",
+  "gem_type": "0",
+  "chips": {
+    "ruby": "0",
+    "diamond": "4",
+    "sapphire": "4",
+    "emerald": "0",
+    "obsidian": "0"
+  }
+},{
+  "number": "92",
+  "card_type": "noble",
+  "level": "0",
+  "points": "3",
+  "gem_type": "0",
+  "chips": {
+    "ruby": "4",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "4",
+    "obsidian": "0"
+  }
+},{
+  "number": "93",
+  "card_type": "noble",
+  "level": "0",
+  "points": "3",
+  "gem_type": "0",
+  "chips": {
+    "ruby": "0",
+    "diamond": "3",
+    "sapphire": "3",
+    "emerald": "3",
+    "obsidian": "0"
+  }
+},{
+  "number": "94",
+  "card_type": "noble",
+  "level": "0",
+  "points": "3",
+  "gem_type": "0",
+  "chips": {
+    "ruby": "0",
+    "diamond": "3",
+    "sapphire": "3",
+    "emerald": "0",
+    "obsidian": "3"
+  }
+},{
+  "number": "95",
+  "card_type": "noble",
+  "level": "0",
+  "points": "3",
+  "gem_type": "0",
+  "chips": {
+    "ruby": "0",
+    "diamond": "4",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "4"
+  }
+},{
+  "number": "96",
+  "card_type": "noble",
+  "level": "0",
+  "points": "3",
+  "gem_type": "0",
+  "chips": {
+    "ruby": "0",
+    "diamond": "0",
+    "sapphire": "4",
+    "emerald": "4",
+    "obsidian": "0"
+  }
+},{
+  "number": "97",
+  "card_type": "noble",
+  "level": "0",
+  "points": "3",
+  "gem_type": "0",
+  "chips": {
+    "ruby": "4",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "4"
+  }
+},{
+  "number": "98",
+  "card_type": "noble",
+  "level": "0",
+  "points": "3",
+  "gem_type": "0",
+  "chips": {
+    "ruby": "3",
+    "diamond": "0",
+    "sapphire": "3",
+    "emerald": "3",
+    "obsidian": "0"
+  }
+},{
+  "number": "99",
+  "card_type": "noble",
+  "level": "0",
+  "points": "3",
+  "gem_type": "0",
+  "chips": {
+    "ruby": "3",
+    "diamond": "3",
+    "sapphire": "0",
+    "emerald": "0",
+    "obsidian": "3"
+  }
+},{
+  "number": "100",
+  "card_type": "noble",
+  "level": "0",
+  "points": "3",
+  "gem_type": "0",
+  "chips": {
+    "ruby": "3",
+    "diamond": "0",
+    "sapphire": "0",
+    "emerald": "3",
     "obsidian": "3"
   }
 }]

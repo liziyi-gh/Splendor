@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using JsonClasses;
 using GameRooms;
-using System.Collections.Generic;
 
 namespace MsgTools
 {
@@ -52,10 +51,17 @@ namespace MsgTools
             return result;
         }
 
-        public static JsonRoom MsgsGAME_START(string body_str)
+        public static RoomMsgs MsgsGAME_START(string body_str)
         {
             JsonRoom roomData = JsonConvert.DeserializeObject<JsonRoom>(body_str);
-            return roomData;
+            RoomMsgs roomMsgs = new RoomMsgs();
+            roomMsgs.players_number = roomData.players_number;
+            roomMsgs.players_sequence = roomData.players_sequence;
+            roomMsgs.nobles_info = roomData.nobles_info;
+            roomMsgs.levelOneCards_info = roomData.levelOneCards_info;
+            roomMsgs.levelTwoCards_info = roomData.levelTwoCards_info;
+            roomMsgs.levelThreeCards_info = roomData.levelThreeCards_info;
+            return roomMsgs;
         }
 
         public static Msgs MsgINIT_RESP(string body_str)

@@ -3,7 +3,6 @@ using Players;
 using MsgStruct;
 using Gems;
 using JsonClasses;
-using System.Collections.Generic;
 
 namespace GameRooms
 {
@@ -15,7 +14,7 @@ namespace GameRooms
         public static Dictionary<string, int> gems_last_num, cards_last_num;
         public static List<Player> players;
 
-        public static void GameRoomInit(JsonRoom msg)
+        public static void GameRoomInit(RoomMsgs msg)
         {
             players_number = msg.players_number;
             players_sequence = msg.players_sequence;

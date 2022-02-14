@@ -20,13 +20,13 @@ namespace JsonClasses
 
     public class JsonINIT_RESP
     {
-        public uint allocated_player_id { get; set; }
-        public uint[]? other_player_id { get; set; }
+        public ulong allocated_player_id { get; set; }
+        public ulong[]? other_player_id { get; set; }
 
     }
 
     public class JsonNEW_TURN
     {
-        public uint new_turn_player { get; set; }
+        public ulong new_turn_player { get; set; }
     }
 }

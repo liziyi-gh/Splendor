@@ -3,6 +3,8 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using MsgTools;
 using MsgStruct;
@@ -10,8 +12,6 @@ using ApiID;
 using GameRooms;
 using PlayerOperations;
 using Gems;
-using System.Collections.Generic;
-using System.Threading;
 
 namespace Transmission
 {
@@ -46,15 +46,17 @@ namespace Transmission
                 {
                     case API_ID.INIT_RESP:
                         body_msg = Tools.MsgINIT_RESP(body_str);
-                        //
+                        GameManager.GetPlayerID(body_msg);
                         break;
 
                     case API_ID.PLAYER_READY:
-                        //
+                        GameManager.OtherGetReady(head_msg);
                         break;
 
                     case API_ID.GAME_START:
-                        GameRoom.GameRoomInit(Tools.MsgsGAME_START(body_str));
+                        RoomMsgs roomMsgs = Tools.MsgsGAME_START(body_str);
+                        GameRoom.GameRoomInit(roomMsgs);
+                        GameManager.GameStart(roomMsgs);
                         break;
 
                     case API_ID.NEW_TURN:
@@ -96,8 +98,7 @@ namespace Transmission
                         break;
 
                     case API_ID.NEW_PLAYER:
-                        
-                        //
+                        GameManager.NewPlayerGetIn(head_msg);
                         break;
 
                     case API_ID.PLAYER_GET_NOBLE:
