@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
 
                 //发送准备消息至服务端；
                 msg.api_id = 3;
-                msg.player_id = (ulong)playerID;
+                msg.player_id = playerID;
                 Client.Send(msg);
 
                 break;
@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
     public static void GetPlayerID(Msgs msgs)
     {
         ulong myID = msgs.player_id;
-        List<uint> othersID = msgs.other_player_id;
+        List<ulong> othersID = msgs.other_player_id;
 
         current.playerID = myID;
         int playerNum = othersID.Count + 1;

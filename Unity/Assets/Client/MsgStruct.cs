@@ -13,7 +13,7 @@ namespace MsgStruct
         public int card_level = 0,
                    card_num = 0;
         public string? operation_type;
-        public List<uint> other_player_id = new List<uint>();
+        public List<ulong> other_player_id = new List<ulong>();
         public List<int> noble_num = new List<int>();
         public Dictionary<string, int> gems = new Dictionary<string, int>
         {
