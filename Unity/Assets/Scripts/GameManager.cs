@@ -343,7 +343,7 @@ public class GameManager : MonoBehaviour
         switch (testNum)
         {
             case 0:
-                List<uint> test = new List<uint>();
+                List<ulong> test = new List<ulong>();
                 test.Add(1);
                 test.Add(4);
                 testMsg.player_id = 3;
