@@ -1,6 +1,5 @@
 import socket
 import random
-import threading
 import logging
 
 from Server import message_helper
@@ -9,27 +8,7 @@ from Server.message_helper import Header
 from Server.player import Player
 from Server.operation import Operation
 from Server.card_board import CardBoard
-
-
-def static_vars(**kwargs):
-
-    def decorate(func):
-        for k in kwargs:
-            setattr(func, k, kwargs[k])
-        return func
-
-    return decorate
-
-
-def thread_safe(function):
-
-    @static_vars(lock=threading.Lock())
-    def async_wrapper(self, *args, **kwargs):
-        with async_wrapper.lock:
-            ret = function(self, *args, **kwargs)
-            return ret
-
-    return async_wrapper
+from Server.func_helper import thread_safe
 
 
 class GameRoom:
