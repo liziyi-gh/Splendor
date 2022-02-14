@@ -33,8 +33,8 @@ class Card:
                  chips=None):
         self.card_type = card_type
         self.number = number
-        self.level = level
-        self.points = points
+        self.level = int(level)
+        self.points = int(points)
         self.gem_type = gem_type
 
         # This indicate how many chips need to cash this card

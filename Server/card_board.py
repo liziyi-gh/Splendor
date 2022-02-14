@@ -18,19 +18,20 @@ class CardBoard():
             card = Card.createFromJson(item)
             self.card_repo.append(card)
         random.shuffle(self.card_repo)
-
+        self.used_cards = []
         self.nobles_info = [self.nextCardInRepo(0)]
         self.levelOneCards_info = []
         self.levelTwoCards_info = []
         self.levelThreeCards_info = []
         for i in range(self.WIDTH_OF_CARD_IN_BOARD):
-            self.addNewCardToBoard(1, position=i)
-            self.addNewCardToBoard(2, position=i)
-            self.addNewCardToBoard(3, position=i)
+            self.addNewCardToBoard(1)
+            self.addNewCardToBoard(2)
+            self.addNewCardToBoard(3)
 
     def nextCardInRepo(self, card_level) -> Card:
         for item in self.card_repo:
             if item.level == card_level:
+                self.used_cards.append(item)
                 self.card_repo.remove(item)
                 return item
 
@@ -63,21 +64,21 @@ class CardBoard():
         card = self.nextCardInRepo(card_level)
 
         if card_level == 1:
-            if position is None:
+            if position is not None:
                 position = self.levelOneCards_info.index(original_card)
                 self.levelOneCards_info[position] = card
             else:
                 self.levelOneCards_info.append(card)
 
         if card_level == 2:
-            if position is None:
+            if position is not None:
                 position = self.levelTwoCards_info.index(original_card)
                 self.levelTwoCards_info[position] = card
             else:
                 self.levelTwoCards_info.append(card)
 
         if card_level == 3:
-            if position is None:
+            if position is not None:
                 position = self.levelThreeCards_info.index(original_card)
                 self.levelThreeCards_info[position] = card
             else:
