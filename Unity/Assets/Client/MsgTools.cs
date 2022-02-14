@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using JsonClasses;
 using GameRooms;
+using System.Collections.Generic;
 
 namespace MsgTools
 {

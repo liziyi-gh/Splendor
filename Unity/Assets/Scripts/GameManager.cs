@@ -26,15 +26,27 @@ public class GameManager : MonoBehaviour
 
     public State state = State.unready;
     [SerializeField] GameObject highLight1, highLight2;
+    
+    //组件Transform
     Transform stones;
     Transform money;
     Transform players;
-    [SerializeField] GameObject playerPrefab;
-    int playerID=0;    
+    Transform nobles;
+    Transform cards;
+
+    [Header("预制体")]
+    [SerializeField] GameObject playerPrefab, noblePrefab;
+
+    [Header("Sprite")]
+    [SerializeField] Sprite[] allCardSprites;
+
+    ulong playerID=0;    
     
     Msgs msg=new Msgs();
 
     int testNum=0;
+    Msgs testMsg = new Msgs();
+    RoomMsgs testRoom = new RoomMsgs();
 
     private void Awake()
     {
@@ -48,7 +60,8 @@ public class GameManager : MonoBehaviour
         stones = GameObject.Find("Stones").transform;
         money = GameObject.Find("Money").transform;
         players = GameObject.Find("Players").transform;
-                        
+        nobles = GameObject.Find("Nobles").transform;
+        cards = GameObject.Find("CardGroup").transform;
 
         //连接服务器；
         Client.Connect();
@@ -117,8 +130,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static void GetPlayerID(int myID,List<int> othersID)
+    public static void GetPlayerID(Msgs msgs)
     {
+        ulong myID = msgs.player_id;
+        List<uint> othersID = msgs.other_player_id;
+
         current.playerID = myID;
         int playerNum = othersID.Count + 1;
 
@@ -132,27 +148,71 @@ public class GameManager : MonoBehaviour
         
     }    
 
-    public static void NewPlayerGetIn(int hisPlayerID)
+    public static void NewPlayerGetIn(Msgs msgs)
     {
+        ulong hisPlayerID = msgs.player_id;
         GameObject player = Instantiate(current.playerPrefab);
         player.transform.SetParent(current.players);
         player.name = "Player" + hisPlayerID.ToString();        
     }
 
-    public static void OtherGetReady(int hisPlayerID)
+    public static void OtherGetReady(Msgs msgs)
     {
+        ulong hisPlayerID = msgs.player_id;
         GameObject.Find("Player"+hisPlayerID.ToString()).transform.GetChild(1).GetComponent<Text>().color = Color.green;
     }
 
-    public static void GameStart(List<int> playersSeq/*, List<int> nobles, List<int> level1, List<int> level2, List<int> level3*/)
-    {
+    public static void GameStart(RoomMsgs room)
+    {        
+        //把玩家按行动顺序排序
         current.players.DetachChildren();
-        foreach(int player_id in playersSeq)
+        foreach(int player_id in room.players_sequence)
         {
             GameObject player = GameObject.Find("Player" + player_id.ToString());
             player.transform.SetParent(current.players);
-            Debug.Log(player_id);
+            //准备字体不透明度设为0
+            player.transform.GetChild(1).GetComponent<Text>().color = Color.clear;            
         }
+
+        //设置贵族牌
+        foreach(int card_id in room.nobles_info)
+        {
+            GameObject noble = Instantiate(current.noblePrefab);
+            noble.transform.SetParent(current.nobles);
+            noble.GetComponent<Image>().sprite = current.allCardSprites[card_id];
+        }
+
+        //设置1、2、3级牌
+        current.cards.GetChild(0).GetChild(0).GetComponent<Text>().text = "36";
+        current.cards.GetChild(5).GetChild(0).GetComponent<Text>().text = "26";
+        current.cards.GetChild(10).GetChild(0).GetComponent<Text>().text = "16";
+        int i = 1;
+        foreach (int card_id in room.levelOneCards_info)
+        {
+            Image image = current.cards.GetChild(i).GetComponent<Image>();
+            image.color = Color.white;
+            image.sprite = current.allCardSprites[card_id];
+            i++;
+        }        
+        foreach (int card_id in room.levelTwoCards_info)
+        {
+            i++;
+            Image image = current.cards.GetChild(i).GetComponent<Image>();
+            image.color = Color.white;
+            image.sprite = current.allCardSprites[card_id];            
+        }
+        i++;
+        foreach (int card_id in room.levelThreeCards_info)
+        {
+            i++;
+            Image image = current.cards.GetChild(i).GetComponent<Image>();
+            image.color = Color.white;
+            image.sprite = current.allCardSprites[card_id];
+        }
+
+        //设置Player状态；
+        current.state = State.waiting;
+
     }
 
     public void Test()
@@ -161,31 +221,37 @@ public class GameManager : MonoBehaviour
         switch (testNum)
         {
             case 0:
-                List<int> test = new List<int>();
+                List<uint> test = new List<uint>();
                 test.Add(1);
                 test.Add(4);
-                GetPlayerID(3, test);
+                testMsg.player_id = 3;
+                testMsg.other_player_id = test;
+                GetPlayerID(testMsg);
                 testNum++;
                 break;
             case 1:
-                NewPlayerGetIn(6);
+                testMsg.player_id = 6;
+                NewPlayerGetIn(testMsg);
                 testNum++;
                 break;
             case 2:
-                OtherGetReady(1);
+                testMsg.player_id = 1;
+                OtherGetReady(testMsg);
                 testNum++;
                 break;
             case 3:
-                OtherGetReady(6);
+                testMsg.player_id = 6;
+                OtherGetReady(testMsg);
                 testNum++;
                 break;
             case 4:
-                List<int> test1 = new List<int>();
-                test1.Add(3);
-                test1.Add(4);
-                test1.Add(1);
-                test1.Add(6);
-                GameStart(test1);
+                testRoom.players_number = 4;
+                testRoom.players_sequence = new ulong[] { 4, 1, 3, 6 };
+                testRoom.nobles_info = new int[] { 4, 3, 1, 2, 5 };
+                testRoom.levelOneCards_info = new int[] { 6, 7, 8, 9 };
+                testRoom.levelTwoCards_info = new int[] { 6, 7, 8, 9 };
+                testRoom.levelThreeCards_info = new int[] { 6, 7, 8, 9 };
+                GameStart(testRoom);
                 testNum++;
                 break;
 
