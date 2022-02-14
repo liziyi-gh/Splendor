@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using MsgStruct;
 using Transmission;
+using Gems;
 
 public enum State
 {
@@ -25,8 +26,8 @@ public class GameManager : MonoBehaviour
     static GameManager current;
 
     public State state = State.unready;
-    [SerializeField] GameObject highLight1, highLight2;
-    
+    [SerializeField] GameObject highLight1, highLight2, highLight3;
+
     //组件Transform
     Transform stones;
     Transform money;
@@ -35,18 +36,20 @@ public class GameManager : MonoBehaviour
     Transform cards;
 
     [Header("预制体")]
-    [SerializeField] GameObject playerPrefab, noblePrefab;
+    [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject noblePrefab;
 
     [Header("Sprite")]
-    [SerializeField] Sprite[] allCardSprites;
+    [SerializeField] List<Sprite> allCardSprites;
 
-    ulong playerID=0;    
-    
-    Msgs msg=new Msgs();
+    ulong playerID = 0;
 
-    int testNum=0;
+    Msgs msg = new Msgs();
+
+    int testNum = 0;
     Msgs testMsg = new Msgs();
     RoomMsgs testRoom = new RoomMsgs();
+    string[] gems = new string[] {GEM.OBSIDIAN,GEM.RUBY,GEM.EMERALD,GEM.SAPPHIRE,GEM.DIAMOND,GEM.GOLDEN};
 
     private void Awake()
     {
@@ -80,7 +83,11 @@ public class GameManager : MonoBehaviour
 
     public void Reset()
     {
-        state = State.start;        
+        //若游戏还没开始则不能复位；
+        if (state == State.ready || state == State.unready)
+            return;
+
+        state = State.start;
 
         highLight1.SetActive(false); highLight2.SetActive(false);
 
@@ -97,12 +104,42 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case State.takingMoney:
+                //发送拿取筹码组合的具体消息至服务端；
+                msg.api_id = 6;
+                msg.player_id = playerID;
+                msg.operation_type = "get_gems";
+                for(int i=0;i<5;i++)
+                    msg.gems[gems[i]]= int.Parse(stones.GetChild(i).GetChild(1).GetComponent<Text>().text);
+                Client.Send(msg);                
                 break;
 
             case State.buyingCard:
+                //发送买卡的具体消息至服务端；
+                msg.api_id = 6;
+                msg.player_id = playerID;
+                msg.operation_type = "buy_card";
+                GameObject hl = highLight1.activeSelf ? highLight1 : highLight2;
+                msg.card_num = allCardSprites.IndexOf(hl.transform.parent.GetComponent<Image>().sprite);
+                for (int i = 0; i < 6; i++)
+                    msg.gems[gems[i]] = int.Parse(money.GetChild(i).GetChild(1).GetChild(1).GetComponent<Text>().text);
+                Client.Send(msg);
                 break;
 
             case State.flipingCard:
+                //发送盖卡的具体消息至服务端；
+                msg.api_id = 6;
+                msg.player_id = playerID;
+                if (highLight1.transform.parent.name.Contains("Card"))
+                {
+                    msg.operation_type = "fold_card";
+                    msg.card_num = allCardSprites.IndexOf(highLight1.transform.parent.GetComponent<Image>().sprite);
+                }
+                else
+                {
+                    msg.operation_type = "fold_card_unknown";
+                    msg.card_level = int.Parse(highLight1.transform.parent.name);
+                }
+                Client.Send(msg);
                 break;
 
             case State.choosingNoble:
@@ -111,10 +148,12 @@ public class GameManager : MonoBehaviour
             case State.unready:
                 //UI显示准备；
                 players.GetChild(0).GetChild(1).GetComponent<Text>().color = Color.green;
-
+                highLight3.GetComponent<Image>().color = Color.clear;
+                //状态切换为已准备；
+                state = State.ready;
                 //发送准备消息至服务端；
                 msg.api_id = 3;
-                msg.player_id = (ulong)playerID;
+                msg.player_id = playerID;
                 Client.Send(msg);
 
                 break;
@@ -127,9 +166,15 @@ public class GameManager : MonoBehaviour
         {
             GameObject player = Instantiate(playerPrefab);
             player.transform.SetParent(players);
+            if (i == 0)
+            {
+                highLight3.transform.SetParent(player.transform,false);
+                highLight3.GetComponent<Image>().color = Color.red;
+            }                
         }
     }
 
+    //获得自己玩家ID和其他玩家ID；
     public static void GetPlayerID(Msgs msgs)
     {
         ulong myID = msgs.player_id;
@@ -148,6 +193,7 @@ public class GameManager : MonoBehaviour
         
     }    
 
+    //其他玩家进入房间；
     public static void NewPlayerGetIn(Msgs msgs)
     {
         ulong hisPlayerID = msgs.player_id;
@@ -156,12 +202,14 @@ public class GameManager : MonoBehaviour
         player.name = "Player" + hisPlayerID.ToString();        
     }
 
+    //其他玩家准备；
     public static void OtherGetReady(Msgs msgs)
     {
         ulong hisPlayerID = msgs.player_id;
         GameObject.Find("Player"+hisPlayerID.ToString()).transform.GetChild(1).GetComponent<Text>().color = Color.green;
     }
 
+    //游戏开始；
     public static void GameStart(RoomMsgs room)
     {        
         //把玩家按行动顺序排序
@@ -210,14 +258,88 @@ public class GameManager : MonoBehaviour
             image.sprite = current.allCardSprites[card_id];
         }
 
-        //设置Player状态；
+        //设置Player状态为等待行动；
         current.state = State.waiting;
+
+        //设置筹码池筹码个数；
+        for (int j = 0; j < 5; j++)
+            current.stones.GetChild(j).GetChild(0).GetComponent<Text>().text = room.players_number == 4 ? (room.players_number + 3).ToString() 
+                : (room.players_number + 2).ToString();
+        current.stones.GetChild(5).GetChild(0).GetComponent<Text>().text = "5";
 
     }
 
-    public void Test()
+    public static void NewTurn(Msgs msgs)
     {
-        
+        //当前行动玩家Transform
+        Transform player = GameObject.Find("Player" + msgs.player_id.ToString()).transform;
+
+        //UI高亮当前行动玩家；
+        current.highLight3.transform.SetParent(player,false);
+        current.highLight3.GetComponent<Image>().color = Color.green;
+
+        //若轮到自己行动；
+        if (msgs.player_id == current.playerID)        
+            current.state = State.start;
+        else
+            current.state = State.waiting;
+    }
+
+    public static void OperationInvalid()
+    {
+        current.Reset();
+    }
+
+    public static void PlayerOperation(Msgs msgs)
+    {
+        switch (msgs.operation_type)
+        {
+            case "get_gems":
+                /*
+                for (int i = 0; i < 5; i++)
+                {
+                    Text text = current.stones.GetChild(i).GetChild(0).GetComponent<Text>();
+                    text.text = (int.Parse(text.text) - msgs.gems[current.gems[i]]).ToString();
+                }
+                if (msgs.player_id == current.playerID)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Text text = current.money.GetChild(i).GetChild(1).GetChild(0).GetComponent<Text>();
+                        text.text = (int.Parse(text.text) + msgs.gems[current.gems[i]]).ToString();
+                        Text textStone = current.stones.GetChild(i).GetChild(1).GetComponent<Text>();
+                        textStone.text = "0";
+                        textStone.color = Color.clear;
+                    }
+                }*/                    
+                break;
+
+            case "buy_card":
+                /*
+                if (msgs.player_id == current.playerID)
+                {
+                    for (int i = 0; i < 6; i++)
+                    {
+                        Text text = current.money.GetChild(i).GetChild(1).GetChild(0).GetComponent<Text>();
+                        text.text = (int.Parse(text.text) - msgs.gems[current.gems[i]]).ToString();
+                        Text text1 = current.money.GetChild(i).GetChild(1).GetChild(1).GetComponent<Text>();
+                        text1.text = "0";
+                        text1.color = Color.clear;
+                    }
+                }*/
+                break;
+
+            case "fold_card":
+                break;
+
+            case "fold_card_unknown":
+                break;
+        }
+    }
+
+    //模拟收信测试用函数；
+    public void Test()
+    {        
         switch (testNum)
         {
             case 0:
@@ -246,12 +368,17 @@ public class GameManager : MonoBehaviour
                 break;
             case 4:
                 testRoom.players_number = 4;
-                testRoom.players_sequence = new ulong[] { 4, 1, 3, 6 };
+                testRoom.players_sequence = new ulong[] { 3, 6, 4, 1 };
                 testRoom.nobles_info = new int[] { 4, 3, 1, 2, 5 };
                 testRoom.levelOneCards_info = new int[] { 6, 7, 8, 9 };
                 testRoom.levelTwoCards_info = new int[] { 6, 7, 8, 9 };
                 testRoom.levelThreeCards_info = new int[] { 6, 7, 8, 9 };
                 GameStart(testRoom);
+                testNum++;
+                break;
+            case 5:
+                testMsg.player_id = 3;
+                NewTurn(testMsg);
                 testNum++;
                 break;
 

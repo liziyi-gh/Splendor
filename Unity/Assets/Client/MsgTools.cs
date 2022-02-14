@@ -159,7 +159,7 @@ namespace MsgTools
                 default:
                     break;
             }
-            body_data.Add("operation_type", operationInfo);
+            body_data.Add("operation_info", operationInfo);
             byte[] body_msg =  Encoding.UTF8.GetBytes(body_data.ToString());
             List<byte> buffer = new List<byte>();
             buffer.AddRange(MsgHeadPack(msg, (ulong)body_msg.Length));
