@@ -2,7 +2,7 @@ import json
 import logging
 import random
 
-from Server.card import Card, CardType
+from Server.card import Card
 from Server.constants import CARD_CONFIGUATION_FILE_PATH
 from Server.player import Player
 

@@ -2,7 +2,7 @@ import socket
 import threading
 import logging
 
-from Server.constants import HEADER_LENGTH
+from Server.constants import HEADER_LENGTH, SERVER_ADDRESS
 from Server.game_room import GameRoom
 from Server.message_helper import unpackHeader, unpackBody
 from Server.api_id import API_ID
@@ -38,8 +38,7 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
 
 def startListen(current_game_room: GameRoom):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # TODO: read from config file
-    sock.bind(('127.0.0.1', 13204))
+    sock.bind(SERVER_ADDRESS)
     sock.listen()
     while True:
         client_sock, addr = sock.accept()

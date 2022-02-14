@@ -98,6 +98,12 @@ class GameRoom:
         player.setReady()
         msg = message_helper.packPlayerReady(player_id)
         self.boardcastMsg(msg)
+        if len(self.players) > 1:
+            for player in self.players:
+                if not player.ready:
+                    return
+
+        self.startGame()
 
     @thread_safe
     def checkGetChipsLegal(self, operation_info) -> bool:
@@ -214,6 +220,7 @@ class GameRoom:
                 msg = message_helper.packPlayerGetNoble(player.player_id, card)
                 self.boardcastMsg(msg)
                 self.startNewTurn(player.player_id)
+
                 return
 
             if len(available_cards) > 1:
@@ -240,6 +247,7 @@ class GameRoom:
                                            self.players_sequence,
                                            self.card_board)
         self.boardcastMsg(msg)
+        self.startNewTurn(self.players_sequence[0])
 
     @thread_safe
     def startNewTurn(self, player_id):
