@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class ShowDetail : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] GameObject panel;
+    GameObject panel;
 
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
@@ -20,7 +20,7 @@ public class ShowDetail : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     void Start()
     {
-        
+        panel = GameObject.Find("Canvas").transform.Find("DetailHandCard").gameObject;
     }
 
     

@@ -67,11 +67,11 @@ public class Stone : MonoBehaviour, IPointerClickHandler
                 text.text = (int.Parse(text.text) + 1).ToString();                
                 takingText.text = (int.Parse(takingText.text) - 1).ToString();
 
-                //若已拿筹码归零，则字体改回白色
+                //若已拿筹码归零，则字体颜色恢复;
                 if (takingText.text == "0")
                 {
                     text.color = Color.white;
-                    takingText.color = Color.white;
+                    takingText.color = Color.clear;
                 }
 
                 //若筹码池内所有筹码都未拿过，则把状态切换回初始状态；
@@ -92,7 +92,7 @@ public class Stone : MonoBehaviour, IPointerClickHandler
             text.text = (int.Parse(text.text) + int.Parse(takingText.text)).ToString();
             takingText.text = "0";
             text.color = Color.white;
-            takingText.color = Color.white;
+            takingText.color = Color.clear;
         }
         
     }
