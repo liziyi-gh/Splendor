@@ -19,6 +19,7 @@ namespace Transmission
     public static class Client
     {
         public static Socket? socket;
+
         public static void Connect()
         {
             string host = "127.0.0.1";
@@ -51,7 +52,7 @@ namespace Transmission
                         break;
 
                     case API_ID.PLAYER_READY:
-                        GameManager.PlayerGetReady(head_msg);
+                        GameManager.OtherGetReady(head_msg);
                         break;
 
                     case API_ID.GAME_START:
@@ -68,12 +69,13 @@ namespace Transmission
                     case API_ID.PLAYER_OPERATION:
                         body_msg = Tools.MsgPLAYER_OPERATION(body_str);
                         CardPosition cardPos = GameRoom.GetCardPosition(body_msg.card_id);
+                        int player_pos = Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id);
                         switch (body_msg.operation_type)
                         {
                             case Operation.GET_GEMS:
                                 foreach (var i in typeof(GEM).GetProperties())
                                 {
-                                    GameRoom.players[Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id)].gems[i.Name] += body_msg.gems[i.Name];
+                                    GameRoom.players[player_pos].gems[i.Name] += body_msg.gems[i.Name];
                                     GameRoom.gems_last_num[i.Name] -= body_msg.gems[i.Name];
                                 }
                                 break;
@@ -81,17 +83,22 @@ namespace Transmission
                             case Operation.BUY_CARD:
                                 foreach (var i in typeof(GEM).GetProperties())
                                 {
-                                    GameRoom.players[Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id)].gems[i.Name] -= body_msg.gems[i.Name];
+                                    GameRoom.players[player_pos].gems[i.Name] -= body_msg.gems[i.Name];
                                     GameRoom.gems_last_num[i.Name] += body_msg.gems[i.Name];
                                 }
+                                //fix me
                                 GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
+
+                                GameRoom.players[player_pos].cards.Add(body_msg.card_id);   
+                                //加分数
                                 break;
 
                             case Operation.FOLD_CARD:
                                 GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
-                                GameRoom.players[Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id)].gems[GEM.GOLDEN] += body_msg.gems[GEM.GOLDEN];
+                                GameRoom.players[player_pos].gems[GEM.GOLDEN] += body_msg.gems[GEM.GOLDEN];
                                 GameRoom.gems_last_num[GEM.GOLDEN] -= body_msg.gems[GEM.GOLDEN];
-                                //
+                                GameRoom.players[player_pos].foldCards_num++;
+                                GameRoom.players[player_pos].foldCards.Add(body_msg.card_id);
                                 break;
 
                             case Operation.FOLD_CARD_UNKNOWN:
@@ -104,7 +111,7 @@ namespace Transmission
                         break;
 
                     case API_ID.PLAYER_OPERATION_INVALID:
-                        //
+                        GameManager.OperationInvalid();
                         break;
 
                     case API_ID.NEW_PLAYER:
