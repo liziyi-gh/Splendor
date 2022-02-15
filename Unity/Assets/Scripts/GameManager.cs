@@ -7,7 +7,7 @@ using Transmission;
 using Gems;
 using GameRooms;
 using Players;
-
+using CardLevelTypes;
 public enum State
 {
     //游戏开始前：
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject noblePrefab;
 
     [Header("Sprite")]
-    [SerializeField] List<Sprite> allCardSprites;
+    public List<Sprite> allCardSprites;
     [SerializeField] List<Sprite> cardBackSprites;
 
     ulong playerID = 0;
@@ -152,8 +152,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case State.unready:
-                //UI显示准备；
-                players.GetChild(0).GetChild(1).GetComponent<Text>().color = Color.green;
+                //消除标记自己的高亮；
                 highLight3.GetComponent<Image>().color = Color.clear;
                 //状态切换为已准备；
                 state = State.ready;
@@ -208,8 +207,8 @@ public class GameManager : MonoBehaviour
         player.name = "Player" + hisPlayerID.ToString();        
     }
 
-    //其他玩家准备；
-    public static void OtherGetReady(Msgs msgs)
+    //接收玩家准备信息（包括自己）；
+    public static void PlayerGetReady(Msgs msgs)
     {
         ulong hisPlayerID = msgs.player_id;
         GameObject.Find("Player"+hisPlayerID.ToString()).transform.GetChild(1).GetComponent<Text>().color = Color.green;
@@ -300,12 +299,10 @@ public class GameManager : MonoBehaviour
     {
         switch (msgs.operation_type)
         {
-            case "get_gems":
-                                 
+            case "get_gems":                                 
                 break;
 
-            case "buy_card":
-                
+            case "buy_card":                
                 break;
 
             case "fold_card":
@@ -314,6 +311,7 @@ public class GameManager : MonoBehaviour
             case "fold_card_unknown":
                 break;
         }
+        current.LoadGameRoomInfomation();
     }
 
     public void LoadGameRoomInfomation()
@@ -342,7 +340,19 @@ public class GameManager : MonoBehaviour
             foldCards.GetChild(i).GetComponent<Image>().sprite = cardBackSprites[foldCardLevel];
             foldCards.GetChild(i).GetComponent<Recover>().cardback= cardBackSprites[foldCardLevel];
             foldCards.GetChild(i).GetComponent<Recover>().card = allCardSprites[player.foldCards[i]];
-        }                
+        }
+        
+        for(int i = 0; i < 4; i++)
+        {
+            cards.GetChild(i + 1).GetComponent<Image>().sprite = allCardSprites[GameRoom.cards_info[CardLevelType.levelOneCards][i]];
+            cards.GetChild(i + 6).GetComponent<Image>().sprite = allCardSprites[GameRoom.cards_info[CardLevelType.levelTwoCards][i]];
+            cards.GetChild(i + 11).GetComponent<Image>().sprite = allCardSprites[GameRoom.cards_info[CardLevelType.levelThreeCards][i]];
+        }
+
+        for(int i = 0; i < GameRoom.cards_last_num[CardLevelType.nobles]; i++)
+        {
+            nobles.GetChild(i).GetComponent<Image>().sprite= allCardSprites[GameRoom.cards_info[CardLevelType.nobles][i]];
+        }        
 
         Reset();
         state = State.waiting;
@@ -369,12 +379,12 @@ public class GameManager : MonoBehaviour
                 break;
             case 2:
                 testMsg.player_id = 1;
-                OtherGetReady(testMsg);
+                PlayerGetReady(testMsg);
                 testNum++;
                 break;
             case 3:
                 testMsg.player_id = 6;
-                OtherGetReady(testMsg);
+                PlayerGetReady(testMsg);
                 testNum++;
                 break;
             case 4:

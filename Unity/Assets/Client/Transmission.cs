@@ -51,7 +51,7 @@ namespace Transmission
                         break;
 
                     case API_ID.PLAYER_READY:
-                        GameManager.OtherGetReady(head_msg);
+                        GameManager.PlayerGetReady(head_msg);
                         break;
 
                     case API_ID.GAME_START:

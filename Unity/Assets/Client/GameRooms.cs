@@ -5,6 +5,7 @@ using Gems;
 using JsonClasses;
 using System.Collections.Generic;
 using CardLevelTypes;
+using System.Linq;
 
 namespace GameRooms
 {
