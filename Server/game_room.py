@@ -3,6 +3,7 @@ import random
 import logging
 
 from Server import message_helper
+from Server.api_id import API_ID
 from Server.gemstone import Gemstone
 from Server.message_helper import Header
 from Server.player import Player
@@ -61,14 +62,14 @@ class GameRoom:
                                                     self.allocated_id)
         new_player.sendMsg(init_resp_msg)
         new_player_msg = message_helper.packNewPlayer(new_player_id)
-        self.boardcastMsg(new_player_msg)
+        self.boardcastMsg(new_player_msg, API_ID.NEW_PLAYER)
 
     @thread_safe
-    def boardcastMsg(self, msg):
+    def boardcastMsg(self, msg, api_id=None):
         for player in self.players:
             player.sendMsg(msg)
 
-        logging.debug("boardcast msg")
+        logging.debug("boardcast msg, api id {}".format(api_id))
 
     @thread_safe
     def playerReady(self, header: Header, body):
@@ -77,6 +78,7 @@ class GameRoom:
         player.setReady()
         msg = message_helper.packPlayerReady(player_id)
         self.boardcastMsg(msg)
+        logging.info("player {} ready".format(player_id))
         if len(self.players) > 1:
             for player in self.players:
                 if not player.ready:

@@ -1,12 +1,15 @@
 import json
 import logging
 import socket
+import struct
 
+from Server.constants import HEADER_FORMAT, HEADER_LENGTH
 from Server.gemstone import Gemstone
 from Server.card import Card
 
 class Player:
-    def __init__(self, sock:socket.socket, player_id:int):
+
+    def __init__(self, sock: socket.socket, player_id: int):
         self.sock = sock
         self.ready = False
         self.player_id = player_id
@@ -38,12 +41,19 @@ class Player:
 
     def sendMsg(self, msg):
         self.sock.send(msg)
+        header_data = struct.unpack(HEADER_FORMAT, msg[0:HEADER_LENGTH])
+        logging.debug("Send msg to player {}, api {}, body is".format(
+            self.player_id, header_data[0]))
+        if header_data[2] > HEADER_LENGTH:
+            body_data = msg[HEADER_LENGTH:]
+            body = json.loads(body_data.decode())
+            logging.debug(body)
 
     def setReady(self):
         logging.info("Player {} ready".format(self.player_id))
         self.ready = True
 
-    def addCard(self, card:Card, operation_info=None):
+    def addCard(self, card: Card, operation_info=None):
         if card.level == 0:
             # Noble card
             self.points += card.points
@@ -56,15 +66,17 @@ class Player:
                     if "gems_type" in item.keys():
                         gems_type = item["gems_type"]
                         self.chips[gems_type] -= item["gems_number"]
-                setattr(self, card.gem_type, getattr(self, card.gem_type)+1)
+                setattr(self, card.gem_type, getattr(self, card.gem_type) + 1)
 
-        logging.info("Player {} got card {}".format(self.player_id, card.number))
+        logging.info("Player {} got card {}".format(self.player_id,
+                                                    card.number))
 
-    def addFoldCard(self, card:Card):
+    def addFoldCard(self, card: Card):
         self.fold_cards.append(card)
-        logging.info("Player {} fold card {}".format(self.player_id, card.number))
+        logging.info("Player {} fold card {}".format(self.player_id,
+                                                     card.number))
 
-    def checkAvailbaleNobleCard(self, card:Card)->bool:
+    def checkAvailbaleNobleCard(self, card: Card) -> bool:
         for gemstone in card.chips.keys():
             gem_numbers = getattr(self, gemstone)
             if gem_numbers < card.chips[gemstone]:

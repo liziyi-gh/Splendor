@@ -15,6 +15,8 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
         header_data = client_sock.recv(HEADER_LENGTH)
         header = unpackHeader(header_data)
         msg_body_len = header.msg_len - HEADER_LENGTH
+        logging.debug("Receive new msg, api id {}, msg length {}".format(
+            header.api_id, header.msg_len))
         body = None
         if msg_body_len > 0:
             body_data = client_sock.recv(msg_body_len)

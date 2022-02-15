@@ -21,7 +21,7 @@ def unpackBody(body_data):
 
 
 def packHeader(api_id, player_id, body_len=0):
-    return struct.pack(HEADER_FORMAT, api_id, player_id, 0, HEADER_LENGTH+body_len)
+    return struct.pack(HEADER_FORMAT, api_id, player_id, HEADER_LENGTH+body_len, 0)
 
 
 def packInitResp(new_player_id, allocated_player_id):
