@@ -8,6 +8,7 @@ using Gems;
 using GameRooms;
 using Players;
 using CardLevelTypes;
+
 public enum State
 {
     //游戏开始前：
@@ -149,6 +150,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case State.choosingNoble:
+
                 break;
 
             case State.unready:
