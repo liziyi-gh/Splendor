@@ -245,8 +245,8 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 
   @enduml
 #+end_src
-
-#+RESULTS:
+#+CAPTION: image1
+#+NAME:   fig:example
 [[file:example_procedure.png]]
 
 ** Code Style
