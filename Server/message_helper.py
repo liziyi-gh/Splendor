@@ -47,12 +47,12 @@ def packPlayerReady(player_id):
 def packGameStart(players_number, players_sequence,
                   card_board:CardBoard):
     tmp_dict = {
-        "players_number", players_number,
-        "players_sequence", players_sequence,
-        "nobles_info", [card.number for card in card_board.noble_cards],
-        "levelOneCards_info", [card.number for card in card_board.level_one_cards],
-        "levelTwoCards_info", [card.number for card in card_board.level_two_cards],
-        "levelThreeCards_info", [card.number for card in card_board.level_three_cards],
+        "players_number": players_number,
+        "players_sequence": players_sequence,
+        "nobles_info": [card.number for card in card_board.noble_cards],
+        "levelOneCards_info": [card.number for card in card_board.level_one_cards],
+        "levelTwoCards_info": [card.number for card in card_board.level_two_cards],
+        "levelThreeCards_info": [card.number for card in card_board.level_three_cards],
     }
     body_data = json.dumps(tmp_dict).encode()
     header_data = packHeader(API_ID.GAME_START, 0, len(body_data))
