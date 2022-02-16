@@ -86,8 +86,7 @@ class GameRoom:
             for player in self.players:
                 if not player.ready:
                     return
-
-        self.startGame()
+            self.startGame()
 
     @thread_safe
     def checkGetChipsLegal(self, operation_info) -> bool:
