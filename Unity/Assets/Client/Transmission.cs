@@ -13,6 +13,7 @@ using GameRooms;
 using PlayerOperations;
 using Gems;
 using CardLevelTypes;
+using Logger;
 
 namespace Transmission
 {
@@ -39,7 +40,7 @@ namespace Transmission
                 byte[] buffer = new byte[1024];
                 int len = socket.Receive(buffer, buffer.Length, 0);
                 Msgs head_msg = Tools.MsgHeadUnpack(buffer);
-
+                Logging.LogBuffer(buffer, "Receive");
                 string body_str = "";
                 if (head_msg.msg_len > 28) body_str = Tools.MsgBodyUnpack(buffer, head_msg);
 
@@ -143,6 +144,7 @@ namespace Transmission
         public static void Send(Msgs msg)
         {
             List<byte> buffer = new List<byte>();
+            Logging.LogAny<ulong>(msg.player_id);
             switch (msg.api_id)
             {
                 case API_ID.INIT:
@@ -165,6 +167,7 @@ namespace Transmission
                     break;
             }
             socket.Send(buffer.ToArray());
+            Logging.LogBuffer(buffer.ToArray(), "Send");
         }
     }
 }
