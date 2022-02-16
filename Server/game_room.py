@@ -69,7 +69,7 @@ class GameRoom:
         for player in self.players:
             player.sendMsg(msg)
 
-        logging.debug("boardcast msg, api id {}".format(api_id))
+        logging.debug("Finish boardcast msg, api id {}".format(api_id))
 
     @thread_safe
     def playerReady(self, header: Header, body):

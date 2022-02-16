@@ -13,6 +13,9 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
     logging.info("Start handling New socket, addr is {}".format(addr))
     while True:
         header_data = client_sock.recv(HEADER_LENGTH)
+        if len(header_data) < HEADER_LENGTH:
+            logging.error("header data length less than {}".format(HEADER_LENGTH))
+            continue
         header = unpackHeader(header_data)
         msg_body_len = header.msg_len - HEADER_LENGTH
         logging.debug("Receive new msg, api id {}, msg length {}".format(
@@ -21,6 +24,7 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
         if msg_body_len > 0:
             body_data = client_sock.recv(msg_body_len)
             body = unpackBody(body_data)
+            logging.debug("body is {}".format(body_data.decode()))
 
         # TODO: check player_id match socket?
         # TODO: what if socket change?
