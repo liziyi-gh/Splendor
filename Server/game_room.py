@@ -82,7 +82,6 @@ class GameRoom:
         player.setReady()
         msg = message_helper.packPlayerReady(player_id)
         self.boardcastMsg(msg)
-        logging.info("player {} ready".format(player_id))
         if len(self.players) > 1:
             for player in self.players:
                 if not player.ready:
