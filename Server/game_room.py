@@ -5,7 +5,7 @@ import logging
 from Server import message_helper
 from Server.api_id import API_ID
 from Server.gemstone import Gemstone
-from Server.message_helper import Header
+from Server.constants import Header
 from Server.player import Player
 from Server.operation import Operation
 from Server.card_board import CardBoard
@@ -15,7 +15,6 @@ from Server.func_helper import thread_safe
 class GameRoom:
 
     def __init__(self) -> None:
-        logging.debug("Game room init")
         self.players = []
         self.allocated_id = []
         self.allow_player_id = (1, 2, 3, 4)
@@ -30,6 +29,7 @@ class GameRoom:
             Gemstone.OBSIDIAN: 2,
         }
         self.players_sequence = []
+        logging.debug("Game room initialize")
 
     @thread_safe
     def generatePlayerSequence(self):
@@ -42,12 +42,16 @@ class GameRoom:
             if player.player_id == player_id:
                 return player
 
+        logging.error("Could not find player by ID {}".format(player_id))
+
     @thread_safe
     def newPlayerID(self) -> int:
         for i in self.allow_player_id:
             if i not in self.allocated_id:
                 self.allocated_id.append(i)
                 return i
+
+        logging.error("Could not allocated new player ID")
 
     @thread_safe
     def addPlayer(self, sock: socket.socket):

@@ -10,7 +10,7 @@ from Server.api_id import API_ID
 
 def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
                  addr):
-    logging.info("Start handling New socket, addr is {}".format(addr))
+    logging.info("Start handling new socket, addr is {}".format(addr))
     while True:
         header_data = client_sock.recv(HEADER_LENGTH)
         if len(header_data) < HEADER_LENGTH:
@@ -45,6 +45,7 @@ def startListen(current_game_room: GameRoom):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind(SERVER_ADDRESS)
     sock.listen()
+    logging.info("Server address is {}".format(SERVER_ADDRESS))
     while True:
         client_sock, addr = sock.accept()
         logging.info("New socket connect")

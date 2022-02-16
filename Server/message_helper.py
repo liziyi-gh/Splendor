@@ -1,13 +1,10 @@
 import json
 import struct
 
-from collections import namedtuple
 from Server.api_id import API_ID
 from Server.card_board import CardBoard
 from Server.card import Card
-from Server.constants import HEADER_FORMAT, HEADER_LENGTH
-
-Header = namedtuple("Header", ["api_id", "player_id", "msg_len", "reserve"])
+from Server.constants import HEADER_FORMAT, HEADER_LENGTH, Header
 
 # TODO: refactor this
 
@@ -52,10 +49,10 @@ def packGameStart(players_number, players_sequence,
     tmp_dict = {
         "players_number", players_number,
         "players_sequence", players_sequence,
-        "nobles_info", card_board.nobles_info,
-        "levelOneCards_info", card_board.levelOneCards_info,
-        "levelTwoCards_info", card_board.levelTwoCards_info,
-        "levelThreeCards_info", card_board.levelThreeCards_info,
+        "nobles_info", [card.number for card in card_board.noble_cards],
+        "levelOneCards_info", [card.number for card in card_board.level_one_cards],
+        "levelTwoCards_info", [card.number for card in card_board.level_two_cards],
+        "levelThreeCards_info", [card.number for card in card_board.level_three_cards],
     }
     body_data = json.dumps(tmp_dict).encode()
     header_data = packHeader(API_ID.GAME_START, 0, len(body_data))
