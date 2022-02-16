@@ -18,9 +18,15 @@ namespace MsgTools
         public static Msgs MsgHeadUnpack(byte[] buffer)
         {
             Msgs msg = new Msgs();
-            msg.api_id = BitConverter.ToUInt32(buffer, 0);
-            msg.player_id = BitConverter.ToUInt64(buffer, 4);
-            msg.msg_len = BitConverter.ToUInt64(buffer, 12);
+            byte[] arr4 = buffer.Take(4).ToArray();
+            Array.Reverse(arr4);
+            byte[] arr8 = buffer.Skip(4).Take(8).ToArray();
+            Array.Reverse(arr8);
+            msg.api_id = BitConverter.ToUInt32(arr4, 0);
+            msg.player_id = BitConverter.ToUInt64(arr8, 0);
+            arr8 = buffer.Skip(12).Take(8).ToArray();
+            Array.Reverse (arr8);
+            msg.msg_len = BitConverter.ToUInt64(arr8, 0);
             return msg;
         }
 

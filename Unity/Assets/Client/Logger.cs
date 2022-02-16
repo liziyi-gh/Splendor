@@ -12,6 +12,7 @@ namespace Logger
 {
     public static class Logging
     {
+        
         public const string path = ".\\ClientLog.txt";
 
         public static void LogMsgHead(Msgs head_msg)
@@ -57,7 +58,7 @@ namespace Logger
         public static void LogAny<T>(T data)
         {
             var log = new StreamWriter(path, true, System.Text.Encoding.Default);
-            log.WriteLine(data);
+            log.WriteLine("player_id:"+data);
             log.Flush();
             log.Close();
         }

@@ -43,12 +43,13 @@ namespace Transmission
                 Logging.LogBuffer(buffer, "Receive");
                 string body_str = "";
                 if (head_msg.msg_len > 28) body_str = Tools.MsgBodyUnpack(buffer, head_msg);
-
+                Logging.LogAny<ulong>(head_msg.player_id);
                 Msgs body_msg = new Msgs();
                 switch (head_msg.api_id)
                 {
                     case API_ID.INIT_RESP:
                         body_msg = Tools.MsgINIT_RESP(body_str);
+                        Logging.LogAny<ulong>(body_msg.player_id);
                         GameManager.GetPlayerID(body_msg);
                         break;
 
@@ -144,7 +145,6 @@ namespace Transmission
         public static void Send(Msgs msg)
         {
             List<byte> buffer = new List<byte>();
-            Logging.LogAny<ulong>(msg.player_id);
             switch (msg.api_id)
             {
                 case API_ID.INIT:
@@ -167,7 +167,6 @@ namespace Transmission
                     break;
             }
             socket.Send(buffer.ToArray());
-            Logging.LogBuffer(buffer.ToArray(), "Send");
         }
     }
 }
