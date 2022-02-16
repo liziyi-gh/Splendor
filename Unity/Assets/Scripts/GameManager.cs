@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour
 
     //获得自己玩家ID和其他玩家ID；
     public static void GetPlayerID(Msgs msgs)
-    {
+    {        
         ulong myID = msgs.player_id;
         List<ulong> othersID = msgs.other_player_id;
 
@@ -204,6 +204,8 @@ public class GameManager : MonoBehaviour
     public static void NewPlayerGetIn(Msgs msgs)
     {
         ulong hisPlayerID = msgs.player_id;
+        if (hisPlayerID == current.playerID)
+            return;
         GameObject player = Instantiate(current.playerPrefab);
         player.transform.SetParent(current.players);
         player.name = "Player" + hisPlayerID.ToString();        

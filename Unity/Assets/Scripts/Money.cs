@@ -3,9 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Money : MonoBehaviour, IPointerClickHandler
-{
-    string oriText=null;
-    int oriNum;
+{    
     GameManager gameManeger;
     Text holdingText;
     Text takingText;
