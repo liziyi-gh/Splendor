@@ -1,3 +1,4 @@
+import json
 import socket
 import random
 import logging
@@ -19,7 +20,6 @@ class GameRoom:
         self.allocated_id = []
         self.allow_player_id = (1, 2, 3, 4)
         self.card_board = CardBoard()
-        self.last_operation = {}
         self.chips = {
             Gemstone.GOLDEN: 5,
             Gemstone.RUBY: 2,
@@ -30,6 +30,22 @@ class GameRoom:
         }
         self.players_sequence = []
         logging.debug("Game room initialize")
+
+    def __str__(self):
+        tmp_dict = {
+            "players": [player.player_id for player in self.players],
+            "allocated_id": self.allocated_id,
+            "chips": self.chips,
+            "player_sequence": self.players_sequence,
+            "card_board": {
+                "noble card": [card.number for card in self.card_board.noble_cards],
+                "level 1": [card.number for card in self.card_board.level_one_cards],
+                "level 2": [card.number for card in self.card_board.level_two_cards],
+                "level 3": [card.number for card in self.card_board.level_three_cards],
+            }
+        }
+        str = json.dumps(tmp_dict, indent=2)
+        return str
 
     @thread_safe
     def generatePlayerSequence(self):

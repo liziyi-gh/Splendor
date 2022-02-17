@@ -15,7 +15,7 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
         header_data = client_sock.recv(HEADER_LENGTH)
         if len(header_data) < HEADER_LENGTH:
             logging.error("header data length less than {}".format(HEADER_LENGTH))
-            continue
+            return
         header = unpackHeader(header_data)
         msg_body_len = header.msg_len - HEADER_LENGTH
         logging.debug("Receive new msg, api id {}, msg length {}".format(
@@ -39,6 +39,9 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
 
         if header.api_id == API_ID.PLAYER_GET_NOBLE:
             current_game_room.doPlayerGetNoble(header, body)
+
+        logging.debug("current game room info is:")
+        logging.debug(str(current_game_room))
 
 
 def startListen(current_game_room: GameRoom):
