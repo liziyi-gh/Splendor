@@ -23,6 +23,7 @@ namespace GameRooms
         public static Dictionary<string, int[]> cards_info;
         public static Dictionary<string, int> gems_last_num, cards_last_num;
         public static List<Player> players;
+        public static bool reInit = false;
 
         public static void GameRoomInit(JsonRoom msg)
         {
@@ -60,6 +61,7 @@ namespace GameRooms
                 players.Add(new Player());
                 players[i].id = players_sequence[i];
             }
+            reInit = true;
         }
 
         public static Player GetPlayer(ulong player_id)

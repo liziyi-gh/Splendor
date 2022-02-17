@@ -1,0 +1,34 @@
+--------------------------------------------------------------------------
+2022/2/17 17:59:03    Client connected
+--------------------------------------------------------------------------
+2022/2/17 17:59:03    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/17 17:59:03    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/17 17:59:23    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/17 17:59:25    Receive-->API:3, Player:2, MsgLength:28
+
+2022/2/17 17:59:29    Receive-->API:3, Player:1, MsgLength:28
+
+2022/2/17 17:59:29    Receive-->API:4, Player:0, MsgLength:257
+{"players_number": 2, "players_sequence": [2, 1], "nobles_info": ["97", "99", "95"], "levelOneCards_info": ["32", "9", "39", "23"], "levelTwoCards_info": ["67", "70", "41", "66"], "levelThreeCards_info": ["89", "80", "79", "74"]}
+2022/2/17 17:59:29    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+--------------------------------------------------------------------------
+2022/2/17 18:05:26    Client connected
+--------------------------------------------------------------------------
+2022/2/17 18:05:26    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/17 18:05:27    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/17 18:05:40    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/17 18:06:03    Receive-->API:3, Player:1, MsgLength:28
+
+2022/2/17 18:07:00    Receive-->API:3, Player:2, MsgLength:28
+
+2022/2/17 18:07:00    Receive-->API:4, Player:0, MsgLength:258
+{"players_number": 2, "players_sequence": [2, 1], "nobles_info": ["93", "92", "98"], "levelOneCards_info": ["37", "26", "15", "23"], "levelTwoCards_info": ["43", "59", "65", "48"], "levelThreeCards_info": ["72", "71", "88", "79"]}
+2022/2/17 18:07:00    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}

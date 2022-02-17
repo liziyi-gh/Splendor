@@ -62,6 +62,7 @@ namespace Transmission
 
                     case API_ID.GAME_START:
                         GameRoom.GameRoomInit(Tools.MsgsGAME_START(body_str));
+                        while (!GameRoom.reInit);
                         GameManager.GameStart();
                         break;
 
