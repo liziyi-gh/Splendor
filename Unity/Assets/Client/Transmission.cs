@@ -43,10 +43,11 @@ namespace Transmission
             {
                 byte[] buffer = new byte[1024];
                 int len = socket.Receive(buffer, buffer.Length, 0);
+
                 Msgs head_msg = Tools.MsgHeadUnpack(buffer);
-                Logging.LogMsg(buffer, "Receive");
                 string body_str = "";
-                if (head_msg.msg_len > 28) body_str = Tools.MsgBodyUnpack(buffer, head_msg);
+                if (head_msg.msg_len > 28) body_str = Tools.MsgBodyUnpack(buffer, head_msg.msg_len);
+                Logging.LogMsg(head_msg, body_str, LogSwitch.RECEIVE);
                 Msgs body_msg = new Msgs();
                 switch (head_msg.api_id)
                 {
@@ -60,9 +61,7 @@ namespace Transmission
                         break;
 
                     case API_ID.GAME_START:
-                        RoomMsgs roomMsgs = Tools.MsgsGAME_START(body_str);
-                        GameRoom.GameRoomInit(roomMsgs);
-                        GameManager.GameStart();
+                        GameRoom.GameRoomInit(Tools.MsgsGAME_START(body_str));
                         break;
 
                     case API_ID.NEW_TURN:
@@ -169,7 +168,7 @@ namespace Transmission
                     break;
             }
             socket.Send(buffer.ToArray());
-            Logging.LogMsg(buffer.ToArray(), "Send");
+            //Logging.LogMsg(buffer.ToArray(), "Send");
         }
     }
 }
