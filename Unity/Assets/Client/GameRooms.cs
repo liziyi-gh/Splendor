@@ -68,7 +68,7 @@ namespace GameRooms
 
         public static Player GetPlayer(ulong player_id)
         {
-            return players[Array.Indexof(players_sequence, player_id)];
+            return players[Array.IndexOf(players_sequence, player_id)];
         }
 
         public static CardPosition GetCardPosition(int card_id)
