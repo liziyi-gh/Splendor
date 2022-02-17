@@ -3,30 +3,36 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using MsgStruct;
-using PlayerOperations;
 using Gems;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using JsonClasses;
 using GameRooms;
 using System.Collections.Generic;
+using Players;
 
 namespace MsgTools
 {
+
     public static class Tools
     {
+
         public static Msgs MsgHeadUnpack(byte[] buffer)
         {
+
             Msgs msg = new Msgs();
             byte[] arr4 = buffer.Take(4).ToArray();
             Array.Reverse(arr4);
+            msg.api_id = BitConverter.ToUInt32(arr4, 0);
+
             byte[] arr8 = buffer.Skip(4).Take(8).ToArray();
             Array.Reverse(arr8);
-            msg.api_id = BitConverter.ToUInt32(arr4, 0);
             msg.player_id = BitConverter.ToUInt64(arr8, 0);
+
             arr8 = buffer.Skip(12).Take(8).ToArray();
             Array.Reverse (arr8);
             msg.msg_len = BitConverter.ToUInt64(arr8, 0);
+
             return msg;
         }
 

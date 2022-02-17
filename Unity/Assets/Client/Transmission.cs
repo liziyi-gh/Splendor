@@ -10,10 +10,10 @@ using MsgTools;
 using MsgStruct;
 using ApiID;
 using GameRooms;
-using PlayerOperations;
 using Gems;
 using CardLevelTypes;
 using Logger;
+using Players;
 
 namespace Transmission
 {
@@ -29,6 +29,10 @@ namespace Transmission
             IPEndPoint ipEnd = new IPEndPoint(ip, port);
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Connect(ipEnd);
+
+            Logging.LogInit();
+            Logging.LogConnect();
+
             Thread th = new Thread(delegate () { Receive(socket); });
             th.Start();
         }
@@ -40,16 +44,14 @@ namespace Transmission
                 byte[] buffer = new byte[1024];
                 int len = socket.Receive(buffer, buffer.Length, 0);
                 Msgs head_msg = Tools.MsgHeadUnpack(buffer);
-                Logging.LogBuffer(buffer, "Receive");
+                Logging.LogMsg(buffer, "Receive");
                 string body_str = "";
                 if (head_msg.msg_len > 28) body_str = Tools.MsgBodyUnpack(buffer, head_msg);
-                Logging.LogAny<ulong>(head_msg.player_id);
                 Msgs body_msg = new Msgs();
                 switch (head_msg.api_id)
                 {
                     case API_ID.INIT_RESP:
                         body_msg = Tools.MsgINIT_RESP(body_str);
-                        Logging.LogAny<ulong>(body_msg.player_id);
                         GameManager.GetPlayerID(body_msg);
                         break;
 
@@ -167,6 +169,7 @@ namespace Transmission
                     break;
             }
             socket.Send(buffer.ToArray());
+            Logging.LogMsg(buffer.ToArray(), "Send");
         }
     }
 }
