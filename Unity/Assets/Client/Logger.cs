@@ -21,8 +21,8 @@ namespace Logger
     public static class Logging
     {
         
-        public static string path;
-        public static StreamWriter log;
+        private static string path;
+        private static StreamWriter log;
         
         public static void LogInit()
         {
@@ -47,6 +47,11 @@ namespace Logger
         public static void LogAny(string str)
         {
             log.WriteLine(str);
+        }
+
+        public static void LogClose()
+        {
+            log.Close();
         }
     }
 }

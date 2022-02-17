@@ -25,8 +25,10 @@ namespace Transmission
         {
             string host = "127.0.0.1";
             int port = 13204;
+
             IPAddress ip = IPAddress.Parse(host);
             IPEndPoint ipEnd = new IPEndPoint(ip, port);
+
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Connect(ipEnd);
 
@@ -45,9 +47,12 @@ namespace Transmission
                 int len = socket.Receive(buffer, buffer.Length, 0);
 
                 Msgs head_msg = Tools.MsgHeadUnpack(buffer);
+
                 string body_str = "";
                 if (head_msg.msg_len > 28) body_str = Tools.MsgBodyUnpack(buffer, head_msg.msg_len);
+
                 Logging.LogMsg(head_msg, body_str, LogSwitch.RECEIVE);
+
                 Msgs body_msg = new Msgs();
                 switch (head_msg.api_id)
                 {
@@ -73,8 +78,10 @@ namespace Transmission
 
                     case API_ID.PLAYER_OPERATION:
                         body_msg = Tools.MsgPLAYER_OPERATION(body_str);
+
                         CardPosition cardPos = GameRoom.GetCardPosition(body_msg.card_id);
                         int player_pos = Array.IndexOf(GameRoom.players_sequence, body_msg.player_id);
+
                         switch (body_msg.operation_type)
                         {
                             case Operation.GET_GEMS:
@@ -125,6 +132,7 @@ namespace Transmission
 
                     case API_ID.PLAYER_GET_NOBLE:
                         body_msg= Tools.MsgPLAYER_GET_NOBLE(body_str);
+
                         switch (body_msg.nobles_id.Count())
                         {
                             case 1:
@@ -148,6 +156,7 @@ namespace Transmission
         public static void Send(Msgs msg)
         {
             List<byte> buffer = new List<byte>();
+
             switch (msg.api_id)
             {
                 case API_ID.INIT:
@@ -169,6 +178,7 @@ namespace Transmission
                 default:
                     break;
             }
+            
             socket.Send(buffer.ToArray());
             //Logging.LogMsgSend(buffer.ToArray());
         }
