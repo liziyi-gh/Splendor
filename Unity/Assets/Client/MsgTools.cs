@@ -45,19 +45,14 @@ namespace MsgTools
         public static byte[] MsgHeadPack(Msgs msg, ulong body_len)
         {
             byte[] result = new byte[28];
-            for (int i = 0; i < 28; i++)
-                result[i] = 0;
 
-            byte[] lenArray;
-            lenArray = BitConverter.GetBytes(body_len + 28);
+            byte[] lenArray = BitConverter.GetBytes(body_len + 28);;
             lenArray.CopyTo(result, 8);
 
-            byte[] playeridArray;
-            playeridArray = BitConverter.GetBytes(msg.player_id);
+            byte[] playeridArray = BitConverter.GetBytes(msg.player_id);
             playeridArray.CopyTo(result, 16);
 
-            byte[] idArray;
-            idArray = BitConverter.GetBytes(msg.api_id);
+            byte[] idArray = BitConverter.GetBytes(msg.api_id);
             idArray.CopyTo(result, 24);
 
             Array.Reverse(result);
@@ -136,11 +131,14 @@ namespace MsgTools
 
         public static byte[] SendPlayerOperation(Msgs msg)
         {
-
+            List<byte> buffer = new List<byte>();
             JObject body_data = new JObject();
+
             body_data.Add("player_id", msg.player_id);
             body_data.Add("operation_type", msg.operation_type);
+
             JArray operationInfo = new JArray();
+
             switch (msg.operation_type)
             {
                 case Operation.GET_GEMS:
@@ -170,11 +168,14 @@ namespace MsgTools
                 default:
                     break;
             }
+
             body_data.Add("operation_info", operationInfo);
             byte[] body_msg =  Encoding.UTF8.GetBytes(body_data.ToString());
-            List<byte> buffer = new List<byte>();
+            
+
             buffer.AddRange(MsgHeadPack(msg, (ulong)body_msg.Length));
             buffer.AddRange(body_msg);
+
             return buffer.ToArray();
         }
 
@@ -183,11 +184,15 @@ namespace MsgTools
             List<byte> buffer = new List<byte>();
             
             JObject body_data = new JObject();
+
             body_data.Add("player_id", msg.player_id);
             body_data.Add(new JArray(msg.nobles_id[0]));
+
             byte[] body_msg =  Encoding.UTF8.GetBytes(body_data.ToString());
+
             buffer.AddRange(MsgHeadPack(msg, (ulong)body_msg.Length));
             buffer.AddRange(body_msg);
+            
             return buffer.ToArray();
         }
     }
