@@ -104,7 +104,9 @@ public class GameManager : MonoBehaviour
                     LoadGameRoomInfomation();
                     state = State.waiting;
                     break;
-
+                case "NewTurn":
+                    PlayerNewTurn(toDoList[toDo].player_id);
+                    break;
             }
         }
         toDoList = new Dictionary<string,Msgs>();
@@ -240,6 +242,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //新的回合；
+    public void PlayerNewTurn(ulong player_id)
+    {
+        // 当前行动玩家Transform
+        Transform player = GameObject.Find("Player" + player_id.ToString()).transform;
+
+        //UI高亮当前行动玩家；
+        highLight3.transform.SetParent(player, false);
+        highLight3.GetComponent<Image>().color = Color.green;
+
+        //若轮到自己行动；
+        if (player_id == playerID)
+            state = State.start;
+        else
+            state = State.waiting;
+    }
+
     //获得自己玩家ID和其他玩家ID；
     public static void GetPlayerID(Msgs msgs)
     {        
@@ -266,22 +285,12 @@ public class GameManager : MonoBehaviour
 
     public static void NewTurn(Msgs msgs)
     {
-        //当前行动玩家Transform
-        Transform player = GameObject.Find("Player" + msgs.player_id.ToString()).transform;
-
-        //UI高亮当前行动玩家；
-        current.highLight3.transform.SetParent(player,false);
-        current.highLight3.GetComponent<Image>().color = Color.green;
-
-        //若轮到自己行动；
-        if (msgs.player_id == current.playerID)        
-            current.state = State.start;
-        else
-            current.state = State.waiting;
+        current.toDoList.Add("NewTurn", msgs);
     }
 
     public static void OperationInvalid()
     {
+        current.toDoList.Add("OperationInvalid", new Msgs());
         current.Reset();
     }
 
@@ -314,8 +323,7 @@ public class GameManager : MonoBehaviour
             
             stones.GetChild(i).GetChild(1).GetComponent<Text>().text = "0";
 
-            money.GetChild(i).GetChild(0).GetComponent<Text>().text = i == 6 ? player.point.ToString()
-                : player.cards_type[gems[i]].ToString();            
+            money.GetChild(i).GetChild(0).GetComponent<Text>().text = i == 5 ? player.point.ToString() : player.cards_type[gems[i]].ToString();            
 
             money.GetChild(i).GetChild(1).GetChild(0).GetComponent<Text>().text = player.gems[gems[i]].ToString();            
 
@@ -347,8 +355,13 @@ public class GameManager : MonoBehaviour
         }
 
         for (int i = 0; i < cards.childCount; i++)
-            if (cards.GetChild(i).GetComponent<Image>().sprite = allCardSprites[0])
-                cards.GetChild(i).GetComponent<Image>().color = Color.clear;
+        {
+            Image cardImage = cards.GetChild(i).GetComponent<Image>();
+            if (cardImage.sprite == allCardSprites[0])
+                cardImage.color = Color.clear;
+            else
+                cardImage.color = Color.white;
+        }            
 
         for (int i = 0; i < 5; i++)
         {
@@ -368,6 +381,9 @@ public class GameManager : MonoBehaviour
         ResetUI();
     }
 
-    
+    public void ExitButton()
+    {
+        Application.Quit();
+    }
     
 }
