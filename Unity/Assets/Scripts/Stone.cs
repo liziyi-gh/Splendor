@@ -13,25 +13,25 @@ public class Stone : MonoBehaviour, IPointerClickHandler
     {
         gameManeger = GameObject.Find("GameManager").GetComponent<GameManager>();
 
-        //»ñµÃ³ïÂë³Ø¶ÔÓ¦³ïÂëÊıÁ¿
+        //è·å¾—ç­¹ç æ± å¯¹åº”ç­¹ç æ•°é‡
         text = transform.GetChild(0).GetComponent<Text>();
-        //»ñµÃ¸Ã³ïÂëÒÑÄÃ¸öÊı
+        //è·å¾—è¯¥ç­¹ç å·²æ‹¿ä¸ªæ•°
         takingText = transform.GetChild(1).GetComponent<Text>();
     }
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-        //Ö»ÓĞ³õÊ¼×´Ì¬ºÍÄÃÇ®×´Ì¬¿ÉÒÔÄÃÇ®
+        //åªæœ‰åˆå§‹çŠ¶æ€å’Œæ‹¿é’±çŠ¶æ€å¯ä»¥æ‹¿é’±
         if (gameManeger.state!=State.start && gameManeger.state != State.takingMoney)
             return;
-        //»Æ½ğ²»ÄÜÖ±½ÓÄÃ
+        //é»„é‡‘ä¸èƒ½ç›´æ¥æ‹¿
         if (name == "YellowStone")
             return;
 
-        //×ó¼üÄÃ
+        //å·¦é”®æ‹¿
         if (pointerEventData.button == PointerEventData.InputButton.Left)
         {            
-            //Èô»¹Ã»ÄÃ¹ı£¬¹æ¶¨×î¶àÄÜÄÃ³ïÂë¸öÊı£¨Èô´óÓÚµÈÓÚ4Ôò¿ÉÄÃÁ½Ã¶£¬·´Ö®1Ã¶£©£¬oriNum¼ÇÂ¼³õÊ¼³ïÂë¸öÊı
+            //è‹¥è¿˜æ²¡æ‹¿è¿‡ï¼Œè§„å®šæœ€å¤šèƒ½æ‹¿ç­¹ç ä¸ªæ•°ï¼ˆè‹¥å¤§äºç­‰äº4åˆ™å¯æ‹¿ä¸¤æšï¼Œåä¹‹1æšï¼‰ï¼ŒoriNumè®°å½•åˆå§‹ç­¹ç ä¸ªæ•°
             if (takingText.text=="0")
             {                
                 if (int.Parse(text.text) >= 4)
@@ -40,41 +40,41 @@ public class Stone : MonoBehaviour, IPointerClickHandler
                     maxCanTake = 1;
             }
 
-            //ÈôÒÑÄÃµÄ³ïÂë¸öÊı´óÓÚµÈÓÚ×î´óÄÜÄÃµÄ¸öÊı£¬»òÒÑÎŞ³ïÂë¿ÉÄÃ£¬Ôò²»ÄÜÄÃ£»
+            //è‹¥å·²æ‹¿çš„ç­¹ç ä¸ªæ•°å¤§äºç­‰äºæœ€å¤§èƒ½æ‹¿çš„ä¸ªæ•°ï¼Œæˆ–å·²æ— ç­¹ç å¯æ‹¿ï¼Œåˆ™ä¸èƒ½æ‹¿ï¼›
             if (int.Parse(takingText.text) >= maxCanTake || int.Parse(text.text) == 0)
                 return;
             
-            //ÄÃ³ïÂë£º³ïÂë³ØÊıÁ¿¼õÒ»£¬Êı×Ö×ÖÌå±êºì±íÊ¾ÒÑÄÃ¹ı£»
+            //æ‹¿ç­¹ç ï¼šç­¹ç æ± æ•°é‡å‡ä¸€ï¼Œæ•°å­—å­—ä½“æ ‡çº¢è¡¨ç¤ºå·²æ‹¿è¿‡ï¼›
             text.text = (int.Parse(text.text) - 1).ToString();
             text.color = Color.red;
 
-            //Ôö¼Óµ±Ç°³ïÂëÒÑÄÃµÄ¸öÊı£»            
+            //å¢åŠ å½“å‰ç­¹ç å·²æ‹¿çš„ä¸ªæ•°ï¼›            
             takingText.text = (int.Parse(takingText.text) + 1).ToString();
             takingText.color = Color.yellow;                       
 
-            //×´Ì¬ÇĞ»»Îª¡¾ÄÃ³ïÂëÖĞ¡¿
+            //çŠ¶æ€åˆ‡æ¢ä¸ºã€æ‹¿ç­¹ç ä¸­ã€‘
             gameManeger.state=State.takingMoney;
         }
 
-        //ÓÒ¼ü°ÑÄÃµÄ·Å»ØÈ¥
+        //å³é”®æŠŠæ‹¿çš„æ”¾å›å»
         if (pointerEventData.button == PointerEventData.InputButton.Right)
         {           
 
-            //Èç¹û¸Ã³ïÂëÎªÒÑÄÃ¹ı£¬Ôò¿ÉÒÔ·Å»ØÈ¥
+            //å¦‚æœè¯¥ç­¹ç ä¸ºå·²æ‹¿è¿‡ï¼Œåˆ™å¯ä»¥æ”¾å›å»
             if (takingText.text != "0")
             {
-                //·Å»Ø³ïÂë£¬³ïÂë³ØºÍÒÑÄÃ³ïÂëÊı×ÖÏàÓ¦¼ÓÒ»¼õÒ»£»
+                //æ”¾å›ç­¹ç ï¼Œç­¹ç æ± å’Œå·²æ‹¿ç­¹ç æ•°å­—ç›¸åº”åŠ ä¸€å‡ä¸€ï¼›
                 text.text = (int.Parse(text.text) + 1).ToString();                
                 takingText.text = (int.Parse(takingText.text) - 1).ToString();
 
-                //ÈôÒÑÄÃ³ïÂë¹éÁã£¬Ôò×ÖÌåÑÕÉ«»Ö¸´;
+                //è‹¥å·²æ‹¿ç­¹ç å½’é›¶ï¼Œåˆ™å­—ä½“é¢œè‰²æ¢å¤;
                 if (takingText.text == "0")
                 {
                     text.color = Color.white;
                     takingText.color = Color.clear;
                 }
 
-                //Èô³ïÂë³ØÄÚËùÓĞ³ïÂë¶¼Î´ÄÃ¹ı£¬Ôò°Ñ×´Ì¬ÇĞ»»»Ø³õÊ¼×´Ì¬£»
+                //è‹¥ç­¹ç æ± å†…æ‰€æœ‰ç­¹ç éƒ½æœªæ‹¿è¿‡ï¼Œåˆ™æŠŠçŠ¶æ€åˆ‡æ¢å›åˆå§‹çŠ¶æ€ï¼›
                 for (int i = 0; i < 5; i++)
                     if (transform.parent.GetChild(i).GetChild(1).GetComponent<Text>().text != "0")
                         return;

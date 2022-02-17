@@ -17,32 +17,32 @@ public class Money : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-        //Èô²»ÊÇÔÚÂò¿¨Ôò²»ÄÜµã»÷³ÖÓĞ³ïÂë
+        //è‹¥ä¸æ˜¯åœ¨ä¹°å¡åˆ™ä¸èƒ½ç‚¹å‡»æŒæœ‰ç­¹ç 
         if (gameManeger.state!=State.buyingCard)
             return;
 
-        //×ó¼ü¼ÓÂë
+        //å·¦é”®åŠ ç 
         if (pointerEventData.button == PointerEventData.InputButton.Left)
         {            
-            //Èç¹û¸Ã³ÖÓĞ³ïÂëÊıÒÑÎªÁãÔò²»ÄÜÔÙ¼ÓÂë
+            //å¦‚æœè¯¥æŒæœ‰ç­¹ç æ•°å·²ä¸ºé›¶åˆ™ä¸èƒ½å†åŠ ç 
             if (int.Parse(holdingText.text)==0)           
                 return;
-            //¼ÓÂë
+            //åŠ ç 
             holdingText.text = (int.Parse(holdingText.text) - 1).ToString();
             holdingText.color = Color.red;
             takingText.text = (int.Parse(takingText.text) + 1).ToString();
             takingText.color = Color.yellow;
         }
 
-        //ÓÒ¼ü¼õÂë
+        //å³é”®å‡ç 
         if (pointerEventData.button == PointerEventData.InputButton.Right)
         {
-            //ÈôÒÑ¼Ó¹ıÂëÔò¿ÉÒÔ¼õÂë
+            //è‹¥å·²åŠ è¿‡ç åˆ™å¯ä»¥å‡ç 
             if (takingText.text != "0")
             {
                 holdingText.text = (int.Parse(holdingText.text) + 1).ToString();                
                 takingText.text = (int.Parse(takingText.text) - 1).ToString();
-                //ÈôÒÑ°Ñ³ïÂëÈ«²¿È¡»Ø£¬ÔòÑÕÉ«»Ö¸´
+                //è‹¥å·²æŠŠç­¹ç å…¨éƒ¨å–å›ï¼Œåˆ™é¢œè‰²æ¢å¤
                 if (takingText.text == "0")
                 {
                     holdingText.color = Color.white;

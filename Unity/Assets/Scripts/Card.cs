@@ -22,45 +22,45 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-        //³õÊ¼×´Ì¬¡¢Âò¿¨×´Ì¬¡¢¸Ç¿¨×´Ì¬Ê±¿É½øĞĞ¡¾Âò¿¨/¸Ç¿¨¡¿²Ù×÷£»
+        //åˆå§‹çŠ¶æ€ã€ä¹°å¡çŠ¶æ€ã€ç›–å¡çŠ¶æ€æ—¶å¯è¿›è¡Œã€ä¹°å¡/ç›–å¡ã€‘æ“ä½œï¼›
         if (gameManager.state!=State.buyingCard && gameManager.state != State.start && gameManager.state != State.flipingCard)
             return;
 
-        //×ó¼üÂò¿¨£»
+        //å·¦é”®ä¹°å¡ï¼›
         if (pointerEventData.button == PointerEventData.InputButton.Left)
         {
-            //ÅÆ¿âÉÏ·½µÚÒ»ÕÅ¿¨¿ÉÒÔ¸Ç£¬²»ÄÜÂò£»
+            //ç‰Œåº“ä¸Šæ–¹ç¬¬ä¸€å¼ å¡å¯ä»¥ç›–ï¼Œä¸èƒ½ä¹°ï¼›
             if (isCards)
                 return;
 
-            //¸ß¹âÏÔÊ¾Ñ¡ÖĞµÄ¿¨£»
+            //é«˜å…‰æ˜¾ç¤ºé€‰ä¸­çš„å¡ï¼›
             HighlightTheCard(Color.green);
 
-            //reset»Æ½ğ³ïÂë³ØUI£»
+            //reseté»„é‡‘ç­¹ç æ± UIï¼›
             Gold.GetComponent<Stone>().resetAll();
 
-            //×´Ì¬Éè¶¨ÎªÂò¿¨ÖĞ£»
+            //çŠ¶æ€è®¾å®šä¸ºä¹°å¡ä¸­ï¼›
             gameManager.state = State.buyingCard;
         }
 
-        //ÓÒ¼ü¸Ç¿¨£»
+        //å³é”®ç›–å¡ï¼›
         if (pointerEventData.button == PointerEventData.InputButton.Right)
         {
-            //ÒÑ¸Ç×ÅµÄ¿¨²»ÄÜ¸Ç£»
+            //å·²ç›–ç€çš„å¡ä¸èƒ½ç›–ï¼›
             if (isCoverCard)
                 return;
 
-            //Reset³ÖÓĞ³ïÂëÇøUI£»
+            //ResetæŒæœ‰ç­¹ç åŒºUIï¼›
             for (int i = 0; i < 6; i++)            
                 money.GetChild(i).GetChild(1).GetComponent<Money>().resetAll();            
 
-            //¸ß¹âÏÔÊ¾Ñ¡ÖĞµÄ¿¨£»
+            //é«˜å…‰æ˜¾ç¤ºé€‰ä¸­çš„å¡ï¼›
             HighlightTheCard(Color.red);
 
-            //¸Ä±ä»Æ½ğÊıÁ¿ÏÔÊ¾£»
+            //æ”¹å˜é»„é‡‘æ•°é‡æ˜¾ç¤ºï¼›
             if (gameManager.state != State.flipingCard)
             {
-                //×´Ì¬Éè¶¨Îª¸Ç¿¨ÖĞ£»
+                //çŠ¶æ€è®¾å®šä¸ºç›–å¡ä¸­ï¼›
                 gameManager.state = State.flipingCard;
                                 
                 Text text = Gold.transform.GetChild(0).GetComponent<Text>();
