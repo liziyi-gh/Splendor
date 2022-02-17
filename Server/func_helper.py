@@ -1,5 +1,6 @@
 import threading
 
+
 def static_vars(**kwargs):
 
     def decorate(func):

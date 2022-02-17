@@ -11,7 +11,7 @@ namespace Players
         public List<int> cards, foldCards, nobles;
         public Dictionary<string, int> cards_type;
         public Dictionary<string, int> gems;
-    
+
         public Player()
         {
             cards_type = new Dictionary<string, int>
@@ -35,5 +35,14 @@ namespace Players
             point = 0;
             foldCards_num = 0;
         }
+    }
+
+    public static class Operation
+    {
+        public const string GET_GEMS = "get_gems",
+                            BUY_CARD = "buy_card",
+                            FOLD_CARD = "fold_card",
+                            FOLD_CARD_UNKNOWN = "fold_card_unknown";
+
     }
 }

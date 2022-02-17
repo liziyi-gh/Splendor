@@ -7,57 +7,49 @@ using System.Collections.Generic;
 using MsgStruct;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using MsgTools;
 
 namespace Logger
 {
+
+    public static class LogSwitch
+    {
+        public const string RECEIVE = "Receive";
+        public const string SEND = "Send";
+    }
+
     public static class Logging
     {
         
-        public const string path = ".\\ClientLog.txt";
-
-        public static void LogMsgHead(Msgs head_msg)
+        public static string path;
+        public static StreamWriter log;
+        
+        public static void LogInit()
         {
-            var log = new StreamWriter(path, true, System.Text.Encoding.Default);
-            log.WriteLine("--------------------------------------------------");
-            log.WriteLine(DateTime.Now.ToString("G") + "    API:{0}, Player:{1}, MsgLength:{2}", head_msg.api_id, head_msg.player_id, head_msg.msg_len);
-            log.Flush();
-            log.Close();
+            path = ".\\ClientLog.txt";
+            log = new StreamWriter(path, true, System.Text.Encoding.Default);
+            //log.AutoFlush = true;
         }
 
-        public static void LogMsgBody(byte[] buffer)
+        public static void LogMsg(byte[] buffer, string logSwitch)
         {
-            var log = new StreamWriter(path, true, System.Text.Encoding.Default);
-            JObject msg = JObject.Parse(buffer.Skip(28).Take(buffer.Length).ToString());
-            foreach (var i in msg.Properties())
-                log.Write(i.ToString()+":"+msg[i].ToString()+", ");
-            log.WriteLine();
+            Msgs msg = Tools.MsgHeadUnpack(buffer);
+            log.WriteLine(DateTime.Now.ToString("G") + "    "+logSwitch+"-->API:{0}, Player:{1}, MsgLength:{2}", msg.api_id, msg.player_id, msg.msg_len);
+            log.WriteLine(Encoding.UTF8.GetString(buffer.Skip(28).Take(buffer.Length).ToArray()));
             log.Flush();
-            log.Close();
+            
         }
 
-        public static void LogBuffer(byte[] buffer, string tag)
+        public static void LogConnect()
         {
-            var log = new StreamWriter(path, true, System.Text.Encoding.Default);
-            log.WriteLine(tag + " buffer:");
-            int j = 0;
-            foreach (var i in buffer)
-            {
-                log.Write(i);
-                if (j == 3)
-                {
-                    log.Write(", ");
-                    j = 0;
-                }
-                else j++;
-            }
-            log.WriteLine() ;
+            log.WriteLine("--------------------------------------------------------------------------");
+            log.WriteLine(DateTime.Now.ToString("G") + "    Client connected");
+            log.WriteLine("--------------------------------------------------------------------------");
             log.Flush();
-            log.Close();
         }
 
         public static void LogAny<T>(T data)
         {
-            var log = new StreamWriter(path, true, System.Text.Encoding.Default);
             log.WriteLine("player_id:"+data);
             log.Flush();
             log.Close();

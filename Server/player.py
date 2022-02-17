@@ -7,6 +7,7 @@ from Server.constants import HEADER_FORMAT, HEADER_LENGTH
 from Server.gemstone import Gemstone
 from Server.card import Card
 
+
 class Player:
 
     def __init__(self, sock: socket.socket, player_id: int):
