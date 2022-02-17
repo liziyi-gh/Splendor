@@ -25,14 +25,4 @@ namespace MsgStruct
             { GEM.GOLDEN, 0 }
         };
     }
-
-    public class RoomMsgs
-    {
-        public int players_number = 0;
-        public ulong[]? players_sequence;
-        public int[]? nobles_info,
-                      levelOneCards_info,
-                      levelTwoCards_info,
-                      levelThreeCards_info;
-    }
 }
