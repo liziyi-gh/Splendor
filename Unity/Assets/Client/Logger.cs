@@ -28,15 +28,14 @@ namespace Logger
         {
             path = ".\\ClientLog.txt";
             log = new StreamWriter(path, true, System.Text.Encoding.Default);
-            //log.AutoFlush = true;
+            log.AutoFlush = true;
         }
 
-        public static void LogMsg(byte[] buffer, string logSwitch)
+        public static void LogMsg(Msgs msg, string body_msg, string logSwitch)
         {
-            Msgs msg = Tools.MsgHeadUnpack(buffer);
             log.WriteLine(DateTime.Now.ToString("G") + "    "+logSwitch+"-->API:{0}, Player:{1}, MsgLength:{2}", msg.api_id, msg.player_id, msg.msg_len);
-            log.WriteLine(Encoding.UTF8.GetString(buffer.Skip(28).Take(buffer.Length).ToArray()));
-            log.Flush();
+            log.WriteLine(body_msg);
+            //log.Flush();
             
         }
 
@@ -45,7 +44,7 @@ namespace Logger
             log.WriteLine("--------------------------------------------------------------------------");
             log.WriteLine(DateTime.Now.ToString("G") + "    Client connected");
             log.WriteLine("--------------------------------------------------------------------------");
-            log.Flush();
+            //log.Flush();
         }
 
         public static void LogAny<T>(T data)
