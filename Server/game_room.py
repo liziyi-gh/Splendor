@@ -74,9 +74,6 @@ class GameRoom:
         new_player_id = self.newPlayerID()
         new_player = Player(sock, new_player_id)
         self.players.append(new_player)
-        for key in self.chips.keys():
-            if key not in Gemstone.GOLDEN:
-                self.chips[key] += 1
         self.card_board.addPlayer()
         init_resp_msg = message_helper.packInitResp(new_player_id,
                                                     self.allocated_id)
@@ -172,8 +169,8 @@ class GameRoom:
             for item in operation_info:
                 chip_type = item["chips_type"]
                 chip_number = item["chips_number"]
-                self.chips[chip_type] += chip_number
-                player.chips[chip_type] -= chip_number
+                self.chips[chip_type] -= chip_number
+                player.chips[chip_type] += chip_number
 
             self.boardcastMsg(operation_msg)
             self.startNewTurn(player.player_id)
@@ -243,6 +240,19 @@ class GameRoom:
     def startGame(self):
         self.generatePlayerSequence()
         players_number = len(self.allocated_id)
+        chips_num = 3
+        if players_number == 2:
+            chips_num = 4
+            print("chips number is {}".format(chips_num))
+        if players_number == 3:
+            chips_num = 5
+        if players_number == 4:
+            chips_num = 7
+        for key in self.chips.keys():
+            if key == Gemstone.GOLDEN:
+                continue
+            self.chips[key] = chips_num
+
         msg = message_helper.packGameStart(players_number,
                                            self.players_sequence,
                                            self.card_board)
