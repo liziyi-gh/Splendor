@@ -47,11 +47,9 @@ namespace Logger
             //log.Flush();
         }
 
-        public static void LogAny<T>(T data)
+        public static void LogAny(string str)
         {
-            log.WriteLine("player_id:"+data);
-            log.Flush();
-            log.Close();
+            log.WriteLine(str);
         }
     }
 }
