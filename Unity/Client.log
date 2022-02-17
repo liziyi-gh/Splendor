@@ -49,3 +49,24 @@
 {"players_number": 2, "players_sequence": [1, 2], "nobles_info": ["99", "98", "100"], "levelOneCards_info": ["19", "6", "2", "38"], "levelTwoCards_info": ["58", "42", "65", "64"], "levelThreeCards_info": ["77", "81", "80", "89"]}
 2022/2/17 19:33:18    Receive-->API:5, Player:0, MsgLength:50
 {"new_turn_player": 2}
+2022/2/17 19:48:52    Receive-->API:6, Player:0, MsgLength:96
+{"player_id": 2, "operation_type": "get_gems", "operation_info": []}
+2022/2/17 19:48:52    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+--------------------------------------------------------------------------
+2022/2/17 19:52:36    Client connected
+--------------------------------------------------------------------------
+2022/2/17 19:52:36    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/17 19:52:36    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/17 19:52:44    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/17 19:52:50    Receive-->API:3, Player:1, MsgLength:28
+
+2022/2/17 19:52:52    Receive-->API:3, Player:2, MsgLength:28
+
+2022/2/17 19:52:52    Receive-->API:4, Player:0, MsgLength:259
+{"players_number": 2, "players_sequence": [2, 1], "nobles_info": ["95", "94", "100"], "levelOneCards_info": ["17", "23", "11", "20"], "levelTwoCards_info": ["57", "52", "53", "51"], "levelThreeCards_info": ["79", "76", "89", "88"]}
+2022/2/17 19:52:52    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}

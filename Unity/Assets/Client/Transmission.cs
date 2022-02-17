@@ -170,7 +170,7 @@ namespace Transmission
                     break;
             }
             socket.Send(buffer.ToArray());
-            //Logging.LogMsg(buffer.ToArray(), "Send");
+            //Logging.LogMsgSend(buffer.ToArray());
         }
     }
 }
