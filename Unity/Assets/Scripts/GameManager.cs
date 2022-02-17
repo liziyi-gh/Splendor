@@ -11,11 +11,11 @@ using CardLevelTypes;
 
 public enum State
 {
-    //ÓÎÏ·¿ªÊ¼Ç°£º
+    //æ¸¸æˆå¼€å§‹å‰ï¼š
     unready,
     ready,
 
-    //ÓÎÏ·ÖĞ×´Ì¬£º
+    //æ¸¸æˆä¸­çŠ¶æ€ï¼š
     start,
     buyingCard,
     takingMoney,
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     public State state = State.unready;
     [SerializeField] GameObject highLight1, highLight2, highLight3;
 
-    //×é¼şTransform
+    //ç»„ä»¶Transform
     Transform stones;
     Transform money;
     Transform players;
@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     Transform cards;
     Transform foldCards;
 
-    [Header("Ô¤ÖÆÌå")]
+    [Header("é¢„åˆ¶ä½“")]
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject noblePrefab;
 
@@ -74,10 +74,10 @@ public class GameManager : MonoBehaviour
         cards = GameObject.Find("CardGroup").transform;
         foldCards = GameObject.Find("FoldCards").transform;
 
-        //Á¬½Ó·şÎñÆ÷£»
+        //è¿æ¥æœåŠ¡å™¨ï¼›
         Client.Connect();
 
-        //·¢ËÍINITÏûÏ¢µ½·şÎñÆ÷£»
+        //å‘é€INITæ¶ˆæ¯åˆ°æœåŠ¡å™¨ï¼›
         sendMsg.api_id = 1;
         Client.Send(sendMsg);
                 
@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
 
     public void Reset()
     {
-        //ÈôÓÎÏ·»¹Ã»¿ªÊ¼Ôò²»ÄÜ¸´Î»£»
+        //è‹¥æ¸¸æˆè¿˜æ²¡å¼€å§‹åˆ™ä¸èƒ½å¤ä½ï¼›
         if (state == State.ready || state == State.unready)
             return;
 
@@ -134,11 +134,11 @@ public class GameManager : MonoBehaviour
 
     public void Action()
     {
-        //·¢ËÍ²Ù×÷ÖÁ·şÎñÆ÷£»
+        //å‘é€æ“ä½œè‡³æœåŠ¡å™¨ï¼›
         switch (state)
         {
             case State.takingMoney:
-                //·¢ËÍÄÃÈ¡³ïÂë×éºÏµÄ¾ßÌåÏûÏ¢ÖÁ·şÎñ¶Ë£»
+                //å‘é€æ‹¿å–ç­¹ç ç»„åˆçš„å…·ä½“æ¶ˆæ¯è‡³æœåŠ¡ç«¯ï¼›
                 sendMsg.api_id = 6;
                 sendMsg.player_id = playerID;
                 sendMsg.operation_type = "get_gems";
@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case State.buyingCard:
-                //·¢ËÍÂò¿¨µÄ¾ßÌåÏûÏ¢ÖÁ·şÎñ¶Ë£»
+                //å‘é€ä¹°å¡çš„å…·ä½“æ¶ˆæ¯è‡³æœåŠ¡ç«¯ï¼›
                 sendMsg.api_id = 6;
                 sendMsg.player_id = playerID;
                 sendMsg.operation_type = "buy_card";
@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case State.flipingCard:
-                //·¢ËÍ¸Ç¿¨µÄ¾ßÌåÏûÏ¢ÖÁ·şÎñ¶Ë£»
+                //å‘é€ç›–å¡çš„å…·ä½“æ¶ˆæ¯è‡³æœåŠ¡ç«¯ï¼›
                 sendMsg.api_id = 6;
                 sendMsg.player_id = playerID;
                 if (highLight1.transform.parent.name.Contains("Card"))
@@ -181,11 +181,11 @@ public class GameManager : MonoBehaviour
                 break;
 
             case State.unready:
-                //Ïû³ı±ê¼Ç×Ô¼ºµÄ¸ßÁÁ£»
+                //æ¶ˆé™¤æ ‡è®°è‡ªå·±çš„é«˜äº®ï¼›
                 highLight3.GetComponent<Image>().color = Color.clear;
-                //×´Ì¬ÇĞ»»ÎªÒÑ×¼±¸£»
+                //çŠ¶æ€åˆ‡æ¢ä¸ºå·²å‡†å¤‡ï¼›
                 state = State.ready;
-                //·¢ËÍ×¼±¸ÏûÏ¢ÖÁ·şÎñ¶Ë£»
+                //å‘é€å‡†å¤‡æ¶ˆæ¯è‡³æœåŠ¡ç«¯ï¼›
                 sendMsg.api_id = 3;
                 sendMsg.player_id = playerID;
                 Client.Send(sendMsg);
@@ -194,7 +194,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //ÉèÖÃÍæ¼ÒUI£»
+    //è®¾ç½®ç©å®¶UIï¼›
     public void SetPlayerUI(Msgs recieveMsg)
     {
         playerID = recieveMsg.player_id;
@@ -207,7 +207,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //ĞÂÍæ¼Ò½øÈë·¿¼ä£»
+    //æ–°ç©å®¶è¿›å…¥æˆ¿é—´ï¼›
     public void PlayerGetIn(ulong player_id)
     {
         GameObject player = Instantiate(playerPrefab);
@@ -221,13 +221,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //Íæ¼Ò×¼±¸UI£»
+    //ç©å®¶å‡†å¤‡UIï¼›
     public void GetReady(ulong player_id)
     {
         GameObject.Find("Player" + player_id.ToString()).transform.GetChild(1).GetComponent<Text>().color = Color.green;
     }
 
-    //°´ĞĞ¶¯Ë³ĞòÖØÉèÍæ¼ÒUI£»
+    //æŒ‰è¡ŒåŠ¨é¡ºåºé‡è®¾ç©å®¶UIï¼›
     public void ResetPlayerUI()
     {
         players.DetachChildren();
@@ -235,30 +235,30 @@ public class GameManager : MonoBehaviour
         {
             GameObject player = GameObject.Find("Player" + player_id.ToString());
             player.transform.SetParent(current.players);
-            //×¼±¸×ÖÌå²»Í¸Ã÷¶ÈÉèÎª0
+            //å‡†å¤‡å­—ä½“ä¸é€æ˜åº¦è®¾ä¸º0
             player.transform.GetChild(1).GetComponent<Text>().color = Color.clear;
         }
     }
 
-    //»ñµÃ×Ô¼ºÍæ¼ÒIDºÍÆäËûÍæ¼ÒID£»
+    //è·å¾—è‡ªå·±ç©å®¶IDå’Œå…¶ä»–ç©å®¶IDï¼›
     public static void GetPlayerID(Msgs msgs)
     {        
         current.toDoList.Add("SetPlayerUI",msgs);        
     }    
 
-    //½ÓÊÜÍæ¼Ò½øÈë·¿¼äĞÅÏ¢£»
+    //æ¥å—ç©å®¶è¿›å…¥æˆ¿é—´ä¿¡æ¯ï¼›
     public static void NewPlayerGetIn(Msgs msgs)
     {        
         current.toDoList.Add("NewPlayerGetIn",msgs);
     }
 
-    //½ÓÊÕÍæ¼Ò×¼±¸ĞÅÏ¢£¨°üÀ¨×Ô¼º£©£»
+    //æ¥æ”¶ç©å®¶å‡†å¤‡ä¿¡æ¯ï¼ˆåŒ…æ‹¬è‡ªå·±ï¼‰ï¼›
     public static void PlayerGetReady(Msgs msgs)
     {
         current.toDoList.Add("PlayerGetReady", msgs);
     }
 
-    //½ÓÊÕÓÎÏ·¿ªÊ¼ĞÅÏ¢£»
+    //æ¥æ”¶æ¸¸æˆå¼€å§‹ä¿¡æ¯ï¼›
     public static void GameStart()
     {
         current.toDoList.Add("GameStart", new Msgs());
@@ -266,14 +266,14 @@ public class GameManager : MonoBehaviour
 
     public static void NewTurn(Msgs msgs)
     {
-        //µ±Ç°ĞĞ¶¯Íæ¼ÒTransform
+        //å½“å‰è¡ŒåŠ¨ç©å®¶Transform
         Transform player = GameObject.Find("Player" + msgs.player_id.ToString()).transform;
 
-        //UI¸ßÁÁµ±Ç°ĞĞ¶¯Íæ¼Ò£»
+        //UIé«˜äº®å½“å‰è¡ŒåŠ¨ç©å®¶ï¼›
         current.highLight3.transform.SetParent(player,false);
         current.highLight3.GetComponent<Image>().color = Color.green;
 
-        //ÈôÂÖµ½×Ô¼ºĞĞ¶¯£»
+        //è‹¥è½®åˆ°è‡ªå·±è¡ŒåŠ¨ï¼›
         if (msgs.player_id == current.playerID)        
             current.state = State.start;
         else
