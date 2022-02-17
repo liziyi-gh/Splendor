@@ -22,13 +22,14 @@ class GameRoom:
         self.card_board = CardBoard()
         self.chips = {
             Gemstone.GOLDEN: 5,
-            Gemstone.RUBY: 2,
-            Gemstone.DIAMOND: 2,
-            Gemstone.SAPPHIRE: 2,
-            Gemstone.EMERALD: 2,
-            Gemstone.OBSIDIAN: 2,
+            Gemstone.RUBY: 0,
+            Gemstone.DIAMOND: 0,
+            Gemstone.SAPPHIRE: 0,
+            Gemstone.EMERALD: 0,
+            Gemstone.OBSIDIAN: 0,
         }
         self.players_sequence = []
+        self.next_player_id = 0
         logging.debug("Game room initialize")
 
     def __str__(self):
@@ -173,7 +174,7 @@ class GameRoom:
                 player.chips[chip_type] += chip_number
 
             self.boardcastMsg(operation_msg)
-            self.startNewTurn(player.player_id)
+            self.startNewTurn()
 
             return
 
@@ -189,7 +190,7 @@ class GameRoom:
             self.card_board.removeCardByNumberThenAddNewCard(card_number)
 
             self.boardcastMsg(operation_msg)
-            self.startNewTurn(player.player_id)
+            self.startNewTurn()
 
             return
 
@@ -204,7 +205,7 @@ class GameRoom:
             self.card_board.removeCardByNumberThenAddNewCard(card_number)
 
             self.boardcastMsg(operation_msg)
-            self.startNewTurn(player.player_id)
+            self.startNewTurn()
 
             return
 
@@ -216,7 +217,7 @@ class GameRoom:
                 self.card_board.removeCardByNumberThenAddNewCard(card.number)
                 msg = message_helper.packPlayerGetNoble(player.player_id, card)
                 self.boardcastMsg(msg)
-                self.startNewTurn(player.player_id)
+                self.startNewTurn()
 
                 return
 
@@ -234,11 +235,12 @@ class GameRoom:
         card = self.card_board.getCardByNumber(card_number)
         player.addCard(card)
         self.card_board.removeCardByNumberThenAddNewCard(card_number)
-        self.startNewTurn(player.player_id)
+        self.startNewTurn()
 
     @thread_safe
     def startGame(self):
         self.generatePlayerSequence()
+        self.next_player_id = self.players_sequence[0]
         players_number = len(self.allocated_id)
         chips_num = 3
         if players_number == 2:
@@ -258,13 +260,14 @@ class GameRoom:
                                            self.card_board)
         self.boardcastMsg(msg)
         logging.info("Game start!")
-        self.startNewTurn(self.players_sequence[0])
+        self.startNewTurn()
 
     @thread_safe
-    def startNewTurn(self, player_id):
-        idx = self.players_sequence.index(player_id)
-        idx = 0 if idx == len(self.players_sequence) - 1 else idx + 1
-        next_player_id = self.players_sequence[idx]
-        msg = message_helper.packNewTurn(next_player_id)
+    def startNewTurn(self):
+        msg = message_helper.packNewTurn(self.next_player_id)
         self.boardcastMsg(msg)
-        logging.info("Start new turn with player {}".format(next_player_id))
+        logging.info("Start new turn with player {}".format(self.next_player_id))
+
+        idx = self.players_sequence.index(self.next_player_id)
+        idx = 0 if idx == len(self.players_sequence) - 1 else idx + 1
+        self.next_player_id = self.players_sequence[idx]
