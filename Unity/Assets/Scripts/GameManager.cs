@@ -8,6 +8,7 @@ using Gems;
 using GameRooms;
 using Players;
 using CardLevelTypes;
+using Logger;
 
 public enum State
 {
@@ -99,6 +100,7 @@ public class GameManager : MonoBehaviour
                     GetReady(toDoList[toDo].player_id);
                     break;
                 case "GameStart":
+                    Logging.LogAny("UI shows GameScene");
                     ResetPlayerUI();
                     LoadGameRoomInfomation();
                     state = State.waiting;

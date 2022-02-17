@@ -74,7 +74,7 @@ namespace Transmission
                     case API_ID.PLAYER_OPERATION:
                         body_msg = Tools.MsgPLAYER_OPERATION(body_str);
                         CardPosition cardPos = GameRoom.GetCardPosition(body_msg.card_id);
-                        int player_pos = Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id);
+                        int player_pos = Array.Indexof(GameRoom.players_sequence, body_msg.player_id);
                         switch (body_msg.operation_type)
                         {
                             case Operation.GET_GEMS:
@@ -128,8 +128,8 @@ namespace Transmission
                         switch (body_msg.nobles_id.Count())
                         {
                             case 1:
-                                GameRoom.players[Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id)].point += 3;
-                                GameRoom.players[Array.BinarySearch(GameRoom.players_sequence, body_msg.player_id)].nobles.Add(body_msg.nobles_id[0]);
+                                GameRoom.players[Array.Indexof(GameRoom.players_sequence, body_msg.player_id)].point += 3;
+                                GameRoom.players[Array.Indexof(GameRoom.players_sequence, body_msg.player_id)].nobles.Add(body_msg.nobles_id[0]);
                                 break;
 
                             default:

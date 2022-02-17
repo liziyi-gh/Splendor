@@ -6,6 +6,7 @@ using JsonClasses;
 using System.Collections.Generic;
 using CardLevelTypes;
 using System.Linq;
+using Logger;
 
 namespace GameRooms
 {
@@ -62,11 +63,12 @@ namespace GameRooms
                 players[i].id = players_sequence[i];
             }
             reInit = true;
+            Logging.LogAny("GameRoom Init Finish");
         }
 
         public static Player GetPlayer(ulong player_id)
         {
-            return players[Array.BinarySearch(players_sequence, player_id)];
+            return players[Array.Indexof(players_sequence, player_id)];
         }
 
         public static CardPosition GetCardPosition(int card_id)

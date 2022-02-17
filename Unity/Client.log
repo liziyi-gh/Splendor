@@ -70,3 +70,397 @@
 {"players_number": 2, "players_sequence": [2, 1], "nobles_info": ["95", "94", "100"], "levelOneCards_info": ["17", "23", "11", "20"], "levelTwoCards_info": ["57", "52", "53", "51"], "levelThreeCards_info": ["79", "76", "89", "88"]}
 2022/2/17 19:52:52    Receive-->API:5, Player:0, MsgLength:50
 {"new_turn_player": 1}
+--------------------------------------------------------------------------
+2022/2/17 21:02:22    Client connected
+--------------------------------------------------------------------------
+2022/2/17 21:02:22    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/17 21:02:22    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/17 21:02:34    Receive-->API:8, Player:2, MsgLength:28
+
+--------------------------------------------------------------------------
+2022/2/17 21:04:54    Client connected
+--------------------------------------------------------------------------
+2022/2/17 21:04:54    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/17 21:04:55    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/17 21:05:09    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/17 21:05:16    Receive-->API:3, Player:1, MsgLength:28
+
+2022/2/17 21:05:17    Receive-->API:3, Player:2, MsgLength:28
+
+2022/2/17 21:05:17    Receive-->API:4, Player:0, MsgLength:256
+{"players_number": 2, "players_sequence": [1, 2], "nobles_info": ["95", "96", "93"], "levelOneCards_info": ["21", "7", "9", "10"], "levelTwoCards_info": ["55", "51", "67", "50"], "levelThreeCards_info": ["80", "82", "78", "90"]}
+GameRoom Init Finish
+2022/2/17 21:05:17    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 2}
+UI shows GameScene
+--------------------------------------------------------------------------
+2022/2/17 21:06:09    Client connected
+--------------------------------------------------------------------------
+2022/2/17 21:06:09    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/17 21:06:09    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/17 21:06:18    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/17 21:06:24    Receive-->API:3, Player:2, MsgLength:28
+
+2022/2/17 21:06:25    Receive-->API:3, Player:1, MsgLength:28
+
+2022/2/17 21:06:25    Receive-->API:4, Player:0, MsgLength:257
+{"players_number": 2, "players_sequence": [2, 1], "nobles_info": ["98", "93", "99"], "levelOneCards_info": ["16", "18", "39", "3"], "levelTwoCards_info": ["69", "59", "54", "60"], "levelThreeCards_info": ["86", "77", "79", "78"]}
+GameRoom Init Finish
+2022/2/17 21:06:25    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
+UI shows GameScene
