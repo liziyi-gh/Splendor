@@ -60,7 +60,7 @@ namespace Transmission
                     case API_ID.GAME_START:
                         RoomMsgs roomMsgs = Tools.MsgsGAME_START(body_str);
                         GameRoom.GameRoomInit(roomMsgs);
-                        GameManager.GameStart(roomMsgs);
+                        GameManager.GameStart();
                         break;
 
                     case API_ID.NEW_TURN:

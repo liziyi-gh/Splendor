@@ -50,12 +50,13 @@ public class GameManager : MonoBehaviour
     ulong playerID = 0;
     Player player;
 
-    Msgs msg = new Msgs();
+    Msgs sendMsg = new Msgs();
+    RoomMsgs Room = new RoomMsgs();
 
-    int testNum = 0;
-    Msgs testMsg = new Msgs();
-    RoomMsgs testRoom = new RoomMsgs();
     string[] gems = new string[] {GEM.OBSIDIAN,GEM.RUBY,GEM.EMERALD,GEM.SAPPHIRE,GEM.DIAMOND,GEM.GOLDEN};
+
+    Dictionary<string,Msgs> toDoList=new Dictionary<string,Msgs>();
+    
 
     private void Awake()
     {
@@ -77,15 +78,36 @@ public class GameManager : MonoBehaviour
         Client.Connect();
 
         //发送INIT消息到服务器；
-        msg.api_id = 1;
-        Client.Send(msg);
+        sendMsg.api_id = 1;
+        Client.Send(sendMsg);
                 
     }
 
     
     void Update()
     {
-        
+        foreach(string toDo in toDoList.Keys)
+        {
+            switch (toDo)
+            {
+                case "SetPlayerUI":
+                    SetPlayerUI(toDoList[toDo]);
+                    break;
+                case "NewPlayerGetIn":
+                    PlayerGetIn(toDoList[toDo].player_id);
+                    break;
+                case "PlayerGetReady":
+                    GetReady(toDoList[toDo].player_id);
+                    break;
+                case "GameStart":
+                    ResetPlayerUI();
+                    LoadGameRoomInfomation();
+                    state = State.waiting;
+                    break;
+
+            }
+        }
+        toDoList = new Dictionary<string,Msgs>();
     }
 
     public void Reset()
@@ -96,6 +118,11 @@ public class GameManager : MonoBehaviour
 
         state = State.start;
 
+        ResetUI();
+    }
+
+    public void ResetUI()
+    {
         highLight1.SetActive(false); highLight2.SetActive(false);
 
         for (int i = 0; i < 6; i++)
@@ -112,41 +139,41 @@ public class GameManager : MonoBehaviour
         {
             case State.takingMoney:
                 //发送拿取筹码组合的具体消息至服务端；
-                msg.api_id = 6;
-                msg.player_id = playerID;
-                msg.operation_type = "get_gems";
+                sendMsg.api_id = 6;
+                sendMsg.player_id = playerID;
+                sendMsg.operation_type = "get_gems";
                 for(int i=0;i<5;i++)
-                    msg.gems[gems[i]]= int.Parse(stones.GetChild(i).GetChild(1).GetComponent<Text>().text);
-                Client.Send(msg);                
+                    sendMsg.gems[gems[i]]= int.Parse(stones.GetChild(i).GetChild(1).GetComponent<Text>().text);
+                Client.Send(sendMsg);                
                 break;
 
             case State.buyingCard:
                 //发送买卡的具体消息至服务端；
-                msg.api_id = 6;
-                msg.player_id = playerID;
-                msg.operation_type = "buy_card";
+                sendMsg.api_id = 6;
+                sendMsg.player_id = playerID;
+                sendMsg.operation_type = "buy_card";
                 GameObject hl = highLight1.activeSelf ? highLight1 : highLight2;
-                msg.card_id = allCardSprites.IndexOf(hl.transform.parent.GetComponent<Image>().sprite);
+                sendMsg.card_id = allCardSprites.IndexOf(hl.transform.parent.GetComponent<Image>().sprite);
                 for (int i = 0; i < 6; i++)
-                    msg.gems[gems[i]] = int.Parse(money.GetChild(i).GetChild(1).GetChild(1).GetComponent<Text>().text);
-                Client.Send(msg);
+                    sendMsg.gems[gems[i]] = int.Parse(money.GetChild(i).GetChild(1).GetChild(1).GetComponent<Text>().text);
+                Client.Send(sendMsg);
                 break;
 
             case State.flipingCard:
                 //发送盖卡的具体消息至服务端；
-                msg.api_id = 6;
-                msg.player_id = playerID;
+                sendMsg.api_id = 6;
+                sendMsg.player_id = playerID;
                 if (highLight1.transform.parent.name.Contains("Card"))
                 {
-                    msg.operation_type = "fold_card";
-                    msg.card_id = allCardSprites.IndexOf(highLight1.transform.parent.GetComponent<Image>().sprite);
+                    sendMsg.operation_type = "fold_card";
+                    sendMsg.card_id = allCardSprites.IndexOf(highLight1.transform.parent.GetComponent<Image>().sprite);
                 }
                 else
                 {
-                    msg.operation_type = "fold_card_unknown";
-                    msg.card_level = int.Parse(highLight1.transform.parent.name);
+                    sendMsg.operation_type = "fold_card_unknown";
+                    sendMsg.card_level = int.Parse(highLight1.transform.parent.name);
                 }
-                Client.Send(msg);
+                Client.Send(sendMsg);
                 break;
 
             case State.choosingNoble:
@@ -159,123 +186,82 @@ public class GameManager : MonoBehaviour
                 //状态切换为已准备；
                 state = State.ready;
                 //发送准备消息至服务端；
-                msg.api_id = 3;
-                msg.player_id = playerID;
-                Client.Send(msg);
+                sendMsg.api_id = 3;
+                sendMsg.player_id = playerID;
+                Client.Send(sendMsg);
 
                 break;
         }
     }
 
-    public void SetPlayerUI(int playerNum)
+    //设置玩家UI；
+    public void SetPlayerUI(Msgs recieveMsg)
     {
-        for (int i = 0; i < playerNum; i++)
+        playerID = recieveMsg.player_id;
+        
+        for (int i = 0; i < recieveMsg.other_player_id.Count; i++)
         {
             GameObject player = Instantiate(playerPrefab);
             player.transform.SetParent(players);
-            if (i == 0)
-            {
-                highLight3.transform.SetParent(player.transform,false);
-                highLight3.GetComponent<Image>().color = Color.red;
-            }                
+            player.name = "Player" + recieveMsg.other_player_id[i].ToString();   
+        }
+    }
+
+    //新玩家进入房间；
+    public void PlayerGetIn(ulong player_id)
+    {
+        GameObject player = Instantiate(playerPrefab);
+        player.transform.SetParent(players);
+        player.name = "Player" + player_id.ToString();
+
+        if (player_id == playerID)
+        {
+            highLight3.transform.SetParent(player.transform, false);
+            highLight3.GetComponent<Image>().color = Color.red;
+        }
+    }
+
+    //玩家准备UI；
+    public void GetReady(ulong player_id)
+    {
+        GameObject.Find("Player" + player_id.ToString()).transform.GetChild(1).GetComponent<Text>().color = Color.green;
+    }
+
+    //按行动顺序重设玩家UI；
+    public void ResetPlayerUI()
+    {
+        players.DetachChildren();
+        foreach (int player_id in GameRoom.players_sequence)
+        {
+            GameObject player = GameObject.Find("Player" + player_id.ToString());
+            player.transform.SetParent(current.players);
+            //准备字体不透明度设为0
+            player.transform.GetChild(1).GetComponent<Text>().color = Color.clear;
         }
     }
 
     //获得自己玩家ID和其他玩家ID；
     public static void GetPlayerID(Msgs msgs)
     {        
-        ulong myID = msgs.player_id;
-        List<ulong> othersID = msgs.other_player_id;
-
-        current.playerID = myID;
-        int playerNum = othersID.Count + 1;
-
-        //生成UI组件；
-        current.SetPlayerUI(playerNum);
-
-        //分配playerID；
-        current.players.GetChild(0).name = "Player" + myID.ToString();
-        for (int i = 1; i < playerNum; i++)        
-            current.players.GetChild(i).name = "Player" + othersID[i - 1].ToString();
-        
+        current.toDoList.Add("SetPlayerUI",msgs);        
     }    
 
-    //其他玩家进入房间；
+    //接受玩家进入房间信息；
     public static void NewPlayerGetIn(Msgs msgs)
-    {
-        ulong hisPlayerID = msgs.player_id;
-        if (hisPlayerID == current.playerID)
-            return;
-        GameObject player = Instantiate(current.playerPrefab);
-        player.transform.SetParent(current.players);
-        player.name = "Player" + hisPlayerID.ToString();        
+    {        
+        current.toDoList.Add("NewPlayerGetIn",msgs);
     }
 
     //接收玩家准备信息（包括自己）；
     public static void PlayerGetReady(Msgs msgs)
     {
-        ulong hisPlayerID = msgs.player_id;
-        GameObject.Find("Player"+hisPlayerID.ToString()).transform.GetChild(1).GetComponent<Text>().color = Color.green;
+        current.toDoList.Add("PlayerGetReady", msgs);
     }
 
-    //游戏开始；
-    public static void GameStart(RoomMsgs room)
-    {        
-        //把玩家按行动顺序排序
-        current.players.DetachChildren();
-        foreach(int player_id in room.players_sequence)
-        {
-            GameObject player = GameObject.Find("Player" + player_id.ToString());
-            player.transform.SetParent(current.players);
-            //准备字体不透明度设为0
-            player.transform.GetChild(1).GetComponent<Text>().color = Color.clear;            
-        }
-
-        //设置贵族牌
-        foreach(int card_id in room.nobles_info)
-        {
-            GameObject noble = Instantiate(current.noblePrefab);
-            noble.transform.SetParent(current.nobles);
-            noble.GetComponent<Image>().sprite = current.allCardSprites[card_id];
-        }
-
-        //设置1、2、3级牌
-        current.cards.GetChild(0).GetChild(0).GetComponent<Text>().text = "36";
-        current.cards.GetChild(5).GetChild(0).GetComponent<Text>().text = "26";
-        current.cards.GetChild(10).GetChild(0).GetComponent<Text>().text = "16";
-        int i = 1;
-        foreach (int card_id in room.levelOneCards_info)
-        {
-            Image image = current.cards.GetChild(i).GetComponent<Image>();
-            image.color = Color.white;
-            image.sprite = current.allCardSprites[card_id];
-            i++;
-        }        
-        foreach (int card_id in room.levelTwoCards_info)
-        {
-            i++;
-            Image image = current.cards.GetChild(i).GetComponent<Image>();
-            image.color = Color.white;
-            image.sprite = current.allCardSprites[card_id];            
-        }
-        i++;
-        foreach (int card_id in room.levelThreeCards_info)
-        {
-            i++;
-            Image image = current.cards.GetChild(i).GetComponent<Image>();
-            image.color = Color.white;
-            image.sprite = current.allCardSprites[card_id];
-        }
-
-        //设置Player状态为等待行动；
-        current.state = State.waiting;
-
-        //设置筹码池筹码个数；
-        for (int j = 0; j < 5; j++)
-            current.stones.GetChild(j).GetChild(0).GetComponent<Text>().text = room.players_number == 4 ? (room.players_number + 3).ToString() 
-                : (room.players_number + 2).ToString();
-        current.stones.GetChild(5).GetChild(0).GetComponent<Text>().text = "5";
-
+    //接收游戏开始信息；
+    public static void GameStart()
+    {
+        current.toDoList.Add("GameStart", new Msgs());
     }
 
     public static void NewTurn(Msgs msgs)
@@ -336,14 +322,21 @@ public class GameManager : MonoBehaviour
             money.GetChild(i).GetChild(1).GetChild(1).GetComponent<Text>().text = "0";            
         }
 
-        for(int i=0;i < player.foldCards_num; i++)
+        for(int i=0;i < 3; i++)
         {
-            int foldCardLevel = player.foldCards[i] < 41 ? 0 : 1;
-            if (player.foldCards[i] > 60)
-                foldCardLevel = 2;
-            foldCards.GetChild(i).GetComponent<Image>().sprite = cardBackSprites[foldCardLevel];
-            foldCards.GetChild(i).GetComponent<Recover>().cardback= cardBackSprites[foldCardLevel];
-            foldCards.GetChild(i).GetComponent<Recover>().card = allCardSprites[player.foldCards[i]];
+            if (i < player.foldCards_num)
+            {
+                int foldCardLevel = player.foldCards[i] < 41 ? 0 : 1;
+                if (player.foldCards[i] > 60)
+                    foldCardLevel = 2;
+                foldCards.GetChild(i).GetComponent<Image>().sprite = cardBackSprites[foldCardLevel];
+                foldCards.GetChild(i).GetComponent<Image>().color = Color.white;
+                foldCards.GetChild(i).GetComponent<Recover>().cardback = cardBackSprites[foldCardLevel];
+                foldCards.GetChild(i).GetComponent<Recover>().card = allCardSprites[player.foldCards[i]];
+            }
+            else            
+                foldCards.GetChild(i).GetComponent<Image>().color = Color.clear;
+            
         }
         
         for(int i = 0; i < 4; i++)
@@ -353,62 +346,28 @@ public class GameManager : MonoBehaviour
             cards.GetChild(i + 11).GetComponent<Image>().sprite = allCardSprites[GameRoom.cards_info[CardLevelType.levelThreeCards][i]];
         }
 
-        for(int i = 0; i < GameRoom.cards_last_num[CardLevelType.nobles]; i++)
-        {
-            nobles.GetChild(i).GetComponent<Image>().sprite= allCardSprites[GameRoom.cards_info[CardLevelType.nobles][i]];
-        }        
+        for (int i = 0; i < cards.childCount; i++)
+            if (cards.GetChild(i).GetComponent<Image>().sprite = allCardSprites[0])
+                cards.GetChild(i).GetComponent<Image>().color = Color.clear;
 
-        Reset();
-        state = State.waiting;
+        for (int i = 0; i < 5; i++)
+        {
+            if (i < GameRoom.cards_last_num[CardLevelType.nobles])
+            {
+                nobles.GetChild(i).GetComponent<Image>().sprite = allCardSprites[GameRoom.cards_info[CardLevelType.nobles][i]];
+                nobles.GetChild(i).GetComponent<Image>().color = Color.white;
+            }                
+            else
+                nobles.GetChild(i).GetComponent<Image>().color = Color.clear;
+        }
+
+        cards.GetChild(0).GetChild(0).GetComponent<Text>().text = Mathf.Max(0,GameRoom.cards_last_num[CardLevelType.levelOneCards]-4).ToString();
+        cards.GetChild(5).GetChild(0).GetComponent<Text>().text = Mathf.Max(0, GameRoom.cards_last_num[CardLevelType.levelTwoCards] - 4).ToString();
+        cards.GetChild(10).GetChild(0).GetComponent<Text>().text = Mathf.Max(0, GameRoom.cards_last_num[CardLevelType.levelThreeCards] - 4).ToString();
+
+        ResetUI();
     }
 
-    //模拟收信测试用函数；
-    public void Test()
-    {        
-        switch (testNum)
-        {
-            case 0:
-                List<ulong> test = new List<ulong>();
-                test.Add(1);
-                test.Add(4);
-                testMsg.player_id = 3;
-                testMsg.other_player_id = test;
-                GetPlayerID(testMsg);
-                testNum++;
-                break;
-            case 1:
-                testMsg.player_id = 6;
-                NewPlayerGetIn(testMsg);
-                testNum++;
-                break;
-            case 2:
-                testMsg.player_id = 1;
-                PlayerGetReady(testMsg);
-                testNum++;
-                break;
-            case 3:
-                testMsg.player_id = 6;
-                PlayerGetReady(testMsg);
-                testNum++;
-                break;
-            case 4:
-                testRoom.players_number = 4;
-                testRoom.players_sequence = new ulong[] { 3, 6, 4, 1 };
-                testRoom.nobles_info = new int[] { 4, 3, 1, 2, 5 };
-                testRoom.levelOneCards_info = new int[] { 6, 7, 8, 9 };
-                testRoom.levelTwoCards_info = new int[] { 6, 7, 8, 9 };
-                testRoom.levelThreeCards_info = new int[] { 6, 7, 8, 9 };
-                GameStart(testRoom);
-                testNum++;
-                break;
-            case 5:
-                testMsg.player_id = 3;
-                NewTurn(testMsg);
-                testNum++;
-                break;
-
-        }      
-               
-                
-    }
+    
+    
 }
