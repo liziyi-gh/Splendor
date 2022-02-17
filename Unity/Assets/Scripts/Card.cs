@@ -26,6 +26,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
         if (gameManager.state!=State.buyingCard && gameManager.state != State.start && gameManager.state != State.flipingCard)
             return;
 
+        if (GetComponent<Image>().color == Color.clear)
+            return;
+
         //左键买卡；
         if (pointerEventData.button == PointerEventData.InputButton.Left)
         {

@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
             switch (toDo)
             {
                 case "SetPlayerUI":
-                    SetPlayerUI(toDoList[toDo]);
+                    SetPlayerUI(toDoList[toDo].other_player_id);
                     break;
                 case "NewPlayerGetIn":
                     PlayerGetIn(toDoList[toDo].player_id);
@@ -198,15 +198,14 @@ public class GameManager : MonoBehaviour
     }
 
     //设置玩家UI；
-    public void SetPlayerUI(Msgs recieveMsg)
-    {
-        playerID = recieveMsg.player_id;
+    public void SetPlayerUI(List<ulong> others)
+    {        
         
-        for (int i = 0; i < recieveMsg.other_player_id.Count; i++)
+        for (int i = 0; i < others.Count; i++)
         {
             GameObject player = Instantiate(playerPrefab);
             player.transform.SetParent(players);
-            player.name = "Player" + recieveMsg.other_player_id[i].ToString();   
+            player.name = "Player" + others[i].ToString();   
         }
     }
 
@@ -262,7 +261,8 @@ public class GameManager : MonoBehaviour
 
     //获得自己玩家ID和其他玩家ID；
     public static void GetPlayerID(Msgs msgs)
-    {        
+    {
+        current.playerID = msgs.player_id;
         current.toDoList.Add("SetPlayerUI",msgs);        
     }    
 
