@@ -35,8 +35,6 @@ namespace Logger
         {
             log.WriteLine(DateTime.Now.ToString("G") + "    "+logSwitch+"-->API:{0}, Player:{1}, MsgLength:{2}", msg.api_id, msg.player_id, msg.msg_len);
             log.WriteLine(body_msg);
-            //log.Flush();
-            
         }
 
         public static void LogConnect()
@@ -44,7 +42,6 @@ namespace Logger
             log.WriteLine("--------------------------------------------------------------------------");
             log.WriteLine(DateTime.Now.ToString("G") + "    Client connected");
             log.WriteLine("--------------------------------------------------------------------------");
-            //log.Flush();
         }
 
         public static void LogAny(string str)
