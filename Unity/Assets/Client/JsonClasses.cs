@@ -14,7 +14,7 @@ namespace JsonClasses
     {
         public int players_number { get; set; }
         public ulong[]? players_sequence { get; set; }
-        public int[]? nobles_info { get; set; }
+        public int[]? nobles_info { get; set; } 
         public int[]? levelOneCards_info { get; set; }
         public int[]? levelTwoCards_info { get; set; }
         public int[]? levelThreeCards_info { get; set; }

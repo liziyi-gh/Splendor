@@ -122,7 +122,8 @@ namespace Transmission
                             default:
                                 break;
                         }    
-                        //
+                        
+                        GameManager.PlayerOperation(body_msg);
                         break;
 
                     case API_ID.PLAYER_OPERATION_INVALID:
@@ -146,6 +147,11 @@ namespace Transmission
                             default:
                                 break;
                         }
+                        //
+                        break;
+
+                    case API_ID.NEW_CARD:
+                        body_msg = Tools.MsgNEW_CARD(body_str);
                         //
                         break;
 

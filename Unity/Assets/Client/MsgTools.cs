@@ -134,6 +134,16 @@ namespace MsgTools
             return msg;
         }
 
+        public static Msgs MsgNEW_CARD(string body_str)
+        {
+            JObject dataNEW_CARD = JObject.Parse(body_str);
+            
+            Msgs msg = new Msgs();
+            msg.card_id = dataNEW_CARD["card_number"];
+            
+            return msg;
+        }
+
         public static byte[] SendPlayerOperation(Msgs msg)
         {
             List<byte> buffer = new List<byte>();
