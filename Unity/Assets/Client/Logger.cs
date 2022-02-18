@@ -18,12 +18,13 @@ namespace Logger
         public const string SEND = "Send";
     }
 
-    public static class Logging
+    public class Logging
     {
         
         private static string path;
         private static StreamWriter log;
-        
+        private readonly object balanceLock = new Object();
+
         public static void LogInit()
         {
             path = ".\\Client.log";
@@ -31,17 +32,31 @@ namespace Logger
             log.AutoFlush = true;
         }
 
-        public static void LogMsg(Msgs msg, string body_msg, string logSwitch)
-        {
-            log.WriteLine(DateTime.Now.ToString("G") + "    "+logSwitch+"-->API:{0}, Player:{1}, MsgLength:{2}", msg.api_id, msg.player_id, msg.msg_len);
-            log.WriteLine(body_msg);
-        }
-
         public static void LogConnect()
         {
             log.WriteLine("--------------------------------------------------------------------------");
             log.WriteLine(DateTime.Now.ToString("G") + "    Client connected");
             log.WriteLine("--------------------------------------------------------------------------");
+        }
+
+        public void LogMsg(Msgs msg, string body_msg, string logSwitch)
+        {
+            lock(balanceLock)
+            {
+                log.WriteLine(DateTime.Now.ToString("G") + "    "+logSwitch+"-->API:{0}, Player:{1}, MsgLength:{2}", msg.api_id, msg.player_id, msg.msg_len);
+                log.WriteLine(body_msg);
+            }
+        }
+
+        public void LogMsgSend(byte[] buffer)
+        {
+            Msgs head_msg = Tools.MsgHeadUnpack(buffer);
+            string body_str = Tools.MsgBodyUnpack(buffer, head_msg.msg_len);
+            lock(balanceLock)
+            {
+                log.WriteLine(DateTime.Now.ToString("G") + "    "+LogSwitch.SEND+"-->API:{0}, Player:{1}, MsgLength:{2}", head_msg.api_id, head_msg.player_id, head_msg.msg_len);
+                log.WriteLine(body_str);
+            }
         }
 
         public static void LogAny(string str)

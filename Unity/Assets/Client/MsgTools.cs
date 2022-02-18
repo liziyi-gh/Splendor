@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Net;
@@ -43,11 +44,11 @@ namespace MsgTools
             return body_str;
         }
 
-        public static byte[] MsgHeadPack(Msgs msg, ulong body_len)
+        public static byte[] MsgHeadPack(Msgs msg)
         {
             byte[] result = new byte[28];
 
-            byte[] lenArray = BitConverter.GetBytes(body_len + 28);;
+            byte[] lenArray = BitConverter.GetBytes(msg.msg_len);
             lenArray.CopyTo(result, 8);
 
             byte[] playeridArray = BitConverter.GetBytes(msg.player_id);
@@ -152,9 +153,9 @@ namespace MsgTools
             switch (msg.operation_type)
             {
                 case Operation.GET_GEMS:
-                    foreach (var i in typeof(GEM).GetProperties())
-                        if (msg.gems[i.Name] != 0)
-                            dataPLAYER_OPERATION.AddOperatonInfo<JsonGems>(new JsonGems(i.Name, msg.gems[i.Name]));
+                    foreach (var i in typeof(GEM).GetFields())
+                        if (msg.gems[i.Name.ToLower()] != 0)
+                            dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty(i.Name.ToLower(), msg.gems[i.Name.ToLower()])));
                     break;
 
                 case Operation.BUY_CARD:
@@ -178,9 +179,17 @@ namespace MsgTools
                     break;
             }
 
-            byte[] body_msg =  Encoding.UTF8.GetBytes(dataPLAYER_OPERATION.ToString());
+            JsonSerializer serializer = new JsonSerializer();
+            StringWriter sw = new StringWriter();
+            serializer.Serialize(new JsonTextWriter(sw), dataPLAYER_OPERATION);
+            //Console.WriteLine(sw.GetStringBuilder().ToString());
 
-            buffer.AddRange(MsgHeadPack(msg, (ulong)body_msg.Length));
+            byte[] body_msg = Encoding.UTF8.GetBytes(sw.GetStringBuilder().ToString());
+
+            //byte[] body_msg =  Encoding.UTF8.GetBytes(dataPLAYER_OPERATION.ToString());
+            msg.msg_len += (ulong)body_msg.Length;
+
+            buffer.AddRange(MsgHeadPack(msg));
             buffer.AddRange(body_msg);
 
             return buffer.ToArray();
@@ -192,8 +201,9 @@ namespace MsgTools
             JsonPLAYER_GET_NOBLE dataPLAYER_GET_NOBLE = new JsonPLAYER_GET_NOBLE(msg.player_id, msg.nobles_id);
 
             byte[] body_msg =  Encoding.UTF8.GetBytes(dataPLAYER_GET_NOBLE.ToString());
+            msg.msg_len += (ulong)body_msg.Length;
 
-            buffer.AddRange(MsgHeadPack(msg, (ulong)body_msg.Length));
+            buffer.AddRange(MsgHeadPack(msg));
             buffer.AddRange(body_msg);
             
             return buffer.ToArray();

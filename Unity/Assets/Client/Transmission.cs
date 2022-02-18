@@ -52,7 +52,8 @@ namespace Transmission
                 string body_str = "";
                 if (head_msg.msg_len > 28) body_str = Tools.MsgBodyUnpack(buffer, head_msg.msg_len);
 
-                Logging.LogMsg(head_msg, body_str, LogSwitch.RECEIVE);
+                Logging log = new Logging();
+                log.LogMsg(head_msg, body_str, LogSwitch.RECEIVE);
 
                 Msgs body_msg = new Msgs();
                 switch (head_msg.api_id)
@@ -165,15 +166,16 @@ namespace Transmission
         public static void Send(Msgs msg)
         {
             List<byte> buffer = new List<byte>();
+            msg.msg_len = 28;
 
             switch (msg.api_id)
             {
                 case API_ID.INIT:
-                    buffer.AddRange(Tools.MsgHeadPack(msg, 0L));
+                    buffer.AddRange(Tools.MsgHeadPack(msg));
                     break;
 
                 case API_ID.PLAYER_READY:
-                    buffer.AddRange(Tools.MsgHeadPack(msg, 0L));
+                    buffer.AddRange(Tools.MsgHeadPack(msg));
                     break;
 
                 case API_ID.PLAYER_OPERATION:
@@ -188,8 +190,10 @@ namespace Transmission
                     break;
             }
             
+            Logging log = new Logging();
+            log.LogMsgSend(buffer.ToArray());
+
             socket.Send(buffer.ToArray());
-            //Logging.LogMsgSend(buffer.ToArray());
         }
     }
 }
