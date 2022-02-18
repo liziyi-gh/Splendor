@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     Transform nobles;
     Transform cards;
     Transform foldCards;
+    Transform gemPrefabs;
 
     [Header("预制体")]
     [SerializeField] GameObject playerPrefab;
@@ -73,6 +74,7 @@ public class GameManager : MonoBehaviour
         nobles = GameObject.Find("Nobles").transform;
         cards = GameObject.Find("CardGroup").transform;
         foldCards = GameObject.Find("FoldCards").transform;
+        gemPrefabs = GameObject.Find("GemPrefabs").transform;
 
         //连接服务器；
         Client.Connect();
@@ -86,7 +88,7 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        lock (toDoList)
+        lock (toDoList.Keys)
         {
             foreach (string toDo in toDoList.Keys)
             {
@@ -398,5 +400,11 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
+    
+    public void test()
+    {
+        gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(5), players.GetChild(0));
+    }
+
     
 }
