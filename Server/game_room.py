@@ -30,6 +30,7 @@ class GameRoom:
         }
         self.players_sequence = []
         self.next_player_id = 0
+        self.current_player_id = 0
         logging.debug("Game room initialize")
 
     def __str__(self):
@@ -168,6 +169,9 @@ class GameRoom:
         operation_type = body["operation_type"]
         operation_info = body["operation_info"]
         original_msg = message_helper.packPlayerOperation(body)
+        if player.player_id != self.current_player_id:
+            self.playerOperationInvalid(player)
+            return
 
         if operation_type == Operation.GET_GEMS:
             legal = self.checkGetChipsLegal(operation_info)
@@ -251,6 +255,7 @@ class GameRoom:
     @thread_safe
     def startGame(self):
         self.generatePlayerSequence()
+        self.current_player_id = self.players_sequence[0]
         self.next_player_id = self.players_sequence[0]
         players_number = len(self.allocated_id)
         chips_num = 3
@@ -274,6 +279,7 @@ class GameRoom:
 
     @thread_safe
     def startNewTurn(self):
+        self.current_player_id = self.next_player_id
         msg = message_helper.packNewTurn(self.next_player_id)
         self.boardcastMsg(msg)
         logging.info("Start new turn with player {}".format(
