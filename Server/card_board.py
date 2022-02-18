@@ -85,13 +85,16 @@ class CardBoard():
             else:
                 self.level_three_cards.append(card)
 
-    def removeCardByNumberThenAddNewCard(self, card_number: int):
+    def removeCardByNumberThenAddNewCard(self, card_number: int) -> int:
         card = self.getCardByNumber(card_number)
         if card in self.noble_cards:
             self.noble_cards.remove(card)
             self.used_cards.append(card)
+
+            return -1
         else:
             self.addNewCardToBoard(card.level, card)
+            return card.number
 
     def checkAvailbaleNobleCard(self, player: Player) -> list[Card]:
         cards = []

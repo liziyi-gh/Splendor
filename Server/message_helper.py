@@ -112,3 +112,13 @@ def packAskPlayerGetNoble(player_id: int, cards: list[Card]):
     header_data = packHeader(API_ID.NEW_TURN, player_id, len(body_data))
 
     return header_data + body_data
+
+
+def packNewCard(player_id : int, card_number : int):
+    tmp_dict = {
+        "card_number": card_number,
+    }
+    body_data = json.dumps(tmp_dict).encode()
+    header_data = packHeader(API_ID.NEW_CARD, player_id, len(body_data))
+
+    return header_data + body_data

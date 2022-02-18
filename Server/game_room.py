@@ -39,10 +39,14 @@ class GameRoom:
             "chips": self.chips,
             "player_sequence": self.players_sequence,
             "card_board": {
-                "noble card": [card.number for card in self.card_board.noble_cards],
-                "level 1": [card.number for card in self.card_board.level_one_cards],
-                "level 2": [card.number for card in self.card_board.level_two_cards],
-                "level 3": [card.number for card in self.card_board.level_three_cards],
+                "noble card":
+                [card.number for card in self.card_board.noble_cards],
+                "level 1":
+                [card.number for card in self.card_board.level_one_cards],
+                "level 2":
+                [card.number for card in self.card_board.level_two_cards],
+                "level 3":
+                [card.number for card in self.card_board.level_three_cards],
             }
         }
         str = json.dumps(tmp_dict, indent=2)
@@ -178,6 +182,23 @@ class GameRoom:
 
             return
 
+        if operation_type == Operation.FOLD_CARD:
+            legal = self.checkFoldCardLegal(operation_info, player)
+            if not legal:
+                self.playerOperationInvalid(player)
+                return
+            card_number = operation_type["card_number"]
+            card = self.card_board.getCardByNumber(card_number)
+            player.addFoldCard(card)
+            new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
+                card_number)
+
+            # FIXME: if fold 10001 like card should not let other players know
+            self.boardcastMsg(operation_msg)
+            self.startNewTurn()
+
+            return
+
         if operation_type == Operation.BUY_CARD:
             legal = self.checkBuyCardLegal(operation_info, player)
             if not legal:
@@ -187,27 +208,13 @@ class GameRoom:
             card_number = operation_type["card_number"]
             card = self.card_board.getCardByNumber(card_number)
             player.addCard(card, operation_info)
-            self.card_board.removeCardByNumberThenAddNewCard(card_number)
+            new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
+                card_number)
+            new_card_msg = message_helper.packNewCard(player.player_id,
+                                                      new_card_number)
 
             self.boardcastMsg(operation_msg)
-            self.startNewTurn()
-
-            return
-
-        if operation_type == Operation.FOLD_CARD:
-            legal = self.checkFoldCardLegal(operation_info, player)
-            if not legal:
-                self.playerOperationInvalid(player)
-                return
-            card_number = operation_type["card_number"]
-            card = self.card_board.getCardByNumber(card_number)
-            player.addFoldCard(card)
-            self.card_board.removeCardByNumberThenAddNewCard(card_number)
-
-            self.boardcastMsg(operation_msg)
-            self.startNewTurn()
-
-            return
+            self.boardcastMsg(new_card_msg)
 
         available_cards = self.card_board.checkAvailbaleNobleCard(player)
         if len(available_cards) > 0:
@@ -245,7 +252,6 @@ class GameRoom:
         chips_num = 3
         if players_number == 2:
             chips_num = 4
-            print("chips number is {}".format(chips_num))
         if players_number == 3:
             chips_num = 5
         if players_number == 4:
@@ -266,7 +272,8 @@ class GameRoom:
     def startNewTurn(self):
         msg = message_helper.packNewTurn(self.next_player_id)
         self.boardcastMsg(msg)
-        logging.info("Start new turn with player {}".format(self.next_player_id))
+        logging.info("Start new turn with player {}".format(
+            self.next_player_id))
 
         idx = self.players_sequence.index(self.next_player_id)
         idx = 0 if idx == len(self.players_sequence) - 1 else idx + 1
