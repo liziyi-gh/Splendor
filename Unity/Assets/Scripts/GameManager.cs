@@ -86,31 +86,40 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        foreach(string toDo in toDoList.Keys)
+        lock (toDoList)
         {
-            switch (toDo)
+            foreach (string toDo in toDoList.Keys)
             {
-                case "SetPlayerUI":
-                    SetPlayerUI(toDoList[toDo].other_player_id);
-                    break;
-                case "NewPlayerGetIn":
-                    PlayerGetIn(toDoList[toDo].player_id);
-                    break;
-                case "PlayerGetReady":
-                    GetReady(toDoList[toDo].player_id);
-                    break;
-                case "GameStart":
-                    Logging.LogAny("UI shows GameScene");
-                    ResetPlayerUI();
-                    LoadGameRoomInfomation();
-                    state = State.waiting;
-                    break;
-                case "NewTurn":
-                    PlayerNewTurn(toDoList[toDo].player_id);
-                    break;
+                switch (toDo)
+                {
+                    case "SetPlayerUI":
+                        SetPlayerUI(toDoList[toDo].other_player_id);
+                        break;
+                    case "NewPlayerGetIn":
+                        PlayerGetIn(toDoList[toDo].player_id);
+                        break;
+                    case "PlayerGetReady":
+                        GetReady(toDoList[toDo].player_id);
+                        break;
+                    case "GameStart":
+                        Logging.LogAny("UI shows GameScene");
+                        ResetPlayerUI();
+                        LoadGameRoomInfomation();
+                        state = State.waiting;
+                        break;
+                    case "NewTurn":
+                        PlayerNewTurn(toDoList[toDo].player_id);
+                        break;
+                    case "OperationInvalid":
+                        Reset();
+                        break;
+                    case "PlayerOperation":
+                        PlayerOperate(toDoList[toDo]);
+                        break;
+                }
             }
-        }
-        toDoList = new Dictionary<string,Msgs>();
+            toDoList = new Dictionary<string, Msgs>();
+        }        
     }
 
     public void Reset()
@@ -259,6 +268,26 @@ public class GameManager : MonoBehaviour
             state = State.waiting;
     }
 
+    //玩家操作；
+    public void PlayerOperate(Msgs msgs)
+    {        
+        switch (msgs.operation_type)
+        {
+            case "get_gems":                                 
+                break;
+
+            case "buy_card":                
+                break;
+
+            case "fold_card":
+                break;
+
+            case "fold_card_unknown":
+                break;
+        }
+        LoadGameRoomInfomation();
+    }
+
     //获得自己玩家ID和其他玩家ID；
     public static void GetPlayerID(Msgs msgs)
     {
@@ -292,26 +321,11 @@ public class GameManager : MonoBehaviour
     public static void OperationInvalid()
     {
         current.toDoList.Add("OperationInvalid",new Msgs());
-        current.Reset();
     }
 
     public static void PlayerOperation(Msgs msgs)
     {
-        switch (msgs.operation_type)
-        {
-            case "get_gems":                                 
-                break;
-
-            case "buy_card":                
-                break;
-
-            case "fold_card":
-                break;
-
-            case "fold_card_unknown":
-                break;
-        }
-        current.LoadGameRoomInfomation();
+        current.toDoList.Add("PlayerOperation", msgs);        
     }
 
     public void LoadGameRoomInfomation()
