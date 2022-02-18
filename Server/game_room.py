@@ -175,7 +175,7 @@ class GameRoom:
                 self.playerOperationInvalid(player)
 
             for item in operation_info:
-                chip_type = item["chips_type"]
+                chip_type = item["gems_type"]
                 chip_number = int(item["chips_number"])
                 self.chips[chip_type] -= chip_number
                 player.chips[chip_type] += chip_number
