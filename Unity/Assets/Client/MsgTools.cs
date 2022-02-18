@@ -139,7 +139,7 @@ namespace MsgTools
             JObject dataNEW_CARD = JObject.Parse(body_str);
             
             Msgs msg = new Msgs();
-            msg.card_id = dataNEW_CARD["card_number"];
+            msg.card_id = (int)dataNEW_CARD["card_number"];
             
             return msg;
         }
