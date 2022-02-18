@@ -109,28 +109,31 @@ class GameRoom:
     @thread_safe
     def checkGetChipsLegal(self, operation_info) -> bool:
         for item in operation_info:
-            gems_type = operation_info["gems_type"]
-            if self.chips[gems_type] < item[gems_type]:
+            gems_type = item["gems_type"]
+            chips_number = int(item["gems_number"])
+            if self.chips[gems_type] < chips_number:
                 return False
 
-            if self.chips[gems_type] < 4 and item[gems_type] > 1:
+            if self.chips[gems_type] < 4 and chips_number > 1:
                 return False
 
         return True
 
     @thread_safe
     def checkBuyCardLegal(self, operation_info, player: Player) -> bool:
-        card_number = operation_info[0]["card_number"]
+        card_number = int(operation_info[0]["card_number"])
         if not self.card_board.getCardByNumber(card_number):
             return False
 
         for item in operation_info:
             try:
                 gems_type = item["gems_type"]
-                if player.chips[gems_type] < item["gems_number"]:
+                chips_number = int(item["gems_number"])
+                if player.chips[gems_type] < chips_number:
                     return False
             except KeyError:
                 pass
+
         return True
 
     @thread_safe
@@ -142,7 +145,7 @@ class GameRoom:
             if operation_info[1]["gems_type"] != Gemstone.GOLDEN:
                 return False
 
-            gold_number = operation_info[1]["gems_number"]
+            gold_number = int(operation_info[1]["gems_number"])
             if gold_number > 1:
                 return False
             if gold_number == 1 and self.chips[Gemstone.GOLDEN] < 1:
@@ -164,7 +167,7 @@ class GameRoom:
         player = self.findPlayerByID(header.player_id)
         operation_type = body["operation_type"]
         operation_info = body["operation_info"]
-        operation_msg = message_helper.packPlayerOperation(body)
+        original_msg = message_helper.packPlayerOperation(body)
 
         if operation_type == Operation.GET_GEMS:
             legal = self.checkGetChipsLegal(operation_info)
@@ -173,28 +176,29 @@ class GameRoom:
 
             for item in operation_info:
                 chip_type = item["chips_type"]
-                chip_number = item["chips_number"]
+                chip_number = int(item["chips_number"])
                 self.chips[chip_type] -= chip_number
                 player.chips[chip_type] += chip_number
 
-            self.boardcastMsg(operation_msg)
+            self.boardcastMsg(original_msg)
             self.startNewTurn()
 
             return
 
         if operation_type == Operation.FOLD_CARD:
+            # FIXME: golden???
             legal = self.checkFoldCardLegal(operation_info, player)
             if not legal:
                 self.playerOperationInvalid(player)
                 return
-            card_number = operation_type["card_number"]
+            card_number = int(operation_info[0]["card_number"])
             card = self.card_board.getCardByNumber(card_number)
             player.addFoldCard(card)
             new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
                 card_number)
 
             # FIXME: if fold 10001 like card should not let other players know
-            self.boardcastMsg(operation_msg)
+            self.boardcastMsg(original_msg)
             self.startNewTurn()
 
             return
@@ -205,7 +209,7 @@ class GameRoom:
                 self.playerOperationInvalid(player)
                 return
 
-            card_number = operation_type["card_number"]
+            card_number = int(operation_info[0]["card_number"])
             card = self.card_board.getCardByNumber(card_number)
             player.addCard(card, operation_info)
             new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
@@ -213,7 +217,7 @@ class GameRoom:
             new_card_msg = message_helper.packNewCard(player.player_id,
                                                       new_card_number)
 
-            self.boardcastMsg(operation_msg)
+            self.boardcastMsg(original_msg)
             self.boardcastMsg(new_card_msg)
 
         available_cards = self.card_board.checkAvailbaleNobleCard(player)
