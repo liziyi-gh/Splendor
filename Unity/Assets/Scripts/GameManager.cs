@@ -9,6 +9,7 @@ using GameRooms;
 using Players;
 using CardLevelTypes;
 using Logger;
+using System;
 
 public enum State
 {
@@ -273,7 +274,16 @@ public class GameManager : MonoBehaviour
     {        
         switch (msgs.operation_type)
         {
-            case "get_gems":                                 
+            case "get_gems":
+                foreach(string gem in msgs.gems.Keys)
+                {
+                    for (int i = 0; i < msgs.gems[gem]; i++)
+                    {
+                        gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems,gem)), 
+                            GameObject.Find("Player" + msgs.player_id.ToString()).transform);
+                        StartCoroutine("WaitForTime", 0.1f);
+                    }                        
+                }
                 break;
 
             case "buy_card":                
@@ -286,6 +296,11 @@ public class GameManager : MonoBehaviour
                 break;
         }
         LoadGameRoomInfomation();
+    }
+
+    IEnumerator WaitForTime(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
     }
 
     //获得自己玩家ID和其他玩家ID；
@@ -401,10 +416,7 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
     
-    public void test()
-    {
-        gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(5), players.GetChild(0));
-    }
+    
 
     
 }
