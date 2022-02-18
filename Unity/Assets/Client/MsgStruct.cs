@@ -10,6 +10,7 @@ namespace MsgStruct
         public ulong player_id = 0L,
                      msg_len = 0L,
                      reserve = 0L;
+                     
         public int card_level = 0,
                    card_id = 0;
         public string? operation_type;

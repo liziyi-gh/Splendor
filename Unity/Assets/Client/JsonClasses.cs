@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace JsonClasses
 {
@@ -28,5 +30,39 @@ namespace JsonClasses
     public class JsonNEW_TURN
     {
         public ulong new_turn_player { get; set; }
+    }
+
+    public class JsonPLAYER_OPERATION
+    {
+        public ulong player_id { get; set; }
+        public string operation_type { get; set; }
+        public JArray operation_info { get; set; } = new JArray();
+
+        public void AddOperatonInfo<T>(T jo)
+        {
+            operation_info.Add(jo);
+        }
+    }
+
+    public class JsonPLAYER_GET_NOBLE
+    {
+        public ulong player_id { get; set; }
+        public List<int> noble_number { get; set; }
+    }
+
+    public class JsonGems
+    {
+        public string gems_type { get; set; }
+        public int gems_number { get; set; }
+
+        public static JsonGems GenerateObject(string type, int number)
+        {
+            JsonGems jsonGems = new JsonGems();
+
+            jsonGems.gems_type = type;
+            jsonGems.gems_number = number;
+
+            return jsonGems;
+        }
     }
 }
