@@ -5,8 +5,9 @@ api
 GameRoom属性更新值的函数
 购买盖卡时GameRoom的更新,读取Json文件
 
-检查收发错误MsgTools、Transmission
-
 优化
 
 lock日志
+
+------------------------------------------
+区分玩家

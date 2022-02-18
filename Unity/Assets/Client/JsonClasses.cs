@@ -36,7 +36,14 @@ namespace JsonClasses
     {
         public ulong player_id { get; set; }
         public string operation_type { get; set; }
-        public JArray operation_info { get; set; } = new JArray();
+        public JArray operation_info { get; set; }
+
+        public JsonPLAYER_OPERATION(ulong id, string type)
+        {
+            player_id = id;
+            operation_type = type;
+            operation_info = new JArray();
+        }
 
         public void AddOperatonInfo<T>(T jo)
         {
@@ -48,6 +55,12 @@ namespace JsonClasses
     {
         public ulong player_id { get; set; }
         public List<int> noble_number { get; set; }
+
+        public JsonPLAYER_GET_NOBLE(ulong id, List<int> nobles_id)
+        {
+            player_id = id;
+            noble_number = nobles_id;
+        }
     }
 
     public class JsonGems
@@ -55,14 +68,10 @@ namespace JsonClasses
         public string gems_type { get; set; }
         public int gems_number { get; set; }
 
-        public static JsonGems GenerateObject(string type, int number)
+        public JsonGems(string type, int number)
         {
-            JsonGems jsonGems = new JsonGems();
-
-            jsonGems.gems_type = type;
-            jsonGems.gems_number = number;
-
-            return jsonGems;
+            gems_type = type;
+            gems_number = number;
         }
     }
 }

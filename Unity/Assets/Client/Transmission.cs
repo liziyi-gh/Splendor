@@ -17,6 +17,7 @@ using Players;
 
 namespace Transmission
 {
+
     public static class Client
     {
         public static Socket? socket;
@@ -98,8 +99,10 @@ namespace Transmission
                                     GameRoom.players[player_pos].gems[i.Name] -= body_msg.gems[i.Name];
                                     GameRoom.gems_last_num[i.Name] += body_msg.gems[i.Name];
                                 }
-                                //fix me
-                                GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
+                                List<int> foldCards = GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].foldCards;
+                                int foldCardPos = Array.IndexOf(foldCards, body_msg.card_id);
+                                if (foldCardPos == -1) GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
+                                else foldCards[foldCardPos] = 0;
 
                                 GameRoom.players[player_pos].cards.Add(body_msg.card_id);   
                                 //加分数

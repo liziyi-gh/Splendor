@@ -94,7 +94,6 @@ namespace MsgTools
             msg.player_id = dataPLAYER_OPERATION.player_id;
             msg.operation_type  = dataPLAYER_OPERATION.operation_type;
             
-            
             switch (msg.operation_type)
             {
                 case Operation.GET_GEMS:
@@ -128,6 +127,7 @@ namespace MsgTools
         {
             Msgs msg = new Msgs();
             JsonPLAYER_GET_NOBLE dataPLAYER_GET_NOBLE = JsonConvert.DeserializeObject<JsonPLAYER_GET_NOBLE>(body_str);
+
             msg.player_id = dataPLAYER_GET_NOBLE.player_id;
             msg.nobles_id = dataPLAYER_GET_NOBLE.noble_number;
 
@@ -137,52 +137,37 @@ namespace MsgTools
         public static byte[] SendPlayerOperation(Msgs msg)
         {
             List<byte> buffer = new List<byte>();
-            JsonPLAYER_OPERATION dataPLAYER_OPERATION  = new JsonPLAYER_OPERATION();
-
-            dataPLAYER_OPERATION.player_id = msg.player_id;
-            dataPLAYER_OPERATION.operation_type = msg.operation_type;
-
-            //JArray operation_info = new JArray();
+            JsonPLAYER_OPERATION dataPLAYER_OPERATION  = new JsonPLAYER_OPERATION(msg.player_id, msg.operation_type);
 
             switch (msg.operation_type)
             {
                 case Operation.GET_GEMS:
                     foreach (var i in typeof(GEM).GetProperties())
                         if (msg.gems[i.Name] != 0)
-                            dataPLAYER_OPERATION.AddOperatonInfo<JsonGems>(JsonGems.GenerateObject(i.Name, msg.gems[i.Name]));
-
-                            //operationInfo.Add(new JObject(new JProperty("gems_type", i.Name),
-                                                          //new JProperty("gems_number", msg.gems[i.Name])));
+                            dataPLAYER_OPERATION.AddOperatonInfo<JsonGems>(new JsonGems(i.Name, msg.gems[i.Name]));
                     break;
 
                 case Operation.BUY_CARD:
                     dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("card_number", msg.card_id)));
-                    //operationInfo.Add(new JObject(new JProperty("card_number", msg.card_id)));
+
                     foreach (var i in typeof(GEM).GetProperties())
                         if (msg.gems[i.Name] != 0)
-                            dataPLAYER_OPERATION.AddOperatonInfo<JsonGems>(JsonGems.GenerateObject(i.Name, msg.gems[i.Name]));
-                            //operationInfo.Add(new JObject(new JProperty("gems_type", i.Name),
-                                                          //new JProperty("gems_number", msg.gems[i.Name])));
+                            dataPLAYER_OPERATION.AddOperatonInfo<JsonGems>(new JsonGems(i.Name, msg.gems[i.Name]));
                     break;
 
                 case Operation.FOLD_CARD:
                     dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("card_number", msg.card_id)));
-                    //operationInfo.Add(new JObject(new JProperty("card_number", msg.card_id)));
                     break;
 
                 case Operation.FOLD_CARD_UNKNOWN:
                     dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("card_level", msg.card_level),
                                                                               new JProperty("card_number", msg.card_id)));
-                    //operationInfo.Add(new JObject(new JProperty("card_level", msg.card_level),
-                                                 // new JProperty("card_number", msg.card_id)));
                     break;
 
                 default:
                     break;
             }
 
-            //body_data.Add("operation_info", operationInfo);
-            //byte[] body_msg =  Encoding.UTF8.GetBytes(body_data.ToString());
             byte[] body_msg =  Encoding.UTF8.GetBytes(dataPLAYER_OPERATION.ToString());
 
             buffer.AddRange(MsgHeadPack(msg, (ulong)body_msg.Length));
@@ -194,16 +179,9 @@ namespace MsgTools
         public static byte[] SendPLAYER_GET_NOBLE(Msgs msg)
         {
             List<byte> buffer = new List<byte>();
-            JsonPLAYER_GET_NOBLE dataPLAYER_GET_NOBLE = new JsonPLAYER_GET_NOBLE();
-            dataPLAYER_GET_NOBLE.player_id = msg.player_id;
-            dataPLAYER_GET_NOBLE.noble_number = msg.nobles_id;
+            JsonPLAYER_GET_NOBLE dataPLAYER_GET_NOBLE = new JsonPLAYER_GET_NOBLE(msg.player_id, msg.nobles_id);
+
             byte[] body_msg =  Encoding.UTF8.GetBytes(dataPLAYER_GET_NOBLE.ToString());
-            //JObject body_data = new JObject();
-
-           // body_data.Add("player_id", msg.player_id);
-           // body_data.Add(new JArray(msg.nobles_id[0]));
-
-            //byte[] body_msg =  Encoding.UTF8.GetBytes(body_data.ToString());
 
             buffer.AddRange(MsgHeadPack(msg, (ulong)body_msg.Length));
             buffer.AddRange(body_msg);
