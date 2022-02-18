@@ -100,7 +100,7 @@ namespace Transmission
                                     GameRoom.gems_last_num[i.Name] += body_msg.gems[i.Name];
                                 }
                                 List<int> foldCards = GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].foldCards;
-                                int foldCardPos = Array.IndexOf(foldCards, body_msg.card_id);
+                                int foldCardPos = Array.IndexOf(foldCards.ToArray(), body_msg.card_id);
                                 if (foldCardPos == -1) GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
                                 else foldCards[foldCardPos] = 0;
 
