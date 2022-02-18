@@ -155,15 +155,15 @@ namespace MsgTools
                 case Operation.GET_GEMS:
                     foreach (var i in typeof(GEM).GetFields())
                         if (msg.gems[i.Name.ToLower()] != 0)
-                            dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty(i.Name.ToLower(), msg.gems[i.Name.ToLower()])));
+                            dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("gems_type", i.Name.ToLower()), new JProperty("gems_number", msg.gems[i.Name.ToLower()])));
                     break;
 
                 case Operation.BUY_CARD:
                     dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("card_number", msg.card_id)));
 
-                    foreach (var i in typeof(GEM).GetProperties())
-                        if (msg.gems[i.Name] != 0)
-                            dataPLAYER_OPERATION.AddOperatonInfo<JsonGems>(new JsonGems(i.Name, msg.gems[i.Name]));
+                    foreach (var i in typeof(GEM).GetFields())
+                        if (msg.gems[i.Name.ToLower()] != 0)
+                            dataPLAYER_OPERATION.AddOperatonInfo<JsonGems>(new JsonGems(i.Name.ToLower(), msg.gems[i.Name.ToLower()]));
                     break;
 
                 case Operation.FOLD_CARD:

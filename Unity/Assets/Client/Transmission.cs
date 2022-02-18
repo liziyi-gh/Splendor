@@ -87,18 +87,18 @@ namespace Transmission
                         switch (body_msg.operation_type)
                         {
                             case Operation.GET_GEMS:
-                                foreach (var i in typeof(GEM).GetProperties())
+                                foreach (var i in typeof(GEM).GetFields())
                                 {
-                                    GameRoom.players[player_pos].gems[i.Name] += body_msg.gems[i.Name];
-                                    GameRoom.gems_last_num[i.Name] -= body_msg.gems[i.Name];
+                                    GameRoom.players[player_pos].gems[i.Name.ToLower()] += body_msg.gems[i.Name.ToLower()];
+                                    GameRoom.gems_last_num[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
                                 }
                                 break;
 
                             case Operation.BUY_CARD:
-                                foreach (var i in typeof(GEM).GetProperties())
+                                foreach (var i in typeof(GEM).GetFields())
                                 {
-                                    GameRoom.players[player_pos].gems[i.Name] -= body_msg.gems[i.Name];
-                                    GameRoom.gems_last_num[i.Name] += body_msg.gems[i.Name];
+                                    GameRoom.players[player_pos].gems[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
+                                    GameRoom.gems_last_num[i.Name.ToLower()] += body_msg.gems[i.Name.ToLower()];
                                 }
                                 List<int> foldCards = GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].foldCards;
                                 int foldCardPos = Array.IndexOf(foldCards.ToArray(), body_msg.card_id);
