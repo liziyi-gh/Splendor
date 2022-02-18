@@ -41,13 +41,22 @@ namespace Transmission
         {
             while (true)
             {
+                Logging.LogAny(socket.Connected.ToString());
+
                 byte[] buffer = new byte[1024];
                 int len = socket.Receive(buffer, buffer.Length, 0);
 
                 Msgs head_msg = Tools.MsgHeadUnpack(buffer);
                 string body_str = "";
                 if (head_msg.msg_len > 28) body_str = Tools.MsgBodyUnpack(buffer, head_msg.msg_len);
-                Logging.LogMsg(head_msg, body_str, LogSwitch.RECEIVE);
+
+                if (socket.Connected)
+                {
+                    Logging log = new Logging();
+                    log.LogMsg(head_msg, body_str, LogSwitch.RECEIVE);
+                }
+                else Logging.LogClose();
+
                 Msgs body_msg = new Msgs();
                 switch (head_msg.api_id)
                 {
@@ -169,6 +178,14 @@ namespace Transmission
                 default:
                     break;
             }
+            
+            if (socket.Connected)
+            {
+                Logging log = new Logging();
+                log.LogMsgSend(buffer.ToArray());
+            }
+            else Logging.LogClose();
+
             socket.Send(buffer.ToArray());
             //Logging.LogMsgSend(buffer.ToArray());
         }

@@ -151,11 +151,11 @@ namespace MsgTools
                     break;
 
                 case Operation.BUY_CARD:
-                    operationInfo.Add(new JObject(new JProperty("card_number", msg.card_id)));
-                    foreach (var i in typeof(GEM).GetProperties())
-                        if (msg.gems[i.Name] != 0)
-                            operationInfo.Add(new JObject(new JProperty("gems_type", i.Name),
-                                                          new JProperty("gems_number", msg.gems[i.Name])));
+                    dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("card_number", msg.card_id)));
+
+                    foreach (var i in typeof(GEM).GetFields())
+                        if (msg.gems[i.Name.ToLower()] != 0)
+                            dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("gems_type", i.Name.ToLower()), new JProperty("gems_number", msg.gems[i.Name.ToLower()])));
                     break;
 
                 case Operation.FOLD_CARD:

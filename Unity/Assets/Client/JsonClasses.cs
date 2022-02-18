@@ -29,4 +29,35 @@ namespace JsonClasses
     {
         public ulong new_turn_player { get; set; }
     }
+
+    public class JsonPLAYER_OPERATION
+    {
+        public ulong player_id { get; set; }
+        public string operation_type { get; set; }
+        public JArray operation_info { get; set; }
+
+        public JsonPLAYER_OPERATION(ulong id, string type)
+        {
+            player_id = id;
+            operation_type = type;
+            operation_info = new JArray();
+        }
+
+        public void AddOperatonInfo<T>(T jo)
+        {
+            operation_info.Add(jo);
+        }
+    }
+
+    public class JsonPLAYER_GET_NOBLE
+    {
+        public ulong player_id { get; set; }
+        public List<int> noble_number { get; set; }
+
+        public JsonPLAYER_GET_NOBLE(ulong id, List<int> nobles_id)
+        {
+            player_id = id;
+            noble_number = nobles_id;
+        }
+    }
 }
