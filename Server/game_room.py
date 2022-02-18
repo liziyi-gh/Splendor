@@ -176,7 +176,7 @@ class GameRoom:
 
             for item in operation_info:
                 chip_type = item["gems_type"]
-                chip_number = int(item["chips_number"])
+                chip_number = int(item["gems_number"])
                 self.chips[chip_type] -= chip_number
                 player.chips[chip_type] += chip_number
 
