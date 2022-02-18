@@ -163,7 +163,7 @@ namespace MsgTools
 
                     foreach (var i in typeof(GEM).GetFields())
                         if (msg.gems[i.Name.ToLower()] != 0)
-                            dataPLAYER_OPERATION.AddOperatonInfo<JsonGems>(new JsonGems(i.Name.ToLower(), msg.gems[i.Name.ToLower()]));
+                            dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("gems_type", i.Name.ToLower()), new JProperty("gems_number", msg.gems[i.Name.ToLower()])));
                     break;
 
                 case Operation.FOLD_CARD:

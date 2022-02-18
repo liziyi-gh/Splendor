@@ -62,16 +62,4 @@ namespace JsonClasses
             noble_number = nobles_id;
         }
     }
-
-    public class JsonGems
-    {
-        public string gems_type { get; set; }
-        public int gems_number { get; set; }
-
-        public JsonGems(string type, int number)
-        {
-            gems_type = type;
-            gems_number = number;
-        }
-    }
 }
