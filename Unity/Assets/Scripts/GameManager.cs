@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     static GameManager current;
 
     public State state = State.unready;
-    [SerializeField] GameObject highLight1, highLight2, highLight3;
+    [SerializeField] GameObject highLight1, highLight2;
 
     //组件Transform
     Transform stones;
@@ -194,7 +194,7 @@ public class GameManager : MonoBehaviour
 
             case State.unready:
                 //消除标记自己的高亮；
-                highLight3.GetComponent<Image>().color = Color.clear;
+                GameObject.Find("Player" + playerID.ToString()).GetComponent<Image>().color = Color.gray;
                 //状态切换为已准备；
                 state = State.ready;
                 //发送准备消息至服务端；
@@ -206,7 +206,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //设置玩家UI；
+    //生成玩家UI；
     public void SetPlayerUI(List<ulong> others)
     {        
         
@@ -214,7 +214,8 @@ public class GameManager : MonoBehaviour
         {
             GameObject player = Instantiate(playerPrefab);
             player.transform.SetParent(players);
-            player.name = "Player" + others[i].ToString();   
+            player.name = "Player" + others[i].ToString();
+            player.GetComponent<Image>().color = Color.gray;
         }
     }
 
@@ -225,11 +226,10 @@ public class GameManager : MonoBehaviour
         player.transform.SetParent(players);
         player.name = "Player" + player_id.ToString();
 
-        if (player_id == playerID)
-        {
-            highLight3.transform.SetParent(player.transform, false);
-            highLight3.GetComponent<Image>().color = Color.red;
-        }
+        if (player_id == playerID)        
+            player.transform.GetChild(2).gameObject.SetActive(false);
+        else
+            player.GetComponent<Image>().color = Color.gray;
     }
 
     //玩家准备UI；
@@ -254,12 +254,10 @@ public class GameManager : MonoBehaviour
     //新的回合；
     public void PlayerNewTurn(ulong player_id)
     {
-        // 当前行动玩家Transform
-        Transform player = GameObject.Find("Player" + player_id.ToString()).transform;
-
         //UI高亮当前行动玩家；
-        highLight3.transform.SetParent(player, false);
-        highLight3.GetComponent<Image>().color = Color.green;
+        for (int i = 0; i < GameRoom.players_number; i++)
+            players.GetChild(i).GetComponent<Image>().color = Color.gray;        
+        GameObject.Find("Player" + player_id.ToString()).GetComponent<Image>().color = Color.white; 
 
         //若轮到自己行动；
         if (player_id == playerID)

@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour
     List<Sprite> avatars;
     int avatarID;
     Image image;
-    //public int playerID;
+    
 
     void Start()
     {
@@ -19,7 +19,7 @@ public class PlayerManager : MonoBehaviour
     }
     
     void Update()
-    {
+    {               
         
     }
 
@@ -28,4 +28,6 @@ public class PlayerManager : MonoBehaviour
         avatarID = avatarID == 4 ? 0 : avatarID + 1;
         image.sprite = avatars[avatarID];
     }
+
+    
 }

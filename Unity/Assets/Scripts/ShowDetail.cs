@@ -21,7 +21,7 @@ public class ShowDetail : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         Player player = GameRoom.GetPlayer(ulong.Parse(transform.parent.name[6].ToString()));
         for (int i = 0; i < 6; i++)
         {
-            panel.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<Text>().text = i == 6 ? player.point.ToString()
+            panel.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<Text>().text = i == 5 ? player.point.ToString()
                 : player.cards_type[gems[i]].ToString();
 
             panel.transform.GetChild(0).GetChild(i).GetChild(1).GetChild(0).GetComponent<Text>().text = player.gems[gems[i]].ToString();
