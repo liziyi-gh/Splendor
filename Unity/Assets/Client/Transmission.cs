@@ -46,6 +46,7 @@ namespace Transmission
             {
                 byte[] buffer = new byte[1024];
                 int len = socket.Receive(buffer, buffer.Length, 0);
+                Logging.LogAny("Buffer Received!");
 
                 Msgs head_msg = Tools.MsgHeadUnpack(buffer);
 
