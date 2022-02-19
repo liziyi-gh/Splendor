@@ -27,7 +27,14 @@ namespace Logger
 
         public static void LogInit()
         {
-            path = ".\\Client.log";
+            if (File.Exists(".\\Client.log"))
+            {
+                int ver = 2;
+                while(File.Exists(".\\Client_"+ver.ToString()+".log")) ver++;
+                path = ".\\Client_"+ver.ToString()+".log";
+            }
+            else path = ".\\Client.log";
+
             log = new StreamWriter(path, true, System.Text.Encoding.Default);
             log.AutoFlush = true;
         }

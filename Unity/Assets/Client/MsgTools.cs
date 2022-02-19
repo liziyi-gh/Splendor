@@ -179,14 +179,8 @@ namespace MsgTools
                     break;
             }
 
-            JsonSerializer serializer = new JsonSerializer();
-            StringWriter sw = new StringWriter();
-            serializer.Serialize(new JsonTextWriter(sw), dataPLAYER_OPERATION);
-            //Console.WriteLine(sw.GetStringBuilder().ToString());
-
-            byte[] body_msg = Encoding.UTF8.GetBytes(sw.GetStringBuilder().ToString());
-
-            //byte[] body_msg =  Encoding.UTF8.GetBytes(dataPLAYER_OPERATION.ToString());
+            byte[] body_msg = JsonToBytes<JsonPLAYER_OPERATION>(dataPLAYER_OPERATION);
+            
             msg.msg_len += (ulong)body_msg.Length;
 
             buffer.AddRange(MsgHeadPack(msg));
@@ -200,13 +194,22 @@ namespace MsgTools
             List<byte> buffer = new List<byte>();
             JsonPLAYER_GET_NOBLE dataPLAYER_GET_NOBLE = new JsonPLAYER_GET_NOBLE(msg.player_id, msg.nobles_id);
 
-            byte[] body_msg =  Encoding.UTF8.GetBytes(dataPLAYER_GET_NOBLE.ToString());
+            byte[] body_msg = JsonToBytes<JsonPLAYER_GET_NOBLE>(dataPLAYER_GET_NOBLE);
             msg.msg_len += (ulong)body_msg.Length;
 
             buffer.AddRange(MsgHeadPack(msg));
             buffer.AddRange(body_msg);
             
             return buffer.ToArray();
+        }
+
+        private static byte[] JsonToBytes<T>(T jsonObject)
+        {
+            StringWriter sw = new StringWriter();
+            JsonSerializer serializer = new JsonSerializer();
+            serializer.Serialize(new JsonTextWriter(sw), jsonObject);
+
+            return Encoding.UTF8.GetBytes(sw.GetStringBuilder().ToString());
         }
     }
 }

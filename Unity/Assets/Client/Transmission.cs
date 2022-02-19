@@ -44,8 +44,6 @@ namespace Transmission
         {
             while (true)
             {
-                Logging.LogAny(socket.Connected.ToString());
-
                 byte[] buffer = new byte[1024];
                 int len = socket.Receive(buffer, buffer.Length, 0);
 
@@ -204,7 +202,6 @@ namespace Transmission
             else Logging.LogClose();
 
             socket.Send(buffer.ToArray());
-            //Logging.LogMsgSend(buffer.ToArray());
         }
     }
 }
