@@ -92,9 +92,7 @@ namespace Transmission
                         body_msg = Tools.MsgPLAYER_OPERATION(body_str);
 
                         CardPosition cardPos = GameRoom.GetCardPosition(body_msg.card_id);
-                        if (cardPos != null) Logging.LogAny("cardLevel: "+ cardPos.cardLevel+ ", cardIndex: "+ cardPos.cardIndex.ToString());
                         int player_pos = Array.IndexOf(GameRoom.players_sequence, body_msg.player_id);
-                        Logging.LogAny("player_pos: "+ player_pos.ToString());
 
                         switch (body_msg.operation_type)
                         {
@@ -121,7 +119,7 @@ namespace Transmission
                                 }
 
                                 GameRoom.players[player_pos].cards.Add(body_msg.card_id);   
-                                //加分数
+                                GameRoom.players[player_pos].point += Tools.ReadCardPoint(body_msg.card_id);
                                 break;
 
                             case Operation.FOLD_CARD:

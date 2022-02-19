@@ -11,6 +11,7 @@ using JsonClasses;
 using GameRooms;
 using System.Collections.Generic;
 using Players;
+using Logger;
 
 namespace MsgTools
 {
@@ -211,6 +212,16 @@ namespace MsgTools
             serializer.Serialize(new JsonTextWriter(sw), jsonObject);
 
             return Encoding.UTF8.GetBytes(sw.GetStringBuilder().ToString());
+        }
+
+        public static int ReadCardPoint(int card_id)
+        {
+            string jsonFile = @"..\card_configuration.json";
+            StreamReader sr = File.OpenText(jsonFile);
+            JsonTextReader reader = new JsonTextReader(sr);
+            JArray ja = (JArray)JToken.ReadFrom(reader);
+
+            return (int)ja[card_id-1]["points"];
         }
     }
 }
