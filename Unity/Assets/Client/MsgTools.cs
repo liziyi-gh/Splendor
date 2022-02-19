@@ -104,8 +104,9 @@ namespace MsgTools
 
                 case Operation.BUY_CARD:
                     msg.card_id = (int)dataPLAYER_OPERATION.operation_info[0]["card_number"];
-                    foreach (var i in dataPLAYER_OPERATION.operation_info)
-                        msg.gems[(string)i["gems_type"]] = (int)i["gems_number"];
+                    for (int i = 1; i<dataPLAYER_OPERATION.operation_info.Count(); i++)
+                    //foreach (var i in dataPLAYER_OPERATION.operation_info)ug fixe
+                        msg.gems[(string)dataPLAYER_OPERATION.operation_info[i]["gems_type"]] = (int)dataPLAYER_OPERATION.operation_info[i]["gems_number"];
                     break;
 
                 case Operation.FOLD_CARD:
@@ -180,7 +181,7 @@ namespace MsgTools
             }
 
             byte[] body_msg = JsonToBytes<JsonPLAYER_OPERATION>(dataPLAYER_OPERATION);
-            
+
             msg.msg_len += (ulong)body_msg.Length;
 
             buffer.AddRange(MsgHeadPack(msg));
