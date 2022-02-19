@@ -1,6 +1,7 @@
 import json
 import logging
 import random
+from typing import List
 
 from Server.card import Card
 from Server.constants import CARD_CONFIGUATION_FILE_PATH
