@@ -104,10 +104,13 @@ namespace Transmission
                                     GameRoom.players[player_pos].gems[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
                                     GameRoom.gems_last_num[i.Name.ToLower()] += body_msg.gems[i.Name.ToLower()];
                                 }
-                                List<int> foldCards = GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].foldCards;
-                                int foldCardPos = Array.IndexOf(foldCards.ToArray(), body_msg.card_id);
+                                int foldCardPos = Array.IndexOf(GameRoom.players[player_pos].foldCards.ToArray(), body_msg.card_id);
                                 if (foldCardPos == -1) GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
-                                else foldCards[foldCardPos] = 0;
+                                else
+                                {
+                                    GameRoom.players[player_pos].foldCards[foldCardPos] = 0;
+                                    GameRoom.players[player_pos].foldCards_num--;
+                                }
 
                                 GameRoom.players[player_pos].cards.Add(body_msg.card_id);   
                                 //加分数

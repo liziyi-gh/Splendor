@@ -34,6 +34,9 @@ namespace Players
             id = 0;
             point = 0;
             foldCards_num = 0;
+            cards = new List<int>();
+            foldCards = new List<int>();
+            nobles = new List<int>();
         }
     }
 
