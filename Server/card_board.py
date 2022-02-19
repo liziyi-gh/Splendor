@@ -61,25 +61,25 @@ class CardBoard():
             logging.error("Could not find card by number {}".format(card_number))
             return None
 
-    def addNewCardToBoard(self, card_level, original_card=None, position=None):
+    def addNewCardToBoard(self, card_level, original_card=None):
         card = self.nextCardInRepo(card_level)
 
         if card_level == 1:
-            if position is not None:
+            if original_card is not None:
                 position = self.level_one_cards.index(original_card)
                 self.level_one_cards[position] = card
             else:
                 self.level_one_cards.append(card)
 
         if card_level == 2:
-            if position is not None:
+            if original_card is not None:
                 position = self.level_two_cards.index(original_card)
                 self.level_two_cards[position] = card
             else:
                 self.level_two_cards.append(card)
 
         if card_level == 3:
-            if position is not None:
+            if original_card is not None:
                 position = self.level_three_cards.index(original_card)
                 self.level_three_cards[position] = card
             else:
