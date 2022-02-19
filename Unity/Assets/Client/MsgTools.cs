@@ -39,7 +39,7 @@ namespace MsgTools
 
         public static string MsgBodyUnpack(byte[] buffer, ulong msg_len)
         {
-            string body_str = Encoding.UTF8.GetString(buffer.Skip(28).Take((int)msg_len-28).ToArray());
+            string body_str = Encoding.UTF8.GetString(buffer.Take((int)msg_len-28).ToArray());
 
             return body_str;
         }

@@ -45,20 +45,25 @@ namespace Transmission
             while (true)
             {
                 byte[] buffer = new byte[1024];
-                int len = socket.Receive(buffer, buffer.Length, 0);
-                Logging.LogAny("Buffer Received!");
+                int head_len = socket.Receive(buffer, 0, 28, 0);
+
+                if (head_len == 0)
+                {
+                    socket.Close();
+                    Logging.LogClose();
+                }
 
                 Msgs head_msg = Tools.MsgHeadUnpack(buffer);
 
                 string body_str = "";
-                if (head_msg.msg_len > 28) body_str = Tools.MsgBodyUnpack(buffer, head_msg.msg_len);
-
-                if (socket.Connected)
+                if (head_msg.msg_len > 28)
                 {
-                    Logging log = new Logging();
-                    log.LogMsg(head_msg, body_str, LogSwitch.RECEIVE);
+                    int body_len = socket.Receive(buffer, 0, (int)head_msg.msg_len-28, 0);
+                    body_str = Tools.MsgBodyUnpack(buffer, head_msg.msg_len);
                 }
-                else Logging.LogClose();
+
+                Logging log = new Logging();
+                log.LogMsg(head_msg, body_str, LogSwitch.RECEIVE);
 
                 Msgs body_msg = new Msgs();
                 switch (head_msg.api_id)
@@ -198,12 +203,8 @@ namespace Transmission
                     break;
             }
             
-            if (socket.Connected)
-            {
-                Logging log = new Logging();
-                log.LogMsgSend(buffer.ToArray());
-            }
-            else Logging.LogClose();
+            Logging log = new Logging();
+            log.LogMsgSend(buffer.ToArray());
 
             socket.Send(buffer.ToArray());
         }

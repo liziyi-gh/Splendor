@@ -79,7 +79,7 @@ namespace Logger
         public void LogMsgSend(byte[] buffer)
         {
             Msgs head_msg = Tools.MsgHeadUnpack(buffer);
-            string body_str = Tools.MsgBodyUnpack(buffer, head_msg.msg_len);
+            string body_str = (head_msg.msg_len > 28) ? Tools.MsgBodyUnpack(buffer.Skip(28).Take((int)head_msg.msg_len-28).ToArray(), head_msg.msg_len) : "";
             LogMsg(head_msg, body_str, LogSwitch.SEND);
         }
 
