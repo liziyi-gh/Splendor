@@ -182,6 +182,7 @@ class GameRoom:
             legal = self.checkGetChipsLegal(operation_info)
             if not legal:
                 self.playerOperationInvalid(player)
+                return
 
             for item in operation_info:
                 chip_type = item["gems_type"]
