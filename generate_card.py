@@ -38,16 +38,16 @@ with open(json_file_path, 'w') as f:
         card = Card(raw_card[0], raw_card[1], raw_card[2], raw_card[3],
                     raw_card[4], raw_card[5], raw_card[6], raw_card[7],
                     raw_card[8], raw_card[9])
-        json_scheme["number"] = card.number
+        json_scheme["number"] = int(card.number)
         json_scheme["card_type"] = card.type
-        json_scheme["level"] = card.level
-        json_scheme["points"] = card.points
+        json_scheme["level"] = int(card.level)
+        json_scheme["points"] = int(card.points)
         json_scheme["gem_type"] = card.gem_type
-        json_scheme["chips"]["ruby"] = card.ruby
-        json_scheme["chips"]["diamond"] = card.diamond
-        json_scheme["chips"]["sapphire"] = card.sapphire
-        json_scheme["chips"]["emerald"] = card.emerald
-        json_scheme["chips"]["obsidian"] = card.obsidian
+        json_scheme["chips"]["ruby"] = int(card.ruby)
+        json_scheme["chips"]["diamond"] = int(card.diamond)
+        json_scheme["chips"]["sapphire"] = int(card.sapphire)
+        json_scheme["chips"]["emerald"] = int(card.emerald)
+        json_scheme["chips"]["obsidian"] = int(card.obsidian)
         str_json_card = json.dumps(json_scheme, indent=2)
         print(str_json_card)
         f.write(str_json_card)
