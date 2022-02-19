@@ -32,7 +32,7 @@ class Card:
                  gem_type=Gemstone.NIL,
                  chips=None):
         self.card_type = card_type
-        self.number = number
+        self.number = int(number)
         self.level = int(level)
         self.points = int(points)
         self.gem_type = gem_type

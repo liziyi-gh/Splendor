@@ -54,8 +54,11 @@ class CardBoard():
             self.level_three_cards + self.noble_cards
             if item.number == card_number
         ]
+        print("target_card is")
+        print(target_card)
+        print(type(target_card))
 
-        if target_card:
+        if target_card != []:
             return target_card[0]
         else:
             logging.error("Could not find card by number {}".format(card_number))

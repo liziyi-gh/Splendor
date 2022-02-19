@@ -109,14 +109,19 @@ class GameRoom:
 
     @thread_safe
     def checkGetChipsLegal(self, operation_info) -> bool:
+        all_chips_number = 0
         for item in operation_info:
             gems_type = item["gems_type"]
             chips_number = int(item["gems_number"])
+            all_chips_number += chips_number
             if self.chips[gems_type] < chips_number:
                 return False
 
             if self.chips[gems_type] < 4 and chips_number > 1:
                 return False
+
+        if all_chips_number > 3:
+            return False
 
         return True
 
