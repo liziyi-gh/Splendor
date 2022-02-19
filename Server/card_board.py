@@ -62,28 +62,25 @@ class CardBoard():
             return None
 
     def addNewCardToBoard(self, card_level, original_card=None):
-        card = self.nextCardInRepo(card_level)
+        def addCardHelper(new_card, card_list: List[Card], original_card=None):
+            if original_card is not None:
+                position = card_list.index(original_card)
+                card_list[position] = new_card
+            else:
+                card_list.append(new_card)
+
+        new_card = self.nextCardInRepo(card_level)
 
         if card_level == 1:
-            if original_card is not None:
-                position = self.level_one_cards.index(original_card)
-                self.level_one_cards[position] = card
-            else:
-                self.level_one_cards.append(card)
+            addCardHelper(new_card, self.level_one_cards, original_card)
 
         if card_level == 2:
-            if original_card is not None:
-                position = self.level_two_cards.index(original_card)
-                self.level_two_cards[position] = card
-            else:
-                self.level_two_cards.append(card)
+            addCardHelper(new_card, self.level_two_cards, original_card)
 
         if card_level == 3:
-            if original_card is not None:
-                position = self.level_three_cards.index(original_card)
-                self.level_three_cards[position] = card
-            else:
-                self.level_three_cards.append(card)
+            addCardHelper(new_card, self.level_three_cards, original_card)
+
+        return new_card.number
 
     def removeCardByNumberThenAddNewCard(self, card_number: int) -> int:
         card = self.getCardByNumber(card_number)
@@ -93,8 +90,8 @@ class CardBoard():
 
             return -1
         else:
-            self.addNewCardToBoard(card.level, card)
-            return card.number
+            new_card_number = self.addNewCardToBoard(card.level, card)
+            return new_card_number
 
     def checkAvailbaleNobleCard(self, player: Player) -> list[Card]:
         cards = []
