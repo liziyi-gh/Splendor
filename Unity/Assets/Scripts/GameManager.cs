@@ -108,7 +108,6 @@ public class GameManager : MonoBehaviour
                         Logging.LogAny("UI shows GameScene");
                         ResetPlayerUI();
                         LoadGameRoomInfomation();
-                        state = State.waiting;
                         break;
                     case "NewTurn":
                         PlayerNewTurn(toDoList[toDo].player_id);
@@ -128,7 +127,7 @@ public class GameManager : MonoBehaviour
     public void Reset()
     {
         //若游戏还没开始则不能复位；
-        if (state == State.ready || state == State.unready)
+        if (state == State.ready || state == State.unready || state==State.waiting)
             return;
 
         state = State.start;
@@ -275,15 +274,7 @@ public class GameManager : MonoBehaviour
         switch (msgs.operation_type)
         {
             case "get_gems":
-                foreach(string gem in msgs.gems.Keys)
-                {
-                    for (int i = 0; i < msgs.gems[gem]; i++)
-                    {
-                        gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems,gem)), 
-                            GameObject.Find("Player" + msgs.player_id.ToString()).transform);
-                        StartCoroutine("WaitForTime", 0.1f);
-                    }                        
-                }
+                StartCoroutine(GetGem(msgs));
                 break;
 
             case "buy_card":                
@@ -298,9 +289,17 @@ public class GameManager : MonoBehaviour
         LoadGameRoomInfomation();
     }
 
-    IEnumerator WaitForTime(float waitTime)
+    IEnumerator GetGem(Msgs msgs)
     {
-        yield return new WaitForSeconds(waitTime);
+        foreach (string gem in gems)
+        {
+            for (int i = 0; i < msgs.gems[gem]; i++)
+            {
+                gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
+                    GameObject.Find("Player" + msgs.player_id.ToString()).transform);
+                yield return new WaitForSeconds(0.1f);
+            }
+        }        
     }
 
     //获得自己玩家ID和其他玩家ID；

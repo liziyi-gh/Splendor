@@ -87,13 +87,10 @@ public class Stone : MonoBehaviour, IPointerClickHandler
 
     public void resetAll()
     {
-        if (takingText.text != "0")
-        {
-            text.text = (int.Parse(text.text) + int.Parse(takingText.text)).ToString();
-            takingText.text = "0";
-            text.color = Color.white;
-            takingText.color = Color.clear;
-        }
-        
+        text.text = (int.Parse(text.text) + int.Parse(takingText.text)).ToString();
+        takingText.text = "0";
+        text.color = Color.white;
+        takingText.color = Color.clear;
+
     }
 }

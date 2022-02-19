@@ -55,12 +55,9 @@ public class Money : MonoBehaviour, IPointerClickHandler
 
     public void resetAll()
     {
-        if (takingText.text != "0")
-        {
-            holdingText.text = (int.Parse(takingText.text)+ int.Parse(holdingText.text)).ToString();
-            takingText.text = "0";
-            holdingText.color = Color.white;
-            takingText.color = Color.clear;
-        }        
+        holdingText.text = (int.Parse(takingText.text) + int.Parse(holdingText.text)).ToString();
+        takingText.text = "0";
+        holdingText.color = Color.white;
+        takingText.color = Color.clear;
     }
 }
