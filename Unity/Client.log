@@ -31,3 +31,384 @@ UI shows GameScene
 {"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "diamond", "gems_number": 1}, {"gems_type": "emerald", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 1}]}
 2022/2/19 21:50:04    Receive-->API:5, Player:0, MsgLength:50
 {"new_turn_player": 2}
+--------------------------------------------------------------------------
+2022/2/19 21:59:36    Client connected
+--------------------------------------------------------------------------
+2022/2/19 21:59:36    Send-->API:1, Player:0, MsgLength:28
+
+2022/2/19 21:59:36    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/19 21:59:36    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/19 21:59:39    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/19 21:59:43    Send-->API:3, Player:1, MsgLength:28
+
+2022/2/19 21:59:43    Receive-->API:3, Player:1, MsgLength:28
+
+2022/2/19 21:59:43    Receive-->API:3, Player:2, MsgLength:28
+
+2022/2/19 21:59:43    Receive-->API:4, Player:0, MsgLength:228
+{"players_number": 2, "players_sequence": [2, 1], "nobles_info": [100, 94, 93], "levelOneCards_info": [40, 29, 1, 13], "levelTwoCards_info": [63, 57, 61, 66], "levelThreeCards_info": [73, 90, 75, 86]}
+GameRoom Init Finish
+2022/2/19 21:59:43    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 2}
+UI shows GameScene
+2022/2/19 21:59:48    Receive-->API:6, Player:0, MsgLength:183
+{"player_id": 2, "operation_type": "get_gems", "operation_info": [{"gems_type": "emerald", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 1}]}
+2022/2/19 21:59:48    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+2022/2/19 21:59:57    Send-->API:6, Player:1, MsgLength:208
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"diamond","gems_number":1},{"gems_type":"ruby","gems_number":1},{"gems_type":"sapphire","gems_number":1}]}
+2022/2/19 21:59:57    Receive-->API:6, Player:0, MsgLength:224
+{"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "diamond", "gems_number": 1}, {"gems_type": "ruby", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 1}]}
+2022/2/19 21:59:57    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 2}
+2022/2/19 22:00:08    Receive-->API:6, Player:0, MsgLength:225
+{"player_id": 2, "operation_type": "get_gems", "operation_info": [{"gems_type": "obsidian", "gems_number": 1}, {"gems_type": "ruby", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 1}]}
+2022/2/19 22:00:08    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+2022/2/19 22:00:20    Send-->API:6, Player:1, MsgLength:208
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"emerald","gems_number":1},{"gems_type":"obsidian","gems_number":1},{"gems_type":"ruby","gems_number":1}]}
+2022/2/19 22:00:20    Receive-->API:6, Player:0, MsgLength:224
+{"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "emerald", "gems_number": 1}, {"gems_type": "obsidian", "gems_number": 1}, {"gems_type": "ruby", "gems_number": 1}]}
+2022/2/19 22:00:20    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 2}
+2022/2/19 22:00:27    Receive-->API:6, Player:0, MsgLength:204
+{"player_id": 2, "operation_type": "buy_card", "operation_info": [{"card_number": 40}, {"gems_type": "emerald", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 2}]}
+--------------------------------------------------------------------------
+2022/2/19 22:21:10    Client connected
+--------------------------------------------------------------------------
+2022/2/19 22:21:10    Send-->API:1, Player:0, MsgLength:28
+
+2022/2/19 22:21:10    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/19 22:21:11    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/19 22:21:15    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/19 22:21:20    Send-->API:3, Player:1, MsgLength:28
+
+2022/2/19 22:21:20    Receive-->API:3, Player:1, MsgLength:28
+
+2022/2/19 22:21:20    Receive-->API:3, Player:2, MsgLength:28
+
+2022/2/19 22:21:20    Receive-->API:4, Player:0, MsgLength:227
+{"players_number": 2, "players_sequence": [1, 2], "nobles_info": [92, 91, 97], "levelOneCards_info": [1, 10, 14, 40], "levelTwoCards_info": [70, 59, 49, 54], "levelThreeCards_info": [85, 83, 71, 88]}
+GameRoom Init Finish
+2022/2/19 22:21:20    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+UI shows GameScene
+2022/2/19 22:21:27    Send-->API:6, Player:1, MsgLength:171
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"emerald","gems_number":1},{"gems_type":"sapphire","gems_number":2}]}
+2022/2/19 22:21:27    Receive-->API:6, Player:0, MsgLength:183
+{"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "emerald", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 2}]}
+2022/2/19 22:21:28    Send-->API:6, Player:1, MsgLength:171
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"emerald","gems_number":1},{"gems_type":"sapphire","gems_number":2}]}
+2022/2/19 22:21:28    Send-->API:6, Player:1, MsgLength:171
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"emerald","gems_number":1},{"gems_type":"sapphire","gems_number":2}]}
+2022/2/19 22:21:28    Send-->API:6, Player:1, MsgLength:171
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"emerald","gems_number":1},{"gems_type":"sapphire","gems_number":2}]}
+2022/2/19 22:21:28    Send-->API:6, Player:1, MsgLength:171
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"emerald","gems_number":1},{"gems_type":"sapphire","gems_number":2}]}
+2022/2/19 22:21:32    Send-->API:6, Player:1, MsgLength:211
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"diamond","gems_number":1},{"gems_type":"emerald","gems_number":1},{"gems_type":"sapphire","gems_number":1}]}
+2022/2/19 22:21:33    Send-->API:6, Player:1, MsgLength:211
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"diamond","gems_number":1},{"gems_type":"emerald","gems_number":1},{"gems_type":"sapphire","gems_number":1}]}
+2022/2/19 22:21:33    Send-->API:6, Player:1, MsgLength:211
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"diamond","gems_number":1},{"gems_type":"emerald","gems_number":1},{"gems_type":"sapphire","gems_number":1}]}
+2022/2/19 22:21:33    Send-->API:6, Player:1, MsgLength:211
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"diamond","gems_number":1},{"gems_type":"emerald","gems_number":1},{"gems_type":"sapphire","gems_number":1}]}
+--------------------------------------------------------------------------
+2022/2/19 22:25:38    Client connected
+--------------------------------------------------------------------------
+2022/2/19 22:25:38    Send-->API:1, Player:0, MsgLength:28
+
+2022/2/19 22:25:38    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/19 22:25:39    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/19 22:26:00    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/19 22:26:04    Send-->API:3, Player:1, MsgLength:28
+
+2022/2/19 22:26:04    Receive-->API:3, Player:1, MsgLength:28
+
+2022/2/19 22:26:05    Receive-->API:3, Player:2, MsgLength:28
+
+2022/2/19 22:26:05    Receive-->API:4, Player:0, MsgLength:228
+{"players_number": 2, "players_sequence": [1, 2], "nobles_info": [94, 97, 99], "levelOneCards_info": [11, 34, 35, 28], "levelTwoCards_info": [57, 49, 64, 45], "levelThreeCards_info": [74, 76, 86, 90]}
+GameRoom Init Finish
+2022/2/19 22:26:05    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+UI shows GameScene
+2022/2/19 22:26:10    Send-->API:6, Player:1, MsgLength:127
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"ruby","gems_number":2}]}
+2022/2/19 22:26:10    Receive-->API:6, Player:0, MsgLength:135
+{"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "ruby", "gems_number": 2}]}
+--------------------------------------------------------------------------
+2022/2/19 22:28:31    Client connected
+--------------------------------------------------------------------------
+2022/2/19 22:28:31    Send-->API:1, Player:0, MsgLength:28
+
+2022/2/19 22:28:31    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/19 22:28:32    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/19 22:28:36    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/19 22:28:39    Send-->API:3, Player:1, MsgLength:28
+
+2022/2/19 22:28:39    Receive-->API:3, Player:1, MsgLength:28
+
+2022/2/19 22:28:40    Receive-->API:3, Player:2, MsgLength:28
+
+2022/2/19 22:28:40    Receive-->API:4, Player:0, MsgLength:227
+{"players_number": 2, "players_sequence": [1, 2], "nobles_info": [98, 96, 93], "levelOneCards_info": [14, 28, 5, 16], "levelTwoCards_info": [65, 66, 57, 53], "levelThreeCards_info": [76, 90, 71, 85]}
+GameRoom Init Finish
+2022/2/19 22:28:40    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+UI shows GameScene
+2022/2/19 22:28:46    Send-->API:6, Player:1, MsgLength:211
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"diamond","gems_number":1},{"gems_type":"emerald","gems_number":1},{"gems_type":"sapphire","gems_number":1}]}
+2022/2/19 22:28:46    Receive-->API:6, Player:0, MsgLength:227
+{"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "diamond", "gems_number": 1}, {"gems_type": "emerald", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 1}]}
+--------------------------------------------------------------------------
+2022/2/19 22:32:23    Client connected
+--------------------------------------------------------------------------
+2022/2/19 22:32:23    Send-->API:1, Player:0, MsgLength:28
+
+2022/2/19 22:32:23    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/19 22:32:24    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/19 22:32:28    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/19 22:32:30    Send-->API:3, Player:1, MsgLength:28
+
+2022/2/19 22:32:30    Receive-->API:3, Player:1, MsgLength:28
+
+2022/2/19 22:32:31    Receive-->API:3, Player:2, MsgLength:28
+
+2022/2/19 22:32:31    Receive-->API:4, Player:0, MsgLength:227
+{"players_number": 2, "players_sequence": [2, 1], "nobles_info": [95, 99, 93], "levelOneCards_info": [30, 11, 5, 34], "levelTwoCards_info": [44, 45, 41, 68], "levelThreeCards_info": [71, 73, 90, 86]}
+GameRoom Init Finish
+2022/2/19 22:32:31    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 2}
+UI shows GameScene
+2022/2/19 22:32:39    Receive-->API:6, Player:0, MsgLength:227
+{"player_id": 2, "operation_type": "get_gems", "operation_info": [{"gems_type": "diamond", "gems_number": 1}, {"gems_type": "emerald", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 1}]}
+player_pos: 0
+2022/2/19 22:32:39    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+2022/2/19 22:32:45    Send-->API:6, Player:1, MsgLength:127
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"ruby","gems_number":2}]}
+2022/2/19 22:32:45    Receive-->API:6, Player:0, MsgLength:135
+{"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "ruby", "gems_number": 2}]}
+player_pos: 1
+2022/2/19 22:32:45    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 2}
+2022/2/19 22:32:54    Receive-->API:6, Player:0, MsgLength:224
+{"player_id": 2, "operation_type": "get_gems", "operation_info": [{"gems_type": "diamond", "gems_number": 1}, {"gems_type": "obsidian", "gems_number": 1}, {"gems_type": "ruby", "gems_number": 1}]}
+player_pos: 0
+2022/2/19 22:32:54    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+2022/2/19 22:33:06    Send-->API:6, Player:1, MsgLength:207
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"diamond","gems_number":1},{"gems_type":"emerald","gems_number":1},{"gems_type":"ruby","gems_number":1}]}
+2022/2/19 22:33:06    Receive-->API:6, Player:0, MsgLength:223
+{"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "diamond", "gems_number": 1}, {"gems_type": "emerald", "gems_number": 1}, {"gems_type": "ruby", "gems_number": 1}]}
+player_pos: 1
+2022/2/19 22:33:06    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 2}
+2022/2/19 22:33:16    Receive-->API:6, Player:0, MsgLength:293
+{"player_id": 2, "operation_type": "buy_card", "operation_info": [{"card_number": 30}, {"gems_type": "diamond", "gems_number": 1}, {"gems_type": "emerald", "gems_number": 1}, {"gems_type": "obsidian", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 1}]}
+cardLevel: levelOneCards, cardIndex: 30
+player_pos: 0
+--------------------------------------------------------------------------
+2022/2/19 22:36:23    Client connected
+--------------------------------------------------------------------------
+2022/2/19 22:36:23    Send-->API:1, Player:0, MsgLength:28
+
+2022/2/19 22:36:23    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+2022/2/19 22:36:23    Receive-->API:8, Player:1, MsgLength:28
+
+2022/2/19 22:36:27    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/19 22:36:29    Send-->API:3, Player:1, MsgLength:28
+
+2022/2/19 22:36:29    Receive-->API:3, Player:1, MsgLength:28
+
+2022/2/19 22:36:30    Receive-->API:3, Player:2, MsgLength:28
+
+2022/2/19 22:36:30    Receive-->API:4, Player:0, MsgLength:228
+{"players_number": 2, "players_sequence": [1, 2], "nobles_info": [91, 97, 94], "levelOneCards_info": [10, 17, 20, 14], "levelTwoCards_info": [67, 61, 43, 64], "levelThreeCards_info": [84, 72, 81, 85]}
+GameRoom Init Finish
+2022/2/19 22:36:30    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+UI shows GameScene
+2022/2/19 22:36:39    Send-->API:6, Player:1, MsgLength:208
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"emerald","gems_number":1},{"gems_type":"ruby","gems_number":1},{"gems_type":"sapphire","gems_number":1}]}
+2022/2/19 22:36:39    Receive-->API:6, Player:0, MsgLength:224
+{"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "emerald", "gems_number": 1}, {"gems_type": "ruby", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 1}]}
+2022/2/19 22:36:41    Send-->API:6, Player:1, MsgLength:208
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"emerald","gems_number":1},{"gems_type":"ruby","gems_number":1},{"gems_type":"sapphire","gems_number":1}]}
+--------------------------------------------------------------------------
+2022/2/19 22:42:23    Client connected
+--------------------------------------------------------------------------
+2022/2/19 22:42:23    Send-->API:1, Player:0, MsgLength:28
+
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:42:23    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+MsgHead Received!
+2022/2/19 22:42:23    Receive-->API:8, Player:1, MsgLength:28
+
+MsgHead Received!
+2022/2/19 22:42:45    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/19 22:42:48    Send-->API:3, Player:1, MsgLength:28
+
+MsgHead Received!
+2022/2/19 22:42:48    Receive-->API:3, Player:1, MsgLength:28
+
+MsgHead Received!
+2022/2/19 22:42:48    Receive-->API:3, Player:2, MsgLength:28
+
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:42:48    Receive-->API:4, Player:0, MsgLength:226
+{"players_number": 2, "players_sequence": [2, 1], "nobles_info": [95, 91, 93], "levelOneCards_info": [24, 9, 23, 1], "levelTwoCards_info": [69, 68, 66, 53], "levelThreeCards_info": [76, 89, 72, 74]}
+GameRoom Init Finish
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:42:48    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 2}
+UI shows GameScene
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:42:56    Receive-->API:6, Player:0, MsgLength:224
+{"player_id": 2, "operation_type": "get_gems", "operation_info": [{"gems_type": "emerald", "gems_number": 1}, {"gems_type": "ruby", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 1}]}
+--------------------------------------------------------------------------
+2022/2/19 22:47:13    Client connected
+--------------------------------------------------------------------------
+2022/2/19 22:47:13    Send-->API:1, Player:0, MsgLength:28
+
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:47:13    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+MsgHead Received!
+2022/2/19 22:47:13    Receive-->API:8, Player:1, MsgLength:28
+
+MsgHead Received!
+2022/2/19 22:47:17    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/19 22:47:21    Send-->API:3, Player:1, MsgLength:28
+
+MsgHead Received!
+2022/2/19 22:47:21    Receive-->API:3, Player:1, MsgLength:28
+
+MsgHead Received!
+2022/2/19 22:47:22    Receive-->API:3, Player:2, MsgLength:28
+
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:47:22    Receive-->API:4, Player:0, MsgLength:227
+{"players_number": 2, "players_sequence": [1, 2], "nobles_info": [99, 98, 96], "levelOneCards_info": [11, 33, 14, 4], "levelTwoCards_info": [53, 52, 48, 41], "levelThreeCards_info": [75, 72, 85, 76]}
+GameRoom Init Finish
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:47:22    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+UI shows GameScene
+2022/2/19 22:47:44    Send-->API:6, Player:1, MsgLength:130
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"emerald","gems_number":2}]}
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:47:44    Receive-->API:6, Player:0, MsgLength:138
+{"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "emerald", "gems_number": 2}]}
+--------------------------------------------------------------------------
+2022/2/19 22:54:20    Client connected
+--------------------------------------------------------------------------
+2022/2/19 22:54:20    Send-->API:1, Player:0, MsgLength:28
+
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:54:20    Receive-->API:2, Player:1, MsgLength:77
+{"allocated_player_id": 1, "other_player_id": []}
+MsgHead Received!
+2022/2/19 22:54:20    Receive-->API:8, Player:1, MsgLength:28
+
+MsgHead Received!
+2022/2/19 22:54:26    Receive-->API:8, Player:2, MsgLength:28
+
+2022/2/19 22:54:28    Send-->API:3, Player:1, MsgLength:28
+
+MsgHead Received!
+2022/2/19 22:54:28    Receive-->API:3, Player:1, MsgLength:28
+
+MsgHead Received!
+2022/2/19 22:54:29    Receive-->API:3, Player:2, MsgLength:28
+
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:54:29    Receive-->API:4, Player:0, MsgLength:227
+{"players_number": 2, "players_sequence": [2, 1], "nobles_info": [98, 91, 92], "levelOneCards_info": [31, 4, 22, 18], "levelTwoCards_info": [58, 42, 43, 70], "levelThreeCards_info": [80, 86, 75, 87]}
+GameRoom Init Finish
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:54:29    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 2}
+UI shows GameScene
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:54:39    Receive-->API:6, Player:0, MsgLength:139
+{"player_id": 2, "operation_type": "get_gems", "operation_info": [{"gems_type": "obsidian", "gems_number": 2}]}
+player_pos: 0
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:54:39    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+2022/2/19 22:54:54    Send-->API:6, Player:1, MsgLength:131
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"sapphire","gems_number":2}]}
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:54:54    Receive-->API:6, Player:0, MsgLength:139
+{"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "sapphire", "gems_number": 2}]}
+player_pos: 1
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:54:54    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 2}
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:55:05    Receive-->API:6, Player:0, MsgLength:225
+{"player_id": 2, "operation_type": "get_gems", "operation_info": [{"gems_type": "obsidian", "gems_number": 1}, {"gems_type": "ruby", "gems_number": 1}, {"gems_type": "sapphire", "gems_number": 1}]}
+player_pos: 0
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:55:05    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 1}
+2022/2/19 22:55:11    Send-->API:6, Player:1, MsgLength:207
+{"player_id":1,"operation_type":"get_gems","operation_info":[{"gems_type":"diamond","gems_number":1},{"gems_type":"emerald","gems_number":1},{"gems_type":"ruby","gems_number":1}]}
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:55:11    Receive-->API:6, Player:0, MsgLength:223
+{"player_id": 1, "operation_type": "get_gems", "operation_info": [{"gems_type": "diamond", "gems_number": 1}, {"gems_type": "emerald", "gems_number": 1}, {"gems_type": "ruby", "gems_number": 1}]}
+player_pos: 1
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:55:11    Receive-->API:5, Player:0, MsgLength:50
+{"new_turn_player": 2}
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:55:16    Receive-->API:6, Player:0, MsgLength:160
+{"player_id": 2, "operation_type": "buy_card", "operation_info": [{"card_number": 31}, {"gems_type": "obsidian", "gems_number": 3}]}
+cardLevel: levelOneCards, cardIndex: 0
+player_pos: 0
+MsgHead Received!
+MsgBody Received!
+2022/2/19 22:55:16    Receive-->API:10, Player:2, MsgLength:47
+{"card_number": 31}

@@ -63,7 +63,6 @@ namespace GameRooms
                 players[i].id = players_sequence[i];
             }
             reInit = true;
-            Logging.LogAny("GameRoom Init Finish");
         }
 
         public static Player GetPlayer(ulong player_id)
@@ -74,12 +73,13 @@ namespace GameRooms
         public static CardPosition GetCardPosition(int card_id)
         {
             CardPosition cardPos = new CardPosition();
+
             foreach (var i in cards_info.Keys.ToArray<string>())
-                foreach (var j  in cards_info[i])
+                foreach (var j in cards_info[i])
                     if (j == card_id)
                     {
                         cardPos.cardLevel = i;
-                        cardPos.cardIndex = j;
+                        cardPos.cardIndex = Array.IndexOf(cards_info[i], j);
                         return cardPos;
                     }
             return null;

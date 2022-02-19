@@ -92,7 +92,9 @@ namespace Transmission
                         body_msg = Tools.MsgPLAYER_OPERATION(body_str);
 
                         CardPosition cardPos = GameRoom.GetCardPosition(body_msg.card_id);
+                        if (cardPos != null) Logging.LogAny("cardLevel: "+ cardPos.cardLevel+ ", cardIndex: "+ cardPos.cardIndex.ToString());
                         int player_pos = Array.IndexOf(GameRoom.players_sequence, body_msg.player_id);
+                        Logging.LogAny("player_pos: "+ player_pos.ToString());
 
                         switch (body_msg.operation_type)
                         {
