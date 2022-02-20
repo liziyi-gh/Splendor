@@ -181,6 +181,20 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 #+end_src
 即玩家1选择盖住1级牌库的1张牌
 
+示例5:
+#+begin_src json
+  {
+    "player_id": 1,
+    "operation_type": "discard_gems",
+    "operation_info": {
+      "diamond": 1,
+      "sapphire": 1
+    }
+  }
+
+#+end_src
+玩家1 丢弃一个钻石筹码，一个蓝宝石筹码.
+
 *** API ID = 7: PLAYER_OPERATION_INVALID
 用以指示客户端上次发送的操作请求不合法
 | API ID | 玩家编号   | 消息长度(单位为 bytes) | 保留 | 消息体 |
@@ -233,6 +247,19 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
     "card_number": 1
   }
 #+end_src
+
+*** API ID = 11: DISCARD_GEMS
+客户端执行合法的拿筹码操作后，若当前筹码数大于10，服务端将返回此消息
+| API ID | 玩家编号   | 消息长度(单位为 bytes) | 保留 | 消息体 |
+|--------+------------+------------------------+------+--------|
+|     11 | 运行时计算 | 运行时计算             |    0 | string |
+实例:
+#+begin_src json
+  {
+    "number_to_discard": 2
+  }
+#+end_src
+代表客户端需要丢弃两个筹码，丢弃的筹码信息通过 API6 通知服务端。
 
 ** 交互流程图
 #+begin_src plantuml :file example_procedure.png
