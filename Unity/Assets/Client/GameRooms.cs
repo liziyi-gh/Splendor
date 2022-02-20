@@ -107,10 +107,10 @@ namespace GameRooms
 
         public static void showNEW_CARD(Msgs msg)
         {
-            string cardLevel = cardLevelType.nobles;
-            if (msg.card_id <= 90) cardLevel = cardLevelType.levelThreeCards;
-            if (msg.card_id <= 70) cardLevel = cardLevelType.levelTwoCards;
-            if (msg.card_id <= 40) cardLevel = cardLevelType.levelOneCards;
+            string cardLevel = CardLevelType.nobles;
+            if (msg.card_id <= 90) cardLevel = CardLevelType.levelThreeCards;
+            if (msg.card_id <= 70) cardLevel = CardLevelType.levelTwoCards;
+            if (msg.card_id <= 40) cardLevel = CardLevelType.levelOneCards;
             GameRoom.cards_info[cardLevel][Array.IndexOf(GameRoom.cards_info[cardLevel], 0)] = msg.card_id;
         }
     }
