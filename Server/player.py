@@ -92,3 +92,10 @@ class Player:
                 return False
 
         return True
+
+    def getAllChipsNumber(self) -> int:
+        ans = 0
+        for _, v in self.chips.items():
+            ans += v
+
+        return ans
