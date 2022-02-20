@@ -219,5 +219,10 @@ namespace MsgTools
         {
             return (int)GameRoom.jsonAllCardMsg[card_id-1]["points"];
         }
+
+        public static string ReadCardType(int card_id)
+        {
+            return (string)GameRoom.jsonAllCardMsg[card_id-1]["gem_type"];
+        }
     }
 }
