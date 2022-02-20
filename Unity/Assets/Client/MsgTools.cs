@@ -12,6 +12,7 @@ using GameRooms;
 using System.Collections.Generic;
 using Players;
 using Logger;
+using UnityEngine;
 
 namespace MsgTools
 {
@@ -106,7 +107,6 @@ namespace MsgTools
                 case Operation.BUY_CARD:
                     msg.card_id = (int)dataPLAYER_OPERATION.operation_info[0]["card_number"];
                     for (int i = 1; i<dataPLAYER_OPERATION.operation_info.Count(); i++)
-                    //foreach (var i in dataPLAYER_OPERATION.operation_info)ug fixe
                         msg.gems[(string)dataPLAYER_OPERATION.operation_info[i]["gems_type"]] = (int)dataPLAYER_OPERATION.operation_info[i]["gems_number"];
                     break;
 
@@ -118,6 +118,7 @@ namespace MsgTools
                 case Operation.FOLD_CARD_UNKNOWN:
                     msg.card_level = (int)dataPLAYER_OPERATION.operation_info[0]["card_level"];
                     msg.card_id = (int)dataPLAYER_OPERATION.operation_info[0]["card_number"];
+                    if (GameRoom.gems_last_num[GEM.GOLDEN] != 0) msg.gems[GEM.GOLDEN] = 1;
                     break;
 
                 default:
@@ -216,12 +217,7 @@ namespace MsgTools
 
         public static int ReadCardPoint(int card_id)
         {
-            string jsonFile = @"..\card_configuration.json";
-            StreamReader sr = File.OpenText(jsonFile);
-            JsonTextReader reader = new JsonTextReader(sr);
-            JArray ja = (JArray)JToken.ReadFrom(reader);
-
-            return (int)ja[card_id-1]["points"];
+            return (int)GameRoom.jsonAllCardMsg[card_id-1]["points"];
         }
     }
 }

@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using CardLevelTypes;
 using System.Linq;
 using Logger;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace GameRooms
 {
@@ -25,6 +28,7 @@ namespace GameRooms
         public static Dictionary<string, int> gems_last_num, cards_last_num;
         public static List<Player> players;
         public static bool reInit = false;
+        public static JArray jsonAllCardMsg = new JArray();
 
         public static void GameRoomInit(JsonRoom msg)
         {
@@ -82,7 +86,23 @@ namespace GameRooms
                         cardPos.cardIndex = Array.IndexOf(cards_info[i], j);
                         return cardPos;
                     }
+
+            if (card_id > 10000)
+            {
+                if (card_id == 10001) cardPos.cardLevel = CardLevelType.levelOneCards;
+                if (card_id == 10002) cardPos.cardLevel = CardLevelType.levelTwoCards;
+                if (card_id == 10003) cardPos.cardLevel = CardLevelType.levelThreeCards;
+                cardPos.cardIndex = card_id;
+                return cardPos;
+            }
+
             return null;
+        }
+
+        public static void LoadCardMsgJsonFile()
+        {
+            string jsonStr = Resources.Load<TextAsset>("card_configuration").text;
+            jsonAllCardMsg = (JArray)JsonConvert.DeserializeObject(jsonStr);
         }
     }
 }
