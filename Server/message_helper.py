@@ -123,3 +123,13 @@ def packNewCard(player_id : int, card_number : int):
     header_data = packHeader(API_ID.NEW_CARD, player_id, len(body_data))
 
     return header_data + body_data
+
+
+def packDiscardGems(player_id : int, number_to_discard : int):
+    tmp_dict = {
+        "number_to_discard": number_to_discard
+    }
+    body_data = json.dumps(tmp_dict).encode()
+    header_data = packHeader(API_ID.DISCARD_GEMS, player_id, len(body_data))
+
+    return header_data + body_data

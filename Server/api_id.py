@@ -9,3 +9,4 @@ class API_ID:
     NEW_PLAYER = 8
     PLAYER_GET_NOBLE = 9
     NEW_CARD = 10
+    DISCARD_GEMS = 11

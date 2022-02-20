@@ -154,6 +154,19 @@ class GameRoom:
         return True
 
     @thread_safe
+    def checkDiscardGemsLegal(self, operation_info, player: Player) -> bool:
+        discard_numbers = 0
+        for k, v in operation_info:
+            discard_numbers += v
+            if player.chips[k] < v:
+                return False
+
+        if player.getAllChipsNumber() - discard_numbers != 10:
+            return False
+
+        return True
+
+    @thread_safe
     def checkBuyCardLegal(self, operation_info, player: Player) -> bool:
         card_number = operation_info[0]["card_number"]
         if not self.card_board.getCardByNumber(card_number):
@@ -211,11 +224,22 @@ class GameRoom:
                 player.chips[chip_type] += chip_number
 
             self.boardcastMsg(original_msg)
-            self.startNewTurn()
 
-            # TODO: check chips > 10
-
+            player_chips_number = player.getAllChipsNumber()
+            if player_chips_number > 10:
+                msg = message_helper.packDiscardGems(player.player_id,
+                                                     player_chips_number - 10)
+                player.sendMsg(msg)
+            else:
+                self.startNewTurn()
             return
+
+        if operation_type == Operation.DISCARD_GEMS:
+            legal = self.checkDiscardGemsLegal(operation_info, player)
+            for k, v in operation_info.items():
+                player.chips[k] -= v
+
+            self.startNewTurn()
 
         if operation_type == Operation.FOLD_CARD:
             # FIXME: if could have golden, but have to discard
@@ -264,29 +288,28 @@ class GameRoom:
                 in_fold = True
             player.addCard(card, operation_info)
 
-            try:
-                for item in operation_info[1:]:
-                    gems_type = item["gems_type"]
-                    gems_number = item["gems_number"]
-                    self.chips[gems_type] += gems_number
-            except KeyError:
-                print("key error")
+            for item in operation_info[1:]:
+                gems_type = item["gems_type"]
+                gems_number = item["gems_number"]
+                self.chips[gems_type] += gems_number
 
             if not in_fold:
                 new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
                     card_number)
-                new_card_msg = message_helper.packNewCard(player.player_id,
-                                                          new_card_number)
+                new_card_msg = message_helper.packNewCard(
+                    player.player_id, new_card_number)
                 self.boardcastMsg(new_card_msg)
-
 
         available_cards = self.card_board.checkAvailbaleNobleCard(player)
         if len(available_cards) > 0:
+            logging.debug("Available noble cards > 0")
             if len(available_cards) == 1:
                 card = available_cards[0]
                 player.addCard(card)
                 self.card_board.removeCardByNumberThenAddNewCard(card.number)
                 msg = message_helper.packPlayerGetNoble(player.player_id, card)
+                logging.info("Player {} get noble card {}".format(
+                    player.player_id, card.number))
                 self.boardcastMsg(msg)
                 self.startNewTurn()
 
@@ -299,6 +322,7 @@ class GameRoom:
 
                 return
         else:
+            logging.debug("No available noble cards")
             self.startNewTurn()
 
     @thread_safe
