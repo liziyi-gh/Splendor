@@ -181,15 +181,12 @@ namespace Transmission
                     case API_ID.PLAYER_GET_NOBLE:
                         body_msg= Tools.MsgPLAYER_GET_NOBLE(body_str);
 
-                        switch (body_msg.nobles_id.Count())
+                        if (body_msg.nobles_id.Count() == 1)
                         {
-                            case 1:
-                                GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].point += 3;
-                                GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].nobles.Add(body_msg.nobles_id[0]);
-                                break;
-
-                            default:
-                                break;
+                            GameRoom.cards_info[CardLevelType.nobles][Array.IndexOf(GameRoom.cards_info[CardLevelType.nobles], body_msg.nobles_id[0])] = 0;
+                            
+                            GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].point += 3;
+                            GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].nobles.Add(body_msg.nobles_id[0]);
                         }
                         //
                         break;
