@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using MsgTools;
 using MsgStruct;
 using ApiID;
@@ -91,7 +92,9 @@ namespace Transmission
                         break;
 
                     case API_ID.PLAYER_OPERATION:
-                        body_msg = Tools.MsgPLAYER_OPERATION(body_str);
+                        JObject tmp = JObject.Parse(body_str);
+                        if ((string)tmp["operation_type"] == Operation.DISCARD_GEMS) body_msg = Tools.MsgPLAYER_OPERATION_DISCARD_GEMS(body_str);
+                        else body_msg = Tools.MsgPLAYER_OPERATION(body_str);
 
                         CardPosition cardPos = GameRoom.GetCardPosition(body_msg.card_id);
                         int player_pos = Array.IndexOf(GameRoom.players_sequence, body_msg.player_id);
@@ -162,6 +165,14 @@ namespace Transmission
                                 GameRoom.players[player_pos].foldCards.Add(body_msg.card_id);
                                 break;
 
+                            case Operation.DISCARD_GEMS:
+                                foreach (var i in typeof(GEM).GetFields())
+                                {
+                                    GameRoom.gems_last_num[i.Name.ToLower()] += body_msg.gems[i.Name.ToLower()];
+                                    GameRoom.players[player_pos].gems[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
+                                }
+                                break;
+
                             default:
                                 break;
                         }    
@@ -193,6 +204,12 @@ namespace Transmission
                     case API_ID.NEW_CARD:
                         GameRoom.ShowNEW_CARD(Tools.MsgNEW_CARD(body_str));
                         GameManager.NewCard();
+                        break;
+
+                    case API_ID.DISCARD_GEMS:
+                        body_msg = Tools.MsgDISCARD_GEMS(body_str);
+                        body_msg.player_id = head_msg.player_id;
+                        //
                         break;
 
                     default:

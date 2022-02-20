@@ -13,6 +13,7 @@ namespace ApiID
                           PLAYER_OPERATION_INVALID = 7,
                           NEW_PLAYER = 8,
                           PLAYER_GET_NOBLE = 9,
-                          NEW_CARD = 10;
+                          NEW_CARD = 10,
+                          DISCARD_GEMS = 11;
     }
 }

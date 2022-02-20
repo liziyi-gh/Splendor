@@ -127,6 +127,20 @@ namespace MsgTools
             return msg;
         }
 
+        public static Msgs MsgPLAYER_OPERATION_DISCARD_GEMS(string body_str)
+        {
+            Msgs msg = new Msgs();
+            JsonPLAYER_OPERATION_DISCARD_GEMS dataPLAYER_OPERATION_DISCARD_GEMS = JsonConvert.DeserializeObject<JsonPLAYER_OPERATION_DISCARD_GEMS>(body_str);
+
+            msg.player_id = dataPLAYER_OPERATION_DISCARD_GEMS.player_id;
+            msg.operation_type = dataPLAYER_OPERATION_DISCARD_GEMS.operation_type;
+
+            foreach (var i in dataPLAYER_OPERATION_DISCARD_GEMS.operation_info.Properties())
+                msg.gems[i.Name] = (int)dataPLAYER_OPERATION_DISCARD_GEMS.operation_info[i.Name];
+            
+            return msg;
+        }
+
         public static Msgs MsgPLAYER_GET_NOBLE(string body_str)
         {
             Msgs msg = new Msgs();
@@ -145,6 +159,16 @@ namespace MsgTools
             Msgs msg = new Msgs();
             msg.card_id = (int)dataNEW_CARD["card_number"];
             
+            return msg;
+        }
+
+        public static Msgs MsgDISCARD_GEMS(string body_str)
+        {
+            JObject dataDISCARD_GEMS = JObject.Parse(body_str);
+
+            Msgs msg = new Msgs();
+            msg.number_to_discard = (int)dataDISCARD_GEMS["number_to_discard"];
+
             return msg;
         }
 
@@ -178,6 +202,10 @@ namespace MsgTools
                                                                               new JProperty("card_number", msg.card_id)));
                     break;
 
+                case Operation.DISCARD_GEMS:
+                    return SendPLAYER_OPERATION_DISCARD_GEMS(msg);
+                    break;
+
                 default:
                     break;
             }
@@ -186,6 +214,25 @@ namespace MsgTools
 
             msg.msg_len += (ulong)body_msg.Length;
 
+            buffer.AddRange(MsgHeadPack(msg));
+            buffer.AddRange(body_msg);
+
+            return buffer.ToArray();
+        }
+
+        private static byte[] SendPLAYER_OPERATION_DISCARD_GEMS(Msgs msg)
+        {
+            JsonPLAYER_OPERATION_DISCARD_GEMS dataPLAYER_OPERATION_DISCARD_GEMS = new JsonPLAYER_OPERATION_DISCARD_GEMS(msg.player_id);
+
+            foreach (var i in typeof(GEM).GetFields())
+                if (msg.gems[i.Name.ToLower()] != 0)
+                    dataPLAYER_OPERATION_DISCARD_GEMS.operation_info.Add(new JProperty(i.Name.ToLower(), msg.gems[i.Name.ToLower()]));
+
+            byte[] body_msg = JsonToBytes<JsonPLAYER_OPERATION_DISCARD_GEMS>(dataPLAYER_OPERATION_DISCARD_GEMS);
+
+            msg.msg_len += (ulong)body_msg.Length;
+
+            List<byte> buffer = new List<byte>();
             buffer.AddRange(MsgHeadPack(msg));
             buffer.AddRange(body_msg);
 

@@ -51,6 +51,19 @@ namespace JsonClasses
         }
     }
 
+    public class JsonPLAYER_OPERATION_DISCARD_GEMS
+    {
+        public ulong player_id { get; set; }
+        public string operation_type { get; set; }
+        public JObject operation_info { get; set; }
+
+        public JsonPLAYER_OPERATION_DISCARD_GEMS(ulong id)
+        {
+            player_id = id;
+            operation_type = "discard_gems";
+        }
+    }
+
     public class JsonPLAYER_GET_NOBLE
     {
         public ulong player_id { get; set; }

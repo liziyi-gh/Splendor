@@ -12,7 +12,8 @@ namespace MsgStruct
                      reserve = 0L;
                      
         public int card_level = 0,
-                   card_id = 0;
+                   card_id = 0,
+                   number_to_discard;
         public string? operation_type;
         public List<ulong> other_player_id = new List<ulong>();
         public List<int> nobles_id = new List<int>();
