@@ -1,5 +1,6 @@
 import json
 import struct
+from typing import List
 
 from Server.api_id import API_ID
 from Server.card_board import CardBoard
@@ -102,7 +103,7 @@ def packPlayerGetNoble(player_id: int, card: Card):
     return header_data + body_data
 
 
-def packAskPlayerGetNoble(player_id: int, cards: list[Card]):
+def packAskPlayerGetNoble(player_id: int, cards: List[Card]):
     tmp_dict = {
         "player_id": player_id,
         "noble_number": [card.number for card in cards],
