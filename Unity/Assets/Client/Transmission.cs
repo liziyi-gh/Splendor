@@ -124,7 +124,8 @@ namespace Transmission
                                     GameRoom.players[player_pos].foldCards_num--;
                                 }
 
-                                GameRoom.players[player_pos].cards.Add(body_msg.card_id);   
+                                GameRoom.players[player_pos].cards.Add(body_msg.card_id);
+                                GameRoom.players[player_pos].cards_type[Tools.ReadCardType(body_msg.card_id)] ++;
                                 GameRoom.players[player_pos].point += Tools.ReadCardPoint(body_msg.card_id);
                                 //买盖卡在别人的客户端情况
                                 break;
