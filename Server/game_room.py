@@ -334,13 +334,14 @@ class GameRoom:
         for _, v in self.chips.items():
             ans += v
 
+        ans -= self.chips[Gemstone.GOLDEN]
         return ans
 
     @thread_safe
     def getChipsLeftType(self) -> int:
         ans = 0
-        for _, v in self.chips.items():
-            if v > 0:
+        for k, v in self.chips.items():
+            if v > 0 and k != Gemstone.GOLDEN:
                 ans += 1
 
         return ans
