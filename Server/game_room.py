@@ -206,7 +206,11 @@ class GameRoom:
             }
             new_body["operation_info"].append(golden_dict)
             msg = message_helper.packPlayerOperation(new_body)
+            new_card_msg = message_helper.packNewCard(player.player_id,
+                                                      new_card_number)
+
             self.boardcastMsg(msg)
+            self.boardcastMsg(new_card_msg)
             self.startNewTurn()
 
             return
