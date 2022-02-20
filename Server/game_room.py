@@ -154,7 +154,7 @@ class GameRoom:
         return True
 
     @thread_safe
-    def checkDiscardGemsLegal(self, operation_info, player : Player) -> bool:
+    def checkDiscardGemsLegal(self, operation_info, player: Player) -> bool:
         discard_numbers = 0
         for k, v in operation_info:
             discard_numbers += v
@@ -288,13 +288,10 @@ class GameRoom:
                 in_fold = True
             player.addCard(card, operation_info)
 
-            try:
-                for item in operation_info[1:]:
-                    gems_type = item["gems_type"]
-                    gems_number = item["gems_number"]
-                    self.chips[gems_type] += gems_number
-            except KeyError:
-                print("key error")
+            for item in operation_info[1:]:
+                gems_type = item["gems_type"]
+                gems_number = item["gems_number"]
+                self.chips[gems_type] += gems_number
 
             if not in_fold:
                 new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
@@ -305,11 +302,14 @@ class GameRoom:
 
         available_cards = self.card_board.checkAvailbaleNobleCard(player)
         if len(available_cards) > 0:
+            logging.debug("Available noble cards > 0")
             if len(available_cards) == 1:
                 card = available_cards[0]
                 player.addCard(card)
                 self.card_board.removeCardByNumberThenAddNewCard(card.number)
                 msg = message_helper.packPlayerGetNoble(player.player_id, card)
+                logging.info("Player {} get noble card {}".format(
+                    player.player_id, card.number))
                 self.boardcastMsg(msg)
                 self.startNewTurn()
 
@@ -322,6 +322,7 @@ class GameRoom:
 
                 return
         else:
+            logging.debug("No available noble cards")
             self.startNewTurn()
 
     @thread_safe
