@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour
 
     [Header("预制体")]
     [SerializeField] GameObject playerPrefab;
-    [SerializeField] GameObject noblePrefab;
 
     [Header("Sprite")]
     public List<Sprite> allCardSprites;
@@ -122,7 +121,7 @@ public class GameManager : MonoBehaviour
                         LoadGameRoomInfomation();
                         break;
                     case "PlayerGetNoble":
-                        LoadGameRoomInfomation();
+                        ChooseNoble(toDoList[toDo]);
                         break;
                 }
             }
@@ -133,7 +132,7 @@ public class GameManager : MonoBehaviour
     public void Reset()
     {
         //若游戏还没开始则不能复位；
-        if (state == State.ready || state == State.unready || state==State.waiting)
+        if (state == State.ready || state == State.unready || state==State.waiting||state==State.choosingNoble)
             return;
 
         state = State.start;
@@ -200,7 +199,20 @@ public class GameManager : MonoBehaviour
 
             case State.choosingNoble:
                 //选择贵族牌；
-
+                sendMsg.api_id = 9;
+                sendMsg.player_id = playerID;
+                sendMsg.nobles_id = new List<int>();
+                for (int i = 0; i < 5; i++)
+                {
+                    if (nobles.GetChild(i).childCount > 0)
+                    {
+                        sendMsg.nobles_id.Add(allCardSprites.IndexOf(nobles.GetChild(i).GetComponent<Image>().sprite));
+                        nobles.GetChild(i).GetChild(0).GetComponent<Image>().color = Color.clear;
+                        nobles.GetChild(i).DetachChildren();
+                        break;
+                    }                        
+                }
+                Client.Send(sendMsg);
                 break;
 
             case State.unready:
@@ -212,7 +224,6 @@ public class GameManager : MonoBehaviour
                 sendMsg.api_id = 3;
                 sendMsg.player_id = playerID;
                 Client.Send(sendMsg);
-
                 break;
         }
     }
@@ -320,6 +331,31 @@ public class GameManager : MonoBehaviour
         }        
     }
 
+    public void ChooseNoble(Msgs msgs)
+    {
+        if (msgs.nobles_id.Count == 1)
+        {
+            //动画；           
+
+            for (int i = 0; i < 5; i++)
+                nobles.GetChild(i).GetComponent<Image>().color = Color.white;
+
+            LoadGameRoomInfomation();
+        }
+        else
+        {
+            state = State.choosingNoble;
+            for (int i = 0; i < 5; i++)
+            {
+                Image image = nobles.GetChild(i).GetComponent<Image>();
+                image.color = Color.gray;
+                foreach (int noble_id in msgs.nobles_id)                                   
+                    if (allCardSprites[noble_id] == image.sprite)
+                        image.color = Color.white;
+            }
+        }
+    }
+
     //获得自己玩家ID和其他玩家ID；
     public static void GetPlayerID(Msgs msgs)
     {
@@ -365,9 +401,9 @@ public class GameManager : MonoBehaviour
         current.toDoList.Add("NewCard",new Msgs());
     }
 
-    public static void PlayerGetNoble()
+    public static void PlayerGetNoble(Msgs msgs)
     {
-        current.toDoList.Add("PlayerGetNoble",new Msgs());
+        current.toDoList.Add("PlayerGetNoble",msgs);
     }
 
     public void LoadGameRoomInfomation()
