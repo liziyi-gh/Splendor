@@ -94,7 +94,7 @@ class CardBoard():
             new_card_number = self.addNewCardToBoard(card.level, card)
             return new_card_number
 
-    def checkAvailbaleNobleCard(self, player: Player) -> list[Card]:
+    def checkAvailbaleNobleCard(self, player: Player) -> List[Card]:
         cards = []
         for item in self.noble_cards:
             if player.checkAvailbaleNobleCard(item):
