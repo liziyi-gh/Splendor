@@ -165,6 +165,24 @@ PLAYER_READY 由客户端在玩家准备就绪时发送给服务器，并由服�
 #+end_src
 即玩家1选择盖住1号卡牌
 
+以下为服务器广播：
+#+begin_src json
+  {
+    "player_id": 1,
+    "operation_type": "fold_card",
+    "operation_info": [
+      {
+      "card_number": 1
+      },
+      {
+        "golden_number": 1
+      }
+    ]
+  }
+
+#+end_src
+golden_number 为1则拿走一个黄金，为0则不拿。
+
 示例4：
 #+begin_src json
   {

@@ -1,3 +1,4 @@
+import copy
 import json
 import socket
 import random
@@ -147,18 +148,9 @@ class GameRoom:
         if len(player.fold_cards) >= 3:
             return False
 
-        try:
-            if operation_info[1]["gems_type"] != Gemstone.GOLDEN:
-                return False
-
-            gold_number = int(operation_info[1]["gems_number"])
-            if gold_number > 1:
-                return False
-            if gold_number == 1 and self.chips[Gemstone.GOLDEN] < 1:
-                return False
-
-        except KeyError:
-            pass
+        card_number = operation_info[0]["card_number"]
+        if self.card_board.getCardByNumber(card_number) is None:
+            return False
 
         return True
 
@@ -196,19 +188,29 @@ class GameRoom:
             return
 
         if operation_type == Operation.FOLD_CARD:
-            # FIXME: golden???
+            # FIXME: if could have golden, but have to discard
             legal = self.checkFoldCardLegal(operation_info, player)
             if not legal:
                 self.playerOperationInvalid(player)
                 return
-            card_number = int(operation_info[0]["card_number"])
+            card_number = operation_info[0]["card_number"]
             card = self.card_board.getCardByNumber(card_number)
             player.addFoldCard(card)
             new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
                 card_number)
 
             # FIXME: if fold 10001 like card should not let other players know
-            self.boardcastMsg(original_msg)
+            new_body = copy.deepcopy(body)
+            golden_dict = {
+                "golden_number": 1
+            }
+            new_body["operation_info"].append(golden_dict)
+            msg = message_helper.packPlayerOperation(new_body)
+            new_card_msg = message_helper.packNewCard(player.player_id,
+                                                      new_card_number)
+
+            self.boardcastMsg(msg)
+            self.boardcastMsg(new_card_msg)
             self.startNewTurn()
 
             return

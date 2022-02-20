@@ -1,11 +1,18 @@
 import socket
 import threading
 import logging
+from time import sleep
 
 from Server.constants import HEADER_LENGTH, SERVER_ADDRESS
 from Server.game_room import GameRoom
 from Server.message_helper import unpackHeader, unpackBody
 from Server.api_id import API_ID
+
+
+ALL_CLIENT_SOCK = []
+ALL_CLIENT_SOCK_LOCK = threading.Lock()
+FIRST_TIME = True
+FIRST_TIME_LOCK = threading.Lock()
 
 
 def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
@@ -15,6 +22,9 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
         header_data = client_sock.recv(HEADER_LENGTH)
         if len(header_data) < HEADER_LENGTH:
             logging.error("header data length less than {}".format(HEADER_LENGTH))
+            with ALL_CLIENT_SOCK_LOCK:
+                ALL_CLIENT_SOCK.remove(client_sock)
+            client_sock.close()
             return
         header = unpackHeader(header_data)
         msg_body_len = header.msg_len - HEADER_LENGTH
@@ -51,15 +61,21 @@ def startListen(current_game_room: GameRoom):
     logging.info("Server address is {}".format(SERVER_ADDRESS))
     while True:
         client_sock, addr = sock.accept()
+        with ALL_CLIENT_SOCK_LOCK:
+            ALL_CLIENT_SOCK.append(client_sock)
         logging.info("New socket connect")
         t = threading.Thread(target=handleClient,
                              args=(current_game_room, client_sock, addr))
+        t.setDaemon(False)
         t.start()
+        with FIRST_TIME_LOCK:
+            global FIRST_TIME
+            FIRST_TIME = False
+
 
 
 def init_log():
     logging.basicConfig(filename="./server.log",
-                        encoding='utf-8',
                         level=logging.DEBUG)
     logging.info("___________________________________________________________")
     logging.info("Server starting")
@@ -69,4 +85,13 @@ def init_log():
 def start():
     init_log()
     current_game_room = GameRoom()
-    startListen(current_game_room)
+    t = threading.Thread(target=startListen, args=(current_game_room,))
+    t.setDaemon(True)
+    t.start()
+    while True:
+        sleep(1)
+        with FIRST_TIME_LOCK:
+            if not FIRST_TIME:
+                with ALL_CLIENT_SOCK_LOCK:
+                    if len(ALL_CLIENT_SOCK) == 0:
+                        return
