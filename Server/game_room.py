@@ -142,8 +142,7 @@ class GameRoom:
                 return False
 
         if operation_chips_number == 2:
-            if room_chips_number > 2 or player_chips_number < 8 or len(
-                    operation_info) > 1:
+            if player_chips_number < 8 and len(operation_info) > 1:
                 return False
 
         if operation_chips_number == 3:
