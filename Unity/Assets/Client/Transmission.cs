@@ -24,7 +24,7 @@ namespace Transmission
 
         public static void Connect()
         {
-            string host = "127.0.0.1";
+            string host = "74.120.169.58";
             int port = 13204;
 
             IPAddress ip = IPAddress.Parse(host);
@@ -124,7 +124,7 @@ namespace Transmission
                                     }
                                     else
                                     {
-                                        int cardCode;
+                                        int cardCode = 0;
                                         if (cardPos.cardLevel == CardLevelType.levelOneCards) cardCode = 10001;
                                         if (cardPos.cardLevel == CardLevelType.levelTwoCards) cardCode = 10002;
                                         if (cardPos.cardLevel == CardLevelType.levelThreeCards) cardCode = 10003;
@@ -184,7 +184,7 @@ namespace Transmission
                         if (body_msg.nobles_id.Count() == 1)
                         {
                             GameRoom.cards_info[CardLevelType.nobles][Array.IndexOf(GameRoom.cards_info[CardLevelType.nobles], body_msg.nobles_id[0])] = 0;
-                            
+
                             GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].point += 3;
                             GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].nobles.Add(body_msg.nobles_id[0]);
                         }
