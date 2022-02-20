@@ -166,7 +166,7 @@ namespace Transmission
 
                     case API_ID.NEW_CARD:
                         body_msg = Tools.MsgNEW_CARD(body_str);
-                        //
+                        GameManager.NewCard();
                         break;
 
                     default:

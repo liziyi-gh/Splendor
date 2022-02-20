@@ -118,6 +118,9 @@ public class GameManager : MonoBehaviour
                     case "PlayerOperation":
                         PlayerOperate(toDoList[toDo]);
                         break;
+                    case "NewCard":
+                        LoadGameRoomInfomation();
+                        break;
                 }
             }
             toDoList = new Dictionary<string, Msgs>();
@@ -156,7 +159,7 @@ public class GameManager : MonoBehaviour
                 sendMsg.api_id = 6;
                 sendMsg.player_id = playerID;
                 sendMsg.operation_type = "get_gems";
-                for(int i=0;i<5;i++)
+                for(int i=0;i<6;i++)
                     sendMsg.gems[gems[i]]= int.Parse(stones.GetChild(i).GetChild(1).GetComponent<Text>().text);
                 Client.Send(sendMsg);                
                 break;
@@ -166,8 +169,10 @@ public class GameManager : MonoBehaviour
                 sendMsg.api_id = 6;
                 sendMsg.player_id = playerID;
                 sendMsg.operation_type = "buy_card";
-                GameObject hl = highLight1.activeSelf ? highLight1 : highLight2;
-                sendMsg.card_id = allCardSprites.IndexOf(hl.transform.parent.GetComponent<Image>().sprite);
+                if(highLight1.activeSelf)
+                    sendMsg.card_id = allCardSprites.IndexOf(highLight1.transform.parent.GetComponent<Image>().sprite);
+                else
+                    sendMsg.card_id = allCardSprites.IndexOf(highLight2.transform.parent.GetComponent<Recover>().card);                               
                 for (int i = 0; i < 6; i++)
                     sendMsg.gems[gems[i]] = int.Parse(money.GetChild(i).GetChild(1).GetChild(1).GetComponent<Text>().text);
                 Client.Send(sendMsg);
@@ -340,6 +345,11 @@ public class GameManager : MonoBehaviour
     public static void PlayerOperation(Msgs msgs)
     {
         current.toDoList.Add("PlayerOperation", msgs);        
+    }
+
+    public static void NewCard()
+    {
+        current.toDoList.Add("NewCard",new Msgs());
     }
 
     public void LoadGameRoomInfomation()
