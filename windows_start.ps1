@@ -1,3 +1,3 @@
 do {
     python .\startServer.py
-} whiel (1)
+} while (1)
