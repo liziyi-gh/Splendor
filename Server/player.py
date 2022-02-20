@@ -109,3 +109,12 @@ class Player:
                 return True
 
         return False
+
+    def getCardInFoldCards(self, card_number) -> Card:
+        legal = self.cardInFold(card_number)
+        if not legal:
+            logging.error("card {} is not in player {} fold cards".format(card_number,
+                                                                          self.player_id))
+        for card in self.fold_cards:
+            if card.number == card_number:
+                return card

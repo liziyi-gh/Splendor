@@ -246,21 +246,27 @@ class GameRoom:
             return
 
         if operation_type == Operation.BUY_CARD:
+            in_fold = False
             legal = self.checkBuyCardLegal(operation_info, player)
             if not legal:
                 self.playerOperationInvalid(player)
                 return
 
-            card_number = int(operation_info[0]["card_number"])
-            card = self.card_board.getCardByNumber(card_number)
-            player.addCard(card, operation_info)
-            new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
-                card_number)
-            new_card_msg = message_helper.packNewCard(player.player_id,
-                                                      new_card_number)
-
             self.boardcastMsg(original_msg)
-            self.boardcastMsg(new_card_msg)
+
+            card_number = operation_info[0]["card_number"]
+            card = self.card_board.getCardByNumber(card_number)
+            if card is None:
+                card = player.getCardInFoldCards(card_number)
+                in_fold = True
+            player.addCard(card, operation_info)
+            if not in_fold:
+                new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
+                    card_number)
+                new_card_msg = message_helper.packNewCard(player.player_id,
+                                                          new_card_number)
+                self.boardcastMsg(new_card_msg)
+
 
         available_cards = self.card_board.checkAvailbaleNobleCard(player)
         if len(available_cards) > 0:
