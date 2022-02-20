@@ -120,3 +120,9 @@ class Player:
                 return card
 
         return None
+
+    def getGemstoneNumber(self, gemstone_str):
+        # replace getattr for search purpose
+        tmp = getattr(self, gemstone_str)
+
+        return tmp

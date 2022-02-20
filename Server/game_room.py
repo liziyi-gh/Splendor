@@ -187,7 +187,14 @@ class GameRoom:
             if gems_type == Gemstone.GOLDEN:
                 golden_number = chips_number
             else:
+                # chips in operation
                 card_chips[gems_type] -= chips_number
+                # gemstone in player card
+                card_chips[gems_type] -= player.getGemstoneNumber(gems_type)
+                if card_chips[gems_type] < 0:
+                    logging.debug(
+                        "too much {} chips when buy card".format(gems_type))
+                    return False
                 need_golden_number += chips_number
 
             if player.chips[gems_type] < chips_number:
