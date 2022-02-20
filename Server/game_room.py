@@ -143,6 +143,8 @@ class GameRoom:
 
         if operation_chips_number == 2:
             if player_chips_number < 8 and len(operation_info) > 1:
+                if self.getChipsLeftType() == 2:
+                    return True
                 return False
 
         if operation_chips_number == 3:
@@ -327,5 +329,14 @@ class GameRoom:
         ans = 0
         for _, v in self.chips.items():
             ans += v
+
+        return ans
+
+    @thread_safe
+    def getChipsLeftType(self) -> int:
+        ans = 0
+        for _, v in self.chips.items():
+            if v > 0:
+                ans += 1
 
         return ans
