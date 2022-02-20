@@ -228,7 +228,11 @@ class GameRoom:
 
             # FIXME: if fold 10001 like card should not let other players know
             new_body = copy.deepcopy(body)
-            golden_dict = {"golden_number": 1}
+            if self.chips[Gemstone.GOLDEN] > 0:
+                golden_dict = {"golden_number": 1}
+                player.chips[Gemstone.GOLDEN] += 1
+            else:
+                golden_dict = {{"golden_number": 0}}
             new_body["operation_info"].append(golden_dict)
             msg = message_helper.packPlayerOperation(new_body)
             new_card_msg = message_helper.packNewCard(player.player_id,
