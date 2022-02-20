@@ -109,20 +109,46 @@ class GameRoom:
             self.startGame()
 
     @thread_safe
-    def checkGetChipsLegal(self, operation_info) -> bool:
-        all_chips_number = 0
+    def checkGetChipsLegal(self, operation_info, player: Player) -> bool:
+        player_chips_number = player.getAllChipsNumber()
+        room_chips_number = self.getAllChipsNumber()
+        operation_chips_number = 0
+
         for item in operation_info:
             gems_type = item["gems_type"]
-            chips_number = int(item["gems_number"])
-            all_chips_number += chips_number
+            chips_number = item["gems_number"]
+
+            operation_chips_number += chips_number
             if self.chips[gems_type] < chips_number:
                 return False
 
             if self.chips[gems_type] < 4 and chips_number > 1:
                 return False
 
-        if all_chips_number > 3:
+            if chips_number > 2:
+                return False
+
+        if operation_chips_number > room_chips_number:
             return False
+
+        if operation_chips_number > 3:
+            return False
+
+        if operation_chips_number == 0:
+            return False
+
+        if operation_chips_number == 1:
+            if player_chips_number < 9 and room_chips_number > 1:
+                return False
+
+        if operation_chips_number == 2:
+            if room_chips_number > 2 or player_chips_number < 8 or len(
+                    operation_info) > 1:
+                return False
+
+        if operation_chips_number == 3:
+            if len(operation_info) < 3:
+                return False
 
         return True
 
@@ -171,7 +197,7 @@ class GameRoom:
             return
 
         if operation_type == Operation.GET_GEMS:
-            legal = self.checkGetChipsLegal(operation_info)
+            legal = self.checkGetChipsLegal(operation_info, player)
             if not legal:
                 self.playerOperationInvalid(player)
                 return
@@ -201,9 +227,7 @@ class GameRoom:
 
             # FIXME: if fold 10001 like card should not let other players know
             new_body = copy.deepcopy(body)
-            golden_dict = {
-                "golden_number": 1
-            }
+            golden_dict = {"golden_number": 1}
             new_body["operation_info"].append(golden_dict)
             msg = message_helper.packPlayerOperation(new_body)
             new_card_msg = message_helper.packNewCard(player.player_id,
@@ -296,3 +320,11 @@ class GameRoom:
         idx = self.players_sequence.index(self.next_player_id)
         idx = 0 if idx == len(self.players_sequence) - 1 else idx + 1
         self.next_player_id = self.players_sequence[idx]
+
+    @thread_safe
+    def getAllChipsNumber(self) -> int:
+        ans = 0
+        for _, v in self.chips.items():
+            ans += v
+
+        return ans
