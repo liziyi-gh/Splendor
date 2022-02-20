@@ -1,3 +1,4 @@
+import copy
 import json
 import socket
 import random
@@ -199,7 +200,13 @@ class GameRoom:
                 card_number)
 
             # FIXME: if fold 10001 like card should not let other players know
-            self.boardcastMsg(original_msg)
+            new_body = copy.deepcopy(body)
+            golden_dict = {
+                "golden_number": 1
+            }
+            new_body["operation_info"].append(golden_dict)
+            msg = message_helper.packPlayerOperation(new_body)
+            self.boardcastMsg(msg)
             self.startNewTurn()
 
             return
