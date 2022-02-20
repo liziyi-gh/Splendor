@@ -69,6 +69,12 @@ namespace GameRooms
             reInit = true;
         }
 
+        public static void LoadCardMsgJsonFile()
+        {
+            string jsonStr = Resources.Load<TextAsset>("card_configuration").text;
+            jsonAllCardMsg = (JArray)JsonConvert.DeserializeObject(jsonStr);
+        }
+
         public static Player GetPlayer(ulong player_id)
         {
             return players[Array.IndexOf(players_sequence, player_id)];
@@ -99,10 +105,13 @@ namespace GameRooms
             return null;
         }
 
-        public static void LoadCardMsgJsonFile()
+        public static void showNEW_CARD(Msgs msg)
         {
-            string jsonStr = Resources.Load<TextAsset>("card_configuration").text;
-            jsonAllCardMsg = (JArray)JsonConvert.DeserializeObject(jsonStr);
+            string cardLevel = cardLevelType.nobles;
+            if (msg.card_id <= 90) cardLevel = cardLevelType.levelThreeCards;
+            if (msg.card_id <= 70) cardLevel = cardLevelType.levelTwoCards;
+            if (msg.card_id <= 40) cardLevel = cardLevelType.levelOneCards;
+            GameRoom.cards_info[cardLevel][Array.IndexOf(GameRoom.cards_info[cardLevel], 0)] = msg.card_id;
         }
     }
 }

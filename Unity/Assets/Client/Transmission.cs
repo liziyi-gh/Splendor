@@ -127,7 +127,6 @@ namespace Transmission
                                 GameRoom.players[player_pos].cards.Add(body_msg.card_id);   
                                 GameRoom.players[player_pos].point += Tools.ReadCardPoint(body_msg.card_id);
                                 //买盖卡在别人的客户端情况
-                                //TODO read jsonfile
                                 break;
 
                             case Operation.FOLD_CARD:
@@ -183,7 +182,7 @@ namespace Transmission
                         break;
 
                     case API_ID.NEW_CARD:
-                        body_msg = Tools.MsgNEW_CARD(body_str);
+                        GameRoom.showNEW_CARD(Tools.MsgNEW_CARD(body_str));
                         GameManager.NewCard();
                         break;
 
