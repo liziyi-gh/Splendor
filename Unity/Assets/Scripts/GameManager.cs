@@ -121,6 +121,9 @@ public class GameManager : MonoBehaviour
                     case "NewCard":
                         LoadGameRoomInfomation();
                         break;
+                    case "PlayerGetNoble":
+                        LoadGameRoomInfomation();
+                        break;
                 }
             }
             toDoList = new Dictionary<string, Msgs>();
@@ -196,6 +199,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case State.choosingNoble:
+                //选择贵族牌；
 
                 break;
 
@@ -361,6 +365,11 @@ public class GameManager : MonoBehaviour
         current.toDoList.Add("NewCard",new Msgs());
     }
 
+    public static void PlayerGetNoble()
+    {
+        current.toDoList.Add("PlayerGetNoble",new Msgs());
+    }
+
     public void LoadGameRoomInfomation()
     {
         player = GameRoom.GetPlayer(playerID);
@@ -413,13 +422,12 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < 5; i++)
         {
-            if (i < GameRoom.cards_last_num[CardLevelType.nobles])
-            {
-                nobles.GetChild(i).GetComponent<Image>().sprite = allCardSprites[GameRoom.cards_info[CardLevelType.nobles][i]];
-                nobles.GetChild(i).GetComponent<Image>().color = Color.white;
-            }                
-            else
+            Image image = nobles.GetChild(i).GetComponent<Image>();
+            image.sprite = allCardSprites[GameRoom.cards_info[CardLevelType.nobles][i]];
+            if(image.sprite==allCardSprites[0])
                 nobles.GetChild(i).GetComponent<Image>().color = Color.clear;
+            else
+                nobles.GetChild(i).GetComponent<Image>().color = Color.white;                
         }
 
         cards.GetChild(0).GetChild(0).GetComponent<Text>().text = Mathf.Max(0,GameRoom.cards_last_num[CardLevelType.levelOneCards]-4).ToString();
