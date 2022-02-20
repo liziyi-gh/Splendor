@@ -36,6 +36,8 @@ namespace Transmission
             Logging.LogInit();
             Logging.LogConnect();
 
+            GameRoom.LoadCardMsgJsonFile();
+
             Thread th = new Thread(delegate () { Receive(socket); });
             th.Start();
         }
@@ -99,19 +101,23 @@ namespace Transmission
                             case Operation.GET_GEMS:
                                 foreach (var i in typeof(GEM).GetFields())
                                 {
-                                    GameRoom.players[player_pos].gems[i.Name.ToLower()] += body_msg.gems[i.Name.ToLower()];
                                     GameRoom.gems_last_num[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
+                                    GameRoom.players[player_pos].gems[i.Name.ToLower()] += body_msg.gems[i.Name.ToLower()];
                                 }
                                 break;
 
                             case Operation.BUY_CARD:
                                 foreach (var i in typeof(GEM).GetFields())
                                 {
-                                    GameRoom.players[player_pos].gems[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
                                     GameRoom.gems_last_num[i.Name.ToLower()] += body_msg.gems[i.Name.ToLower()];
+                                    GameRoom.players[player_pos].gems[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
                                 }
                                 int foldCardPos = Array.IndexOf(GameRoom.players[player_pos].foldCards.ToArray(), body_msg.card_id);
-                                if (foldCardPos == -1) GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
+                                if (foldCardPos == -1)
+                                {
+                                    GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
+                                    GameRoom.cards_last_num[cardPos.cardLevel] --;
+                                }
                                 else
                                 {
                                     GameRoom.players[player_pos].foldCards[foldCardPos] = 0;
@@ -120,17 +126,29 @@ namespace Transmission
 
                                 GameRoom.players[player_pos].cards.Add(body_msg.card_id);   
                                 GameRoom.players[player_pos].point += Tools.ReadCardPoint(body_msg.card_id);
+                                //买盖卡在别人的客户端情况
+                                //TODO read jsonfile
                                 break;
 
                             case Operation.FOLD_CARD:
                                 GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
-                                GameRoom.players[player_pos].gems[GEM.GOLDEN] += body_msg.gems[GEM.GOLDEN];
+                                GameRoom.cards_last_num[cardPos.cardLevel] --;
                                 GameRoom.gems_last_num[GEM.GOLDEN] -= body_msg.gems[GEM.GOLDEN];
+
+                                GameRoom.players[player_pos].gems[GEM.GOLDEN] += body_msg.gems[GEM.GOLDEN];
                                 GameRoom.players[player_pos].foldCards_num++;
                                 GameRoom.players[player_pos].foldCards.Add(body_msg.card_id);
+                                //
                                 break;
 
                             case Operation.FOLD_CARD_UNKNOWN:
+                                GameRoom.cards_last_num[cardPos.cardLevel] --;
+                                GameRoom.gems_last_num[GEM.GOLDEN] -= body_msg.gems[GEM.GOLDEN];
+
+                                GameRoom.players[player_pos].gems[GEM.GOLDEN] += body_msg.gems[GEM.GOLDEN];
+                                GameRoom.players[player_pos].foldCards_num++;
+                                GameRoom.players[player_pos].foldCards.Add(body_msg.card_id);
+                                //
                                 break;
 
                             default:
