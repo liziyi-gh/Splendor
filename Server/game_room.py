@@ -155,14 +155,15 @@ class GameRoom:
 
     @thread_safe
     def checkBuyCardLegal(self, operation_info, player: Player) -> bool:
-        card_number = int(operation_info[0]["card_number"])
+        card_number = operation_info[0]["card_number"]
         if not self.card_board.getCardByNumber(card_number):
-            return False
+            if not player.cardInFold(card_number):
+                return False
 
         for item in operation_info:
             try:
                 gems_type = item["gems_type"]
-                chips_number = int(item["gems_number"])
+                chips_number = item["gems_number"]
                 if player.chips[gems_type] < chips_number:
                     return False
             except KeyError:

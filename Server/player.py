@@ -99,3 +99,13 @@ class Player:
             ans += v
 
         return ans
+
+    def cardInFold(self, card_number):
+        for card in self.fold_cards:
+            if card.number == card_number:
+                logging.debug(
+                    "Find card in player {} fold card by number {}".format(
+                        self.player_id, card_number))
+                return True
+
+        return False
