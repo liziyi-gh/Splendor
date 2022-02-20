@@ -263,7 +263,7 @@ class GameRoom:
                 in_fold = True
             player.addCard(card, operation_info)
 
-            for item in operation_info[0]:
+            for item in operation_info:
                 gems_type = item["gems_type"]
                 gems_number = item["gems_number"]
                 self.chips[gems_type] += gems_number
