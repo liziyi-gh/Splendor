@@ -15,6 +15,7 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
         header_data = client_sock.recv(HEADER_LENGTH)
         if len(header_data) < HEADER_LENGTH:
             logging.error("header data length less than {}".format(HEADER_LENGTH))
+            client_sock.close()
             return
         header = unpackHeader(header_data)
         msg_body_len = header.msg_len - HEADER_LENGTH
