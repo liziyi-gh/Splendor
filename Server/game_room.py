@@ -263,10 +263,13 @@ class GameRoom:
                 in_fold = True
             player.addCard(card, operation_info)
 
-            for item in operation_info:
-                gems_type = item["gems_type"]
-                gems_number = item["gems_number"]
-                self.chips[gems_type] += gems_number
+            try:
+                for item in operation_info[1:]:
+                    gems_type = item["gems_type"]
+                    gems_number = item["gems_number"]
+                    self.chips[gems_type] += gems_number
+            except KeyError:
+                print("key error")
 
             if not in_fold:
                 new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
