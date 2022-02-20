@@ -197,8 +197,8 @@ namespace Transmission
 
                             GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].point += 3;
                             GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].nobles.Add(body_msg.nobles_id[0]);
-
                         }
+                        
                         GameManager.PlayerGetNoble(body_msg);
                         break;
 
