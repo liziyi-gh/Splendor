@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        lock (toDoList.Keys)
+        lock (toDoList)
         {
             foreach (string toDo in toDoList.Keys)
             {
@@ -279,10 +279,11 @@ public class GameManager : MonoBehaviour
         switch (msgs.operation_type)
         {
             case "get_gems":
-                StartCoroutine(GetGem(msgs));
+                StartCoroutine(TransGems(msgs));
                 break;
 
-            case "buy_card":                
+            case "buy_card":
+                StartCoroutine(TransGems(msgs));
                 break;
 
             case "fold_card":
@@ -294,14 +295,22 @@ public class GameManager : MonoBehaviour
         LoadGameRoomInfomation();
     }
 
-    IEnumerator GetGem(Msgs msgs)
+    IEnumerator TransGems(Msgs msgs)
     {
+        bool isBuyingCard = false;
+        if (msgs.operation_type == "buy_card")
+            isBuyingCard = true;
+
         foreach (string gem in gems)
         {
             for (int i = 0; i < msgs.gems[gem]; i++)
             {
-                gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
-                    GameObject.Find("Player" + msgs.player_id.ToString()).transform);
+                if (msgs.player_id == playerID)
+                    gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
+                        money.GetChild(Array.IndexOf(gems, gem)),isBuyingCard);
+                else                
+                    gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
+                        GameObject.Find("Player" + msgs.player_id.ToString()).transform,isBuyingCard);                                
                 yield return new WaitForSeconds(0.1f);
             }
         }        

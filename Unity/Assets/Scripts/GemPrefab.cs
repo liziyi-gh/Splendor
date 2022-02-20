@@ -8,13 +8,13 @@ public class GemPrefab : MonoBehaviour
     Vector2 targetPosition;
     Transform gemPrefabs;
 
-    // Start is called before the first frame update
+    
     void Start()
     {
         gemPrefabs = transform.parent;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {        
         if ((GetComponent<RectTransform>().anchoredPosition - targetPosition).magnitude < 5f)
@@ -28,12 +28,13 @@ public class GemPrefab : MonoBehaviour
         }
     }
 
-    public void SetDir(Transform gem, Transform player)
+    public void SetDir(Transform gem, Transform targetPoint, bool isReverse)
     {
+        GetComponent<Image>().sprite = gem.GetComponent<Image>().sprite;
         GetComponent<Image>().color = Color.white;
         GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-        GetComponent<Image>().sprite = gem.GetComponent<Image>().sprite;
+        if (isReverse) { Transform temp = gem; gem = targetPoint; targetPoint = temp; }
         transform.SetParent(gem, false);
-        targetPosition = player.position - gem.position;
+        targetPosition = targetPoint.position - gem.position;
     }
 }
