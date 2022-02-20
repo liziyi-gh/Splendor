@@ -456,14 +456,14 @@ public class GameManager : MonoBehaviour
                 cardImage.color = Color.white;
         }            
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < GameRoom.cards_info[CardLevelType.nobles].Length; i++)
         {
             Image image = nobles.GetChild(i).GetComponent<Image>();
             image.sprite = allCardSprites[GameRoom.cards_info[CardLevelType.nobles][i]];
             if(image.sprite==allCardSprites[0])
-                nobles.GetChild(i).GetComponent<Image>().color = Color.clear;
+                image.color = Color.clear;
             else
-                nobles.GetChild(i).GetComponent<Image>().color = Color.white;                
+                image.color = Color.white;                
         }
 
         cards.GetChild(0).GetChild(0).GetComponent<Text>().text = Mathf.Max(0,GameRoom.cards_last_num[CardLevelType.levelOneCards]-4).ToString();
