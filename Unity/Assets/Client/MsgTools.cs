@@ -112,7 +112,7 @@ namespace MsgTools
 
                 case Operation.FOLD_CARD:
                     msg.card_id = (int)dataPLAYER_OPERATION.operation_info[0]["card_number"];
-                    if (GameRoom.gems_last_num[GEM.GOLDEN] != 0) msg.gems[GEM.GOLDEN] = 1;
+                    msg.gems[GEM.GOLDEN] = (int)dataPLAYER_OPERATION.operation_info[1]["golden_number"];
                     break;
 
                 case Operation.FOLD_CARD_UNKNOWN:

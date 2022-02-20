@@ -127,7 +127,7 @@ namespace Transmission
                                 GameRoom.players[player_pos].cards.Add(body_msg.card_id);
                                 GameRoom.players[player_pos].cards_type[Tools.ReadCardType(body_msg.card_id)] ++;
                                 GameRoom.players[player_pos].point += Tools.ReadCardPoint(body_msg.card_id);
-                                //买盖卡在别人的客户端情况
+                                //买不知道卡在别人的客户端情况
                                 break;
 
                             case Operation.FOLD_CARD:
@@ -138,7 +138,6 @@ namespace Transmission
                                 GameRoom.players[player_pos].gems[GEM.GOLDEN] += body_msg.gems[GEM.GOLDEN];
                                 GameRoom.players[player_pos].foldCards_num++;
                                 GameRoom.players[player_pos].foldCards.Add(body_msg.card_id);
-                                //
                                 break;
 
                             case Operation.FOLD_CARD_UNKNOWN:
@@ -148,7 +147,6 @@ namespace Transmission
                                 GameRoom.players[player_pos].gems[GEM.GOLDEN] += body_msg.gems[GEM.GOLDEN];
                                 GameRoom.players[player_pos].foldCards_num++;
                                 GameRoom.players[player_pos].foldCards.Add(body_msg.card_id);
-                                //
                                 break;
 
                             default:

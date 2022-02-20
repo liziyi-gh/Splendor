@@ -9,6 +9,7 @@ using MsgStruct;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using MsgTools;
+using ApiID;
 
 namespace Logger
 {
@@ -71,6 +72,7 @@ namespace Logger
         {
             lock(balanceLock)
             {
+                if (msg.api_id == API_ID.NEW_TURN) log.WriteLine();
                 log.WriteLine(DateTime.Now.ToString("G") + "    "+logSwitch+"-->API:{0}, Player:{1}, MsgLength:{2}", msg.api_id, msg.player_id, msg.msg_len);
                 log.WriteLine(body_msg);
             }
