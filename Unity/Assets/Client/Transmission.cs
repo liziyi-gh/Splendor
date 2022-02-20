@@ -24,7 +24,7 @@ namespace Transmission
 
         public static void Connect()
         {
-            string host = "74.120.169.58";
+            string host = "175.178.115.8";
             int port = 13204;
 
             IPAddress ip = IPAddress.Parse(host);
@@ -127,7 +127,7 @@ namespace Transmission
                                         if (cardPos.cardLevel == CardLevelType.levelOneCards) cardCode = 10001;
                                         if (cardPos.cardLevel == CardLevelType.levelTwoCards) cardCode = 10002;
                                         if (cardPos.cardLevel == CardLevelType.levelThreeCards) cardCode = 10003;
-                                        
+
                                         GameRoom.players[player_pos].foldCards.RemoveAt(Array.IndexOf(GameRoom.players[player_pos].foldCards.ToArray(), cardCode));
                                         GameRoom.players[player_pos].foldCards_num--;
                                     }
