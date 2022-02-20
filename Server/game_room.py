@@ -32,6 +32,7 @@ class GameRoom:
         self.players_sequence = []
         self.next_player_id = 0
         self.current_player_id = 0
+        self.current_expected_operation = None
         logging.debug("Game room initialize")
 
     def __str__(self):
@@ -188,6 +189,10 @@ class GameRoom:
                 golden_number = chips_number
             else:
                 # chips in operation
+                if card_chips[gems_type] == 0 and chips_number > 0:
+                    logging.debug(
+                        "wrong gemstone in buy card".format(card_number))
+                    return False
                 card_chips[gems_type] -= chips_number
                 # gemstone in player card
                 card_chips[gems_type] -= player.getGemstoneNumber(gems_type)
@@ -231,7 +236,12 @@ class GameRoom:
         operation_type = body["operation_type"]
         operation_info = body["operation_info"]
         original_msg = message_helper.packPlayerOperation(body)
+
         if player.player_id != self.current_player_id:
+            self.playerOperationInvalid(player)
+            return
+
+        if self.current_expected_operation is not None and operation_type != self.current_expected_operation:
             self.playerOperationInvalid(player)
             return
 
@@ -243,7 +253,7 @@ class GameRoom:
 
             for item in operation_info:
                 chip_type = item["gems_type"]
-                chip_number = int(item["gems_number"])
+                chip_number = item["gems_number"]
                 self.chips[chip_type] -= chip_number
                 player.chips[chip_type] += chip_number
 
@@ -254,8 +264,10 @@ class GameRoom:
                 msg = message_helper.packDiscardGems(player.player_id,
                                                      player_chips_number - 10)
                 player.sendMsg(msg)
+                self.current_expected_operation = Operation.DISCARD_GEMS
             else:
                 self.startNewTurn()
+
             return
 
         if operation_type == Operation.DISCARD_GEMS:
@@ -264,6 +276,7 @@ class GameRoom:
                 player.chips[k] -= v
 
             self.startNewTurn()
+            self.current_expected_operation = None
 
         if operation_type == Operation.FOLD_CARD:
             # FIXME: if could have golden, but have to discard
@@ -310,12 +323,14 @@ class GameRoom:
             if card is None:
                 card = player.getCardInFoldCards(card_number)
                 in_fold = True
-            player.addCard(card, operation_info)
 
             for item in operation_info[1:]:
                 gems_type = item["gems_type"]
                 gems_number = item["gems_number"]
                 self.chips[gems_type] += gems_number
+                player.chips[gems_type] -= gems_number
+
+            player.addCard(card)
 
             if not in_fold:
                 new_card_number = self.card_board.removeCardByNumberThenAddNewCard(

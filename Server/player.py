@@ -55,7 +55,7 @@ class Player:
         logging.info("Player {} ready".format(self.player_id))
         self.ready = True
 
-    def addCard(self, card: Card, operation_info=None):
+    def addCard(self, card: Card):
         if card.level == 0:
             # Noble card
             self.points += card.points
@@ -63,18 +63,8 @@ class Player:
             # Normal card
             if card in self.fold_cards:
                 self.fold_cards.remove(card)
-            if card.gem_type in Gemstone.__dict__.values():
-                for item in operation_info:
-                    if "gems_type" in item.keys():
-                        gems_type = item["gems_type"]
-                        gems_number = int(item["gems_number"])
-                        player_gems_number = getattr(self, gems_type)
-                        if player_gems_number < gems_number:
-                            self.chips[gems_type] = self.chips[gems_type] - (
-                                gems_number - player_gems_number)
-                        self.chips[gems_type] -= gems_number
 
-                setattr(self, card.gem_type, getattr(self, card.gem_type) + 1)
+            setattr(self, card.gem_type, getattr(self, card.gem_type) + 1)
 
         self.cards.append(card)
         logging.info("Player {} got card {}".format(self.player_id,
@@ -113,8 +103,8 @@ class Player:
     def getCardInFoldCards(self, card_number) -> Card:
         legal = self.cardInFold(card_number)
         if not legal:
-            logging.error("card {} is not in player {} fold cards".format(card_number,
-                                                                          self.player_id))
+            logging.error("card {} is not in player {} fold cards".format(
+                card_number, self.player_id))
         for card in self.fold_cards:
             if card.number == card_number:
                 return card
