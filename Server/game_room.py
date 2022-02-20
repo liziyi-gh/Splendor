@@ -169,18 +169,35 @@ class GameRoom:
     @thread_safe
     def checkBuyCardLegal(self, operation_info, player: Player) -> bool:
         card_number = operation_info[0]["card_number"]
-        if not self.card_board.getCardByNumber(card_number):
-            if not player.cardInFold(card_number):
+
+        card = self.card_board.getCardByNumber(card_number)
+        if card is None:
+            card = player.getCardInFoldCards(card_number)
+            if card is None:
                 return False
 
-        for item in operation_info:
-            try:
-                gems_type = item["gems_type"]
-                chips_number = item["gems_number"]
-                if player.chips[gems_type] < chips_number:
-                    return False
-            except KeyError:
-                pass
+        card_chips = copy.deepcopy(card.chips)
+        golden_number = 0
+        need_golden_number = 0
+
+        for item in operation_info[1:]:
+            gems_type = item["gems_type"]
+            chips_number = item["gems_number"]
+
+            if gems_type == Gemstone.GOLDEN:
+                golden_number = chips_number
+            else:
+                card_chips[gems_type] -= chips_number
+                need_golden_number += chips_number
+
+            if player.chips[gems_type] < chips_number:
+                return False
+        if golden_number < need_golden_number:
+            logging.debug("need more golden chips")
+
+        if golden_number > need_golden_number:
+            logging.debug("too much golden chips")
+            return False
 
         return True
 

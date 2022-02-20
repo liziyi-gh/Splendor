@@ -118,3 +118,5 @@ class Player:
         for card in self.fold_cards:
             if card.number == card_number:
                 return card
+
+        return None
