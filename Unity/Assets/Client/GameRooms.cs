@@ -102,16 +102,26 @@ namespace GameRooms
                 return cardPos;
             }
 
-            return null;
+            cardPos.cardLevel = GetCardLevel(card_id);
+            cardPos.cardIndex = -1;
+
+            return cardPos;
         }
 
-        public static void showNEW_CARD(Msgs msg)
+        public static void ShowNEW_CARD(Msgs msg)
+        {
+            string cardLevel = GetCardLevel(msg.card_id);
+            GameRoom.cards_info[cardLevel][Array.IndexOf(GameRoom.cards_info[cardLevel], 0)] = msg.card_id;
+        }
+
+        private static string GetCardLevel(int card_id)
         {
             string cardLevel = CardLevelType.nobles;
-            if (msg.card_id <= 90) cardLevel = CardLevelType.levelThreeCards;
-            if (msg.card_id <= 70) cardLevel = CardLevelType.levelTwoCards;
-            if (msg.card_id <= 40) cardLevel = CardLevelType.levelOneCards;
-            GameRoom.cards_info[cardLevel][Array.IndexOf(GameRoom.cards_info[cardLevel], 0)] = msg.card_id;
+            if (card_id <= 90) cardLevel = CardLevelType.levelThreeCards;
+            if (card_id <= 70) cardLevel = CardLevelType.levelTwoCards;
+            if (card_id <= 40) cardLevel = CardLevelType.levelOneCards;
+
+            return cardLevel;
         }
     }
 }

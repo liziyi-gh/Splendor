@@ -112,22 +112,36 @@ namespace Transmission
                                     GameRoom.gems_last_num[i.Name.ToLower()] += body_msg.gems[i.Name.ToLower()];
                                     GameRoom.players[player_pos].gems[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
                                 }
-                                int foldCardPos = Array.IndexOf(GameRoom.players[player_pos].foldCards.ToArray(), body_msg.card_id);
-                                if (foldCardPos == -1)
+
+                                if (cardPos.cardIndex == -1)
                                 {
-                                    GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
-                                    GameRoom.cards_last_num[cardPos.cardLevel] --;
+                                    int foldCardPos = Array.IndexOf(GameRoom.players[player_pos].foldCards.ToArray(), body_msg.card_id);
+                                    if (foldCardPos != -1)
+                                    {
+                                        GameRoom.players[player_pos].foldCards[foldCardPos] = 0;
+                                        GameRoom.players[player_pos].foldCards_num--;
+                                        //是否要删掉这个元素
+                                    }
+                                    else
+                                    {
+                                        int cardCode;
+                                        if (cardPos.cardLevel == CardLevelType.levelOneCards) cardCode = 10001;
+                                        if (cardPos.cardLevel == CardLevelType.levelTwoCards) cardCode = 10002;
+                                        if (cardPos.cardLevel == CardLevelType.levelThreeCards) cardCode = 10003;
+                                        GameRoom.players[player_pos].foldCards[Array.IndexOf(GameRoom.players[player_pos].foldCards.ToArray(), cardCode)] = 0;
+                                        GameRoom.players[player_pos].foldCards_num--;
+                                        //
+                                    }
                                 }
                                 else
                                 {
-                                    GameRoom.players[player_pos].foldCards[foldCardPos] = 0;
-                                    GameRoom.players[player_pos].foldCards_num--;
+                                    GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
+                                    GameRoom.cards_last_num[cardPos.cardLevel] --;
                                 }
 
                                 GameRoom.players[player_pos].cards.Add(body_msg.card_id);
                                 GameRoom.players[player_pos].cards_type[Tools.ReadCardType(body_msg.card_id)] ++;
                                 GameRoom.players[player_pos].point += Tools.ReadCardPoint(body_msg.card_id);
-                                //买不知道卡在别人的客户端情况
                                 break;
 
                             case Operation.FOLD_CARD:
@@ -181,7 +195,7 @@ namespace Transmission
                         break;
 
                     case API_ID.NEW_CARD:
-                        GameRoom.showNEW_CARD(Tools.MsgNEW_CARD(body_str));
+                        GameRoom.ShowNEW_CARD(Tools.MsgNEW_CARD(body_str));
                         GameManager.NewCard();
                         break;
 
