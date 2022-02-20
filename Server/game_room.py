@@ -273,6 +273,8 @@ class GameRoom:
                 player.sendMsg(msg)
 
                 return
+        else:
+            self.startNewTurn()
 
     @thread_safe
     def doPlayerGetNoble(self, header: Header, body):
