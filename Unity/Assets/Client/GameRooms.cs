@@ -20,7 +20,7 @@ namespace GameRooms
         public string cardLevel;
         public int cardIndex;
 
-        public static const int MISSING = -1;
+        public static int MISSING = -1;
     }
 
     public static class GameRoom
