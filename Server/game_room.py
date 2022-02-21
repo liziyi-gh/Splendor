@@ -274,6 +274,7 @@ class GameRoom:
             legal = self.checkDiscardGemsLegal(operation_info, player)
             for k, v in operation_info.items():
                 player.chips[k] -= v
+                self.chips[k] += v
 
             msg = message_helper.packPlayerOperation(body)
             self.boardcastMsg(msg)
