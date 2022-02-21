@@ -98,7 +98,7 @@ def packPlayerGetNoble(player_id: int, card: Card):
     }
 
     body_data = json.dumps(tmp_dict).encode()
-    header_data = packHeader(API_ID.NEW_TURN, player_id, len(body_data))
+    header_data = packHeader(API_ID.PLAYER_GET_NOBLE, player_id, len(body_data))
 
     return header_data + body_data
 
