@@ -242,6 +242,8 @@ class GameRoom:
             return
 
         if self.current_expected_operation is not None and operation_type != self.current_expected_operation:
+            logging.debug("Expecting opration is {}".format(
+                self.current_expected_operation))
             self.playerOperationInvalid(player)
             return
 
