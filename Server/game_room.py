@@ -157,7 +157,7 @@ class GameRoom:
     @thread_safe
     def checkDiscardGemsLegal(self, operation_info, player: Player) -> bool:
         discard_numbers = 0
-        for k, v in operation_info:
+        for k, v in operation_info.items():
             discard_numbers += v
             if player.chips[k] < v:
                 return False
