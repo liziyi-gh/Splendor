@@ -140,8 +140,8 @@ public class GameManager : MonoBehaviour
         //若游戏还没开始则不能复位；
         if (state == State.ready || state == State.unready || state==State.waiting || state==State.choosingNoble)
             return;
-
-        state = State.start;
+        if(state!=State.discardingGems)
+            state = State.start;
 
         ResetUI();
     }

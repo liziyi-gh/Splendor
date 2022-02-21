@@ -97,7 +97,7 @@ class GameRoom:
         logging.debug("Finish boardcast msg, api id {}".format(api_id))
 
     @thread_safe
-    def playerReady(self, header: Header, body):
+    def playerReady(self, header: Header):
         player_id = header.player_id
         player = self.findPlayerByID(player_id)
         player.setReady()
@@ -215,6 +215,7 @@ class GameRoom:
 
     @thread_safe
     def checkFoldCardLegal(self, operation_info, player: Player) -> bool:
+        # FIXME: card number like 10001, 10002, 10003
         if len(player.fold_cards) >= 3:
             return False
 
@@ -239,137 +240,41 @@ class GameRoom:
 
         if player.player_id != self.current_player_id:
             self.playerOperationInvalid(player)
+            logging.error("Current turn is palyer {}".format(
+                self.current_player_id))
             return
 
         if self.current_expected_operation is not None and operation_type != self.current_expected_operation:
-            logging.debug("Expecting opration is {}".format(
+            logging.debug("Expecting operation is {}".format(
                 self.current_expected_operation))
             self.playerOperationInvalid(player)
             return
 
         if operation_type == Operation.GET_GEMS:
-            legal = self.checkGetChipsLegal(operation_info, player)
-            if not legal:
-                self.playerOperationInvalid(player)
-                return
-
-            for item in operation_info:
-                chip_type = item["gems_type"]
-                chip_number = item["gems_number"]
-                self.chips[chip_type] -= chip_number
-                player.chips[chip_type] += chip_number
-
-            self.boardcastMsg(original_msg)
-
-            player_chips_number = player.getAllChipsNumber()
-            if player_chips_number > 10:
-                msg = message_helper.packDiscardGems(player.player_id,
-                                                     player_chips_number - 10)
-                player.sendMsg(msg)
-                self.current_expected_operation = Operation.DISCARD_GEMS
-            else:
+            self.doOperationGetGems(player, operation_info, original_msg)
+            if self.checkChipsNumberLegal(player):
                 self.startNewTurn()
-
-            return
-
-        if operation_type == Operation.DISCARD_GEMS:
-            legal = self.checkDiscardGemsLegal(operation_info, player)
-            for k, v in operation_info.items():
-                player.chips[k] -= v
-                self.chips[k] += v
-
-            msg = message_helper.packPlayerOperation(body)
-            self.boardcastMsg(msg)
-            self.startNewTurn()
-            self.current_expected_operation = None
-
-            return
+                return
 
         if operation_type == Operation.FOLD_CARD:
-            # FIXME: if could have golden, but have to discard
-            legal = self.checkFoldCardLegal(operation_info, player)
-            if not legal:
-                self.playerOperationInvalid(player)
+            self.doOperationFoldCards(player, operation_info, body)
+            if self.checkChipsNumberLegal(player):
+                self.startNewTurn()
                 return
-            card_number = operation_info[0]["card_number"]
-            card = self.card_board.getCardByNumber(card_number)
-            player.addFoldCard(card)
-            new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
-                card_number)
 
-            # FIXME: if fold 10001 like card should not let other players know
-            new_body = copy.deepcopy(body)
-            if self.chips[Gemstone.GOLDEN] > 0:
-                golden_dict = {"golden_number": 1}
-                player.chips[Gemstone.GOLDEN] += 1
-                self.chips[Gemstone.GOLDEN] -= 1
-            else:
-                golden_dict = {{"golden_number": 0}}
-            new_body["operation_info"].append(golden_dict)
-            msg = message_helper.packPlayerOperation(new_body)
-            new_card_msg = message_helper.packNewCard(player.player_id,
-                                                      new_card_number)
-
-            self.boardcastMsg(msg)
-            self.boardcastMsg(new_card_msg)
-            self.startNewTurn()
-
-            return
+        if operation_type == Operation.DISCARD_GEMS:
+            if self.doOperationDiscardGems(player, operation_info, body):
+                self.startNewTurn()
+                return
 
         if operation_type == Operation.BUY_CARD:
-            in_fold = False
-            legal = self.checkBuyCardLegal(operation_info, player)
-            if not legal:
-                self.playerOperationInvalid(player)
-                return
-
-            self.boardcastMsg(original_msg)
-
-            card_number = operation_info[0]["card_number"]
-            card = self.card_board.getCardByNumber(card_number)
-            if card is None:
-                card = player.getCardInFoldCards(card_number)
-                in_fold = True
-
-            for item in operation_info[1:]:
-                gems_type = item["gems_type"]
-                gems_number = item["gems_number"]
-                self.chips[gems_type] += gems_number
-                player.chips[gems_type] -= gems_number
-
-            player.addCard(card)
-
-            if not in_fold:
-                new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
-                    card_number)
-                new_card_msg = message_helper.packNewCard(
-                    player.player_id, new_card_number)
-                self.boardcastMsg(new_card_msg)
-
-        available_cards = self.card_board.checkAvailbaleNobleCard(player)
-        if len(available_cards) > 0:
-            logging.debug("Available noble cards > 0")
-            if len(available_cards) == 1:
-                card = available_cards[0]
-                player.addCard(card)
-                self.card_board.removeCardByNumberThenAddNewCard(card.number)
-                msg = message_helper.packPlayerGetNoble(player.player_id, card)
-                logging.info("Player {} get noble card {}".format(
-                    player.player_id, card.number))
-                self.boardcastMsg(msg)
+            self.doOperationBuyCards(player, operation_info, original_msg)
+            if self.checkAvailableNobleCards(player):
                 self.startNewTurn()
-
                 return
 
-            if len(available_cards) > 1:
-                msg = message_helper.packAskPlayerGetNoble(
-                    player.player_id, available_cards)
-                player.sendMsg(msg)
-
-                return
-        else:
-            logging.debug("No available noble cards")
-            self.startNewTurn()
+        # FIXME: important !!!
+        # how to start new turn
 
     @thread_safe
     def doPlayerGetNoble(self, header: Header, body):
@@ -386,13 +291,8 @@ class GameRoom:
         self.current_player_id = self.players_sequence[0]
         self.next_player_id = self.players_sequence[0]
         players_number = len(self.allocated_id)
-        chips_num = 3
-        if players_number == 2:
-            chips_num = 4
-        if players_number == 3:
-            chips_num = 5
-        if players_number == 4:
-            chips_num = 7
+        chips_num_dict = {2: 4, 3: 5, 4: 7}
+        chips_num = chips_num_dict[players_number]
         for key in self.chips.keys():
             if key == Gemstone.GOLDEN:
                 continue
@@ -434,3 +334,126 @@ class GameRoom:
                 ans += 1
 
         return ans
+
+    def doOperationDiscardGems(self, player, operation_info, body) -> bool:
+        legal = self.checkDiscardGemsLegal(operation_info, player)
+        if not legal:
+            self.playerOperationInvalid(player)
+            return False
+
+        for k, v in operation_info.items():
+            player.chips[k] -= v
+            self.chips[k] += v
+
+        msg = message_helper.packPlayerOperation(body)
+        self.boardcastMsg(msg)
+        self.current_expected_operation = None
+        return True
+
+    def doOperationGetGems(self, player, operation_info, original_msg):
+        legal = self.checkGetChipsLegal(operation_info, player)
+        if not legal:
+            self.playerOperationInvalid(player)
+            return
+
+        for item in operation_info:
+            chip_type = item["gems_type"]
+            chip_number = item["gems_number"]
+            self.chips[chip_type] -= chip_number
+            player.chips[chip_type] += chip_number
+
+        self.boardcastMsg(original_msg)
+
+    def checkChipsNumberLegal(self, player: Player):
+        new_turn = True
+        player_chips_number = player.getAllChipsNumber()
+        if player_chips_number > 10:
+            msg = message_helper.packDiscardGems(player.player_id,
+                                                 player_chips_number - 10)
+            player.sendMsg(msg)
+            self.current_expected_operation = Operation.DISCARD_GEMS
+            new_turn = False
+
+        return new_turn
+
+    def doOperationFoldCards(self, player, operation_info, body):
+        legal = self.checkFoldCardLegal(operation_info, player)
+        if not legal:
+            self.playerOperationInvalid(player)
+            return
+        card_number = operation_info[0]["card_number"]
+        card = self.card_board.getCardByNumber(card_number)
+        player.addFoldCard(card)
+        new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
+            card_number)
+
+        # FIXME: if fold 10001 like card should not let other players know
+        new_body = copy.deepcopy(body)
+        if self.chips[Gemstone.GOLDEN] > 0:
+            golden_dict = {"golden_number": 1}
+            player.chips[Gemstone.GOLDEN] += 1
+            self.chips[Gemstone.GOLDEN] -= 1
+        else:
+            golden_dict = {{"golden_number": 0}}
+
+        new_body["operation_info"].append(golden_dict)
+        msg = message_helper.packPlayerOperation(new_body)
+        new_card_msg = message_helper.packNewCard(player.player_id,
+                                                  new_card_number)
+
+        self.boardcastMsg(msg)
+        self.boardcastMsg(new_card_msg)
+
+    def doOperationBuyCards(self, player, operation_info, original_msg):
+        in_fold = False
+        legal = self.checkBuyCardLegal(operation_info, player)
+        if not legal:
+            self.playerOperationInvalid(player)
+            return
+
+        self.boardcastMsg(original_msg)
+
+        card_number = operation_info[0]["card_number"]
+        card = self.card_board.getCardByNumber(card_number)
+        if card is None:
+            card = player.getCardInFoldCards(card_number)
+            in_fold = True
+
+        for item in operation_info[1:]:
+            gems_type = item["gems_type"]
+            gems_number = item["gems_number"]
+            self.chips[gems_type] += gems_number
+            player.chips[gems_type] -= gems_number
+
+        player.addCard(card)
+
+        if not in_fold:
+            new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
+                card_number)
+            new_card_msg = message_helper.packNewCard(player.player_id,
+                                                      new_card_number)
+            self.boardcastMsg(new_card_msg)
+
+    def checkAvailableNobleCards(self, player) -> bool:
+        new_turn = True
+        available_cards = self.card_board.checkAvailbaleNobleCard(player)
+        if len(available_cards) > 0:
+            logging.debug("Available noble cards > 0")
+            if len(available_cards) == 1:
+                card = available_cards[0]
+                player.addCard(card)
+                self.card_board.removeCardByNumberThenAddNewCard(card.number)
+                msg = message_helper.packPlayerGetNoble(player.player_id, card)
+                logging.info("Player {} get noble card {}".format(
+                    player.player_id, card.number))
+                self.boardcastMsg(msg)
+
+            if len(available_cards) > 1:
+                msg = message_helper.packAskPlayerGetNoble(
+                    player.player_id, available_cards)
+                player.sendMsg(msg)
+                new_turn = False
+        else:
+            logging.debug("No available noble cards")
+
+        return new_turn

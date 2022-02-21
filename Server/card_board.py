@@ -45,6 +45,10 @@ class CardBoard():
 
     def getCardByNumber(self, card_number: int) -> Card:
         # TODO: more pythonic
+        if card_number == 10001:
+            # return self.
+            # FIXME
+            pass
         for item in self.level_one_cards:
             if item.number == card_number:
                 return item

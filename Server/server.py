@@ -42,7 +42,7 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
             current_game_room.addPlayer(client_sock)
 
         if header.api_id == API_ID.PLAYER_READY:
-            current_game_room.playerReady(header, body)
+            current_game_room.playerReady(header)
 
         if header.api_id == API_ID.PLAYER_OPERATION:
             current_game_room.doPlayerOperation(header, body)
