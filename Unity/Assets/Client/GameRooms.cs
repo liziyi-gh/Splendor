@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using CardLevelTypes;
 using System.Linq;
 using Logger;
+using MsgTools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -18,6 +19,8 @@ namespace GameRooms
     {
         public string cardLevel;
         public int cardIndex;
+
+        public static const int MISSING = -1;
     }
 
     public static class GameRoom
@@ -97,35 +100,18 @@ namespace GameRooms
                         return cardPos;
                     }
 
-            if (card_id > 10000)
-            {
-                if (card_id == 10001) cardPos.cardLevel = CardLevelType.levelOneCards;
-                if (card_id == 10002) cardPos.cardLevel = CardLevelType.levelTwoCards;
-                if (card_id == 10003) cardPos.cardLevel = CardLevelType.levelThreeCards;
-                cardPos.cardIndex = card_id;
-                return cardPos;
-            }
+            cardPos.cardLevel = Tools.CardNumberConvertToLevel(card_id);
 
-            cardPos.cardLevel = GetCardLevel(card_id);
-            cardPos.cardIndex = -1;
+            if (card_id > 10000) cardPos.cardIndex = card_id;
+            else cardPos.cardIndex = CardPosition.MISSING;
 
             return cardPos;
         }
 
         public static void ShowNEW_CARD(Msgs msg)
         {
-            string cardLevel = GetCardLevel(msg.card_id);
+            string cardLevel = Tools.CardNumberConvertToLevel(msg.card_id);
             GameRoom.cards_info[cardLevel][Array.IndexOf(GameRoom.cards_info[cardLevel], 0)] = msg.card_id;
-        }
-
-        private static string GetCardLevel(int card_id)
-        {
-            string cardLevel = CardLevelType.nobles;
-            if (card_id <= 90) cardLevel = CardLevelType.levelThreeCards;
-            if (card_id <= 70) cardLevel = CardLevelType.levelTwoCards;
-            if (card_id <= 40) cardLevel = CardLevelType.levelOneCards;
-
-            return cardLevel;
         }
     }
 }

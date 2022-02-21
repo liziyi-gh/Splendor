@@ -17,7 +17,7 @@ namespace Logger
     public static class LogSwitch
     {
         public const string RECEIVE = "Receive";
-        public const string SEND = "Send";
+        public const string SEND = "Send   ";
     }
 
     public class Logging
@@ -72,9 +72,14 @@ namespace Logger
         {
             lock(balanceLock)
             {
-                if (msg.api_id == API_ID.NEW_TURN) log.WriteLine();
-                log.WriteLine(DateTime.Now.ToString("G") + "    "+logSwitch+"-->API:{0}, Player:{1}, MsgLength:{2}", msg.api_id, msg.player_id, msg.msg_len);
-                log.WriteLine(body_msg);
+                if (msg.api_id == API_ID.NEW_TURN) log.WriteLine("-------------------------------------------------------");
+                log.WriteLine(logSwitch+"-->API:{0}, Player:{1}, MsgLength:{2}", msg.api_id, msg.player_id, msg.msg_len);
+                if (body_msg != "")
+                {
+                    //JObject jsonMsg = JObject.Parse(body_msg);
+                    log.WriteLine("    "+body_msg);
+
+                }
             }
         }
 

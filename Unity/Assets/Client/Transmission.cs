@@ -25,6 +25,7 @@ namespace Transmission
         public static void Connect()
         {
             string host = "127.0.0.1";
+            //string host = "175.178.115.8";
             int port = 13204;
 
             IPAddress ip = IPAddress.Parse(host);
@@ -111,20 +112,17 @@ namespace Transmission
                                     GameRoom.players[player_pos].gems[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
                                 }
 
-                                if (cardPos.cardIndex == -1)
+                                if (cardPos.cardIndex == CardPosition.MISSING)
                                 {
                                     int foldCardPos = Array.IndexOf(GameRoom.players[player_pos].foldCards.ToArray(), body_msg.card_id);
-                                    if (foldCardPos != -1)
+                                    if (foldCardPos != CardPosition.MISSING)
                                     {
                                         GameRoom.players[player_pos].foldCards.Remove(body_msg.card_id);
                                         GameRoom.players[player_pos].foldCards_num--;
                                     }
                                     else
                                     {
-                                        int cardCode = 0;
-                                        if (cardPos.cardLevel == CardLevelType.levelOneCards) cardCode = 10001;
-                                        if (cardPos.cardLevel == CardLevelType.levelTwoCards) cardCode = 10002;
-                                        if (cardPos.cardLevel == CardLevelType.levelThreeCards) cardCode = 10003;
+                                        int cardCode = Tools.CardLevelConvertToUnknownCardcode(cardPos.cardLevel);
 
                                         GameRoom.players[player_pos].foldCards.RemoveAt(Array.IndexOf(GameRoom.players[player_pos].foldCards.ToArray(), cardCode));
                                         GameRoom.players[player_pos].foldCards_num--;

@@ -12,6 +12,7 @@ using GameRooms;
 using System.Collections.Generic;
 using Players;
 using Logger;
+using CardLevelTypes;
 using UnityEngine;
 
 namespace MsgTools
@@ -201,7 +202,7 @@ namespace MsgTools
 
                 case Operation.FOLD_CARD_UNKNOWN:
                     dataPLAYER_OPERATION.operation_info.Add(new JObject(new JProperty("card_level", msg.card_level),
-                                                                        new JProperty("card_number", msg.card_id)));
+                                                                        new JProperty("card_number", CardLevelConvertToUnknownCardcode(msg.card_level.ToString()))));
                     break;
 
                 case Operation.DISCARD_GEMS:
@@ -272,6 +273,25 @@ namespace MsgTools
         public static string ReadCardType(int card_id)
         {
             return (string)GameRoom.jsonAllCardMsg[card_id-1]["gem_type"];
+        }
+
+        public static string CardNumberConvertToLevel(int card_id)
+        {
+            if (card_id == 10001) return CardLevelType.levelOneCards;
+            if (card_id == 10002) return CardLevelType.levelTwoCards;
+            if (card_id == 10003) return CardLevelType.levelThreeCards;
+            if (card_id <= 40) return CardLevelType.levelOneCards;
+            if (card_id <= 70) return CardLevelType.levelTwoCards;
+            if (card_id <= 90) return CardLevelType.levelThreeCards;
+            return CardLevelType.nobles;
+        }
+
+        public static int CardLevelConvertToUnknownCardcode(string cardLevel)
+        {
+            if (cardLevel == CardLevelType.levelOneCards || cardLevel == "1") return 10001;
+            if (cardLevel == CardLevelType.levelTwoCards || cardLevel == "2") return 10002;
+            if (cardLevel == CardLevelType.levelThreeCards || cardLevel == "3") return 10003;
+            return CardPosition.MISSING;
         }
     }
 }
