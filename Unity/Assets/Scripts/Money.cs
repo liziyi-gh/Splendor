@@ -17,8 +17,8 @@ public class Money : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-        //若不是在买卡则不能点击持有筹码
-        if (gameManeger.state!=State.buyingCard)
+        //若非买卡状态或弃筹码状态则返回；
+        if (gameManeger.state!=State.buyingCard && gameManeger.state!=State.discardingGems)
             return;
 
         //左键加码

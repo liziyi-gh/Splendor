@@ -24,6 +24,7 @@ public enum State
     flipingCard,
     waiting,
     choosingNoble,
+    discardingGems,
 }
 
 public class GameManager : MonoBehaviour
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
 
     public State state = State.unready;
     [SerializeField] GameObject highLight1, highLight2;
+    Text discardText;
 
     //组件Transform
     Transform stones;
@@ -75,6 +77,7 @@ public class GameManager : MonoBehaviour
         cards = GameObject.Find("CardGroup").transform;
         foldCards = GameObject.Find("FoldCards").transform;
         gemPrefabs = GameObject.Find("GemPrefabs").transform;
+        discardText = GameObject.Find("DiscardGemText").GetComponent<Text>();
 
         //连接服务器；
         Client.Connect();
@@ -123,6 +126,9 @@ public class GameManager : MonoBehaviour
                     case "PlayerGetNoble":
                         ChooseNoble(toDoList[toDo]);
                         break;
+                    case "DiscardGems":
+                        Discard();
+                        break;
                 }
             }
             toDoList = new Dictionary<string, Msgs>();
@@ -132,7 +138,7 @@ public class GameManager : MonoBehaviour
     public void Reset()
     {
         //若游戏还没开始则不能复位；
-        if (state == State.ready || state == State.unready || state==State.waiting||state==State.choosingNoble)
+        if (state == State.ready || state == State.unready || state==State.waiting || state==State.choosingNoble)
             return;
 
         state = State.start;
@@ -225,6 +231,15 @@ public class GameManager : MonoBehaviour
                 sendMsg.player_id = playerID;
                 Client.Send(sendMsg);
                 break;
+
+            case State.discardingGems:
+                sendMsg.api_id = 6;
+                sendMsg.player_id = playerID;
+                sendMsg.operation_type = "discard_gems";
+                for (int i = 0; i < 6; i++)
+                    sendMsg.gems[gems[i]] = int.Parse(money.GetChild(i).GetChild(1).GetChild(1).GetComponent<Text>().text);
+                Client.Send(sendMsg);
+                break;
         }
     }
 
@@ -306,15 +321,20 @@ public class GameManager : MonoBehaviour
 
             case "fold_card_unknown":
                 break;
+
+            case "discard_gems":
+                discardText.color = Color.clear;
+                StartCoroutine(TransGems(msgs));
+                break;
         }
         LoadGameRoomInfomation();
     }
 
     IEnumerator TransGems(Msgs msgs)
     {
-        bool isBuyingCard = false;
-        if (msgs.operation_type == "buy_card")
-            isBuyingCard = true;
+        bool isGettingGems = true;
+        if (msgs.operation_type == "buy_card" || msgs.operation_type== "discard_gems")
+            isGettingGems = false;
 
         foreach (string gem in gems)
         {
@@ -322,10 +342,10 @@ public class GameManager : MonoBehaviour
             {
                 if (msgs.player_id == playerID)
                     gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
-                        money.GetChild(Array.IndexOf(gems, gem)),isBuyingCard);
+                        money.GetChild(Array.IndexOf(gems, gem)),isGettingGems);
                 else                
                     gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
-                        GameObject.Find("Player" + msgs.player_id.ToString()).transform,isBuyingCard);                                
+                        GameObject.Find("Player" + msgs.player_id.ToString()).transform,isGettingGems);                                
                 yield return new WaitForSeconds(0.1f);
             }
         }        
@@ -354,6 +374,12 @@ public class GameManager : MonoBehaviour
                         image.color = Color.white;
             }
         }
+    }
+
+    public void Discard()
+    {
+        discardText.color = Color.white;
+        state = State.discardingGems;
     }
 
     //获得自己玩家ID和其他玩家ID；
@@ -404,6 +430,11 @@ public class GameManager : MonoBehaviour
     public static void PlayerGetNoble(Msgs msgs)
     {
         current.toDoList.Add("PlayerGetNoble",msgs);
+    }
+
+    public static void DiscardGems()
+    {
+        current.toDoList.Add("DiscardGems", new Msgs());
     }
 
     public void LoadGameRoomInfomation()
@@ -470,11 +501,15 @@ public class GameManager : MonoBehaviour
         cards.GetChild(5).GetChild(0).GetComponent<Text>().text = Mathf.Max(0, GameRoom.cards_last_num[CardLevelType.levelTwoCards] - 4).ToString();
         cards.GetChild(10).GetChild(0).GetComponent<Text>().text = Mathf.Max(0, GameRoom.cards_last_num[CardLevelType.levelThreeCards] - 4).ToString();
 
+        for(int i = 0; i < GameRoom.players_number; i++)        
+            players.GetChild(i).GetChild(0).GetComponent<Text>().text = GameRoom.GetPlayer(GameRoom.players_sequence[i]).point.ToString();        
+
         ResetUI();
     }
 
     public void ExitButton()
     {
+        Client.Shutdown();
         Application.Quit();
     }
     
