@@ -45,12 +45,6 @@ class CardBoard():
 
     def getCardByNumber(self, card_number: int) -> Card:
         # TODO: more pythonic
-        if card_number == 10001:
-            return self.nextCardInRepo(1)
-        if card_number == 10002:
-            return self.nextCardInRepo(2)
-        if card_number == 10003:
-            return self.nextCardInRepo(3)
         for item in self.level_one_cards:
             if item.number == card_number:
                 return item

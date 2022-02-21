@@ -273,8 +273,14 @@ class GameRoom:
                     self.startNewTurn()
             return
 
-        if operation_type == Operation.FOLD_CARD or operation_type == Operation.FOLD_CARD_UNKNOWN:
+        if operation_type == Operation.FOLD_CARD or operation_type:
             if self.doOperationFoldCards(player, operation_info, body):
+                if self.checkChipsNumberLegal(player):
+                    self.startNewTurn()
+            return
+
+        if operation_type == Operation.FOLD_CARD_UNKNOWN:
+            if self.doOperationFoldUnkownCards(player, operation_info, body):
                 if self.checkChipsNumberLegal(player):
                     self.startNewTurn()
             return
@@ -404,7 +410,6 @@ class GameRoom:
         new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
             card_number)
 
-        # FIXME: if fold 10001 like card should not let other players know
         new_body = copy.deepcopy(body)
         if self.chips[Gemstone.GOLDEN] > 0:
             golden_dict = {"golden_number": 1}
@@ -415,17 +420,11 @@ class GameRoom:
 
         new_body["operation_info"].append(golden_dict)
         msg = message_helper.packPlayerOperation(new_body)
-        real_new_card_msg = message_helper.packNewCard(player.player_id,
-                                                       new_card_number)
         new_card_msg = message_helper.packNewCard(player.player_id,
-                                                  card_number)
+                                                       new_card_number)
 
         self.boardcastMsg(msg)
-        if card_number not in [10001, 10002, 10003]:
-            self.boardcastMsg(real_new_card_msg)
-        else:
-            self.boardcastDiffrentMsg(new_card_msg, new_card_msg, player,
-                                      API_ID.PLAYER_OPERATION)
+        self.boardcastMsg(new_card_msg)
 
         return True
 
@@ -486,3 +485,34 @@ class GameRoom:
             logging.debug("No available noble cards")
 
         return new_turn
+
+    def checkFoldUnknownCardLegal(self, card_number) -> bool:
+        return card_number in [10001, 10002, 10003]
+
+    def doOperationFoldUnkownCards(self, player: Player, operation_info, body) -> bool:
+        card_number = operation_info[0]["card_number"]
+        card_level = card_number - 10000
+        legal = self.checkFoldUnknownCardLegal(card_number)
+        if not legal:
+            self.playerOperationInvalid(player)
+            return False
+        new_card = self.card_board.nextCardInRepo(card_level)
+        player.addFoldCard(new_card)
+
+        new_body = copy.deepcopy(body)
+        if self.chips[Gemstone.GOLDEN] > 0:
+            golden_dict = {"golden_number": 1}
+            player.chips[Gemstone.GOLDEN] += 1
+            self.chips[Gemstone.GOLDEN] -= 1
+        else:
+            golden_dict = {{"golden_number": 0}}
+
+        new_body["operation_info"].append(golden_dict)
+        real_new_card_msg = message_helper.packNewCard(player.player_id,
+                                                       new_card.number)
+        new_card_msg = message_helper.packNewCard(player.player_id, card_number)
+
+        self.boardcastDiffrentMsg(new_card_msg, real_new_card_msg, player,
+                                      API_ID.PLAYER_OPERATION)
+
+        return True

@@ -19,7 +19,11 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
                  addr):
     logging.info("Start handling new socket, addr is {}".format(addr))
     while True:
-        header_data = client_sock.recv(HEADER_LENGTH)
+        try:
+            header_data = client_sock.recv(HEADER_LENGTH)
+        except ConnectionResetError as e:
+            logging.info("socket {} reset connection".format(socket))
+            return
         if len(header_data) < HEADER_LENGTH:
             logging.error("header data length less than {}".format(HEADER_LENGTH))
             with ALL_CLIENT_SOCK_LOCK:
