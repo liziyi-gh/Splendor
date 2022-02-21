@@ -275,6 +275,8 @@ class GameRoom:
             for k, v in operation_info.items():
                 player.chips[k] -= v
 
+            msg = message_helper.packPlayerOperation(body)
+            self.boardcastMsg(msg)
             self.startNewTurn()
             self.current_expected_operation = None
 
