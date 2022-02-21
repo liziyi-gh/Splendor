@@ -1,9 +1,11 @@
 import csv
 import json
+from shutil import copyfile
 from collections import namedtuple
 
 csv_file_path = "./card_configuration.csv"
 json_file_path = "./card_configuration.json"
+json_file_copy_path = "./Unity/Assets/Resources/card_configuration.json"
 
 json_scheme = {
     "number": 0,
@@ -54,3 +56,5 @@ with open(json_file_path, 'w') as f:
         if i != len(raw_cards_data) - 1:
             f.write(",")
     f.write("]")
+
+copyfile(json_file_path, json_file_copy_path)
