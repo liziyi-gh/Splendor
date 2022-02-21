@@ -19,9 +19,9 @@
   "gem_type": "diamond",
   "chips": {
     "ruby": 0,
-    "diamond": 4,
+    "diamond": 0,
     "sapphire": 0,
-    "emerald": 0,
+    "emerald": 4,
     "obsidian": 0
   }
 },{
@@ -33,9 +33,9 @@
   "chips": {
     "ruby": 0,
     "diamond": 0,
-    "sapphire": 0,
+    "sapphire": 4,
     "emerald": 0,
-    "obsidian": 4
+    "obsidian": 0
   }
 },{
   "number": 4,
@@ -46,9 +46,9 @@
   "chips": {
     "ruby": 0,
     "diamond": 0,
-    "sapphire": 4,
+    "sapphire": 0,
     "emerald": 0,
-    "obsidian": 0
+    "obsidian": 4
   }
 },{
   "number": 5,
@@ -58,9 +58,9 @@
   "gem_type": "ruby",
   "chips": {
     "ruby": 0,
-    "diamond": 0,
+    "diamond": 4,
     "sapphire": 0,
-    "emerald": 4,
+    "emerald": 0,
     "obsidian": 0
   }
 },{
