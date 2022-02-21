@@ -283,6 +283,8 @@ class GameRoom:
             self.startNewTurn()
             self.current_expected_operation = None
 
+            return
+
         if operation_type == Operation.FOLD_CARD:
             # FIXME: if could have golden, but have to discard
             legal = self.checkFoldCardLegal(operation_info, player)
