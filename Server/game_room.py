@@ -210,7 +210,8 @@ class GameRoom:
                 card_chips[gems_type] -= chips_number
                 # gemstone in player card
                 card_chips[gems_type] -= player.getGemstoneNumber(gems_type)
-                if card_chips[gems_type] < 0:
+                if card_chips[gems_type] < 0 and card_chips[
+                        gems_type] < player.getGemstoneNumber(gems_type):
                     logging.debug(
                         "too much {} chips when buy card".format(gems_type))
                     return False
@@ -237,7 +238,9 @@ class GameRoom:
 
         card_number = operation_info[0]["card_number"]
         if self.card_board.getCardByNumber(card_number) is None:
-            logging.info("fold card illegal, can not find card {} in card board".format(card_number))
+            logging.info(
+                "fold card illegal, can not find card {} in card board".format(
+                    card_number))
             return False
 
         return True
@@ -399,7 +402,8 @@ class GameRoom:
 
         return new_turn
 
-    def doOperationFoldCards(self, player: Player, operation_info, body) -> bool:
+    def doOperationFoldCards(self, player: Player, operation_info,
+                             body) -> bool:
         legal = self.checkFoldCardLegal(operation_info, player)
         if not legal:
             self.playerOperationInvalid(player)
@@ -421,7 +425,7 @@ class GameRoom:
         new_body["operation_info"].append(golden_dict)
         msg = message_helper.packPlayerOperation(new_body)
         new_card_msg = message_helper.packNewCard(player.player_id,
-                                                       new_card_number)
+                                                  new_card_number)
 
         self.boardcastMsg(msg)
         self.boardcastMsg(new_card_msg)
@@ -489,7 +493,8 @@ class GameRoom:
     def checkFoldUnknownCardLegal(self, card_number) -> bool:
         return card_number in [10001, 10002, 10003]
 
-    def doOperationFoldUnkownCards(self, player: Player, operation_info, body) -> bool:
+    def doOperationFoldUnkownCards(self, player: Player, operation_info,
+                                   body) -> bool:
         card_number = operation_info[0]["card_number"]
         card_level = card_number - 10000
         legal = self.checkFoldUnknownCardLegal(card_number)
@@ -513,6 +518,6 @@ class GameRoom:
         real_new_card_msg = message_helper.packPlayerOperation(new_body)
 
         self.boardcastDiffrentMsg(new_card_msg, real_new_card_msg, player,
-                                      API_ID.NEW_CARD)
+                                  API_ID.NEW_CARD)
 
         return True
