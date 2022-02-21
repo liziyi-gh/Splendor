@@ -5,6 +5,7 @@ import random
 import logging
 
 from Server import message_helper
+from Server import operation
 from Server.api_id import API_ID
 from Server.gemstone import Gemstone
 from Server.constants import Header
@@ -229,10 +230,14 @@ class GameRoom:
     @thread_safe
     def checkFoldCardLegal(self, operation_info, player: Player) -> bool:
         if len(player.fold_cards) >= 3:
+            logging.info(
+                "fold card illegal, player already have {} fold cards".format(
+                    len(player.fold_cards)))
             return False
 
         card_number = operation_info[0]["card_number"]
         if self.card_board.getCardByNumber(card_number) is None:
+            logging.info("fold card illegal, can not find card {} in card board".format(card_number))
             return False
 
         return True
@@ -263,15 +268,15 @@ class GameRoom:
             return
 
         if operation_type == Operation.GET_GEMS:
-            self.doOperationGetGems(player, operation_info, original_msg)
-            if self.checkChipsNumberLegal(player):
-                self.startNewTurn()
+            if self.doOperationGetGems(player, operation_info, original_msg):
+                if self.checkChipsNumberLegal(player):
+                    self.startNewTurn()
             return
 
-        if operation_type == Operation.FOLD_CARD:
-            self.doOperationFoldCards(player, operation_info, body)
-            if self.checkChipsNumberLegal(player):
-                self.startNewTurn()
+        if operation_type == Operation.FOLD_CARD or operation_type == Operation.FOLD_CARD_UNKNOWN:
+            if self.doOperationFoldCards(player, operation_info, body):
+                if self.checkChipsNumberLegal(player):
+                    self.startNewTurn()
             return
 
         if operation_type == Operation.DISCARD_GEMS:
@@ -281,9 +286,9 @@ class GameRoom:
             return
 
         if operation_type == Operation.BUY_CARD:
-            self.doOperationBuyCards(player, operation_info, original_msg)
-            if self.checkAvailableNobleCards(player):
-                self.startNewTurn()
+            if self.doOperationBuyCards(player, operation_info, original_msg):
+                if self.checkAvailableNobleCards(player):
+                    self.startNewTurn()
             return
 
     @thread_safe
@@ -360,11 +365,11 @@ class GameRoom:
         self.current_expected_operation = None
         return True
 
-    def doOperationGetGems(self, player, operation_info, original_msg):
+    def doOperationGetGems(self, player, operation_info, original_msg) -> bool:
         legal = self.checkGetChipsLegal(operation_info, player)
         if not legal:
             self.playerOperationInvalid(player)
-            return
+            return False
 
         for item in operation_info:
             chip_type = item["gems_type"]
@@ -373,6 +378,8 @@ class GameRoom:
             player.chips[chip_type] += chip_number
 
         self.boardcastMsg(original_msg)
+
+        return True
 
     def checkChipsNumberLegal(self, player: Player):
         new_turn = True
@@ -386,11 +393,11 @@ class GameRoom:
 
         return new_turn
 
-    def doOperationFoldCards(self, player: Player, operation_info, body):
+    def doOperationFoldCards(self, player: Player, operation_info, body) -> bool:
         legal = self.checkFoldCardLegal(operation_info, player)
         if not legal:
             self.playerOperationInvalid(player)
-            return
+            return False
         card_number = operation_info[0]["card_number"]
         card = self.card_board.getCardByNumber(card_number)
         player.addFoldCard(card)
@@ -420,12 +427,15 @@ class GameRoom:
             self.boardcastDiffrentMsg(new_card_msg, new_card_msg, player,
                                       API_ID.PLAYER_OPERATION)
 
-    def doOperationBuyCards(self, player: Player, operation_info, original_msg):
+        return True
+
+    def doOperationBuyCards(self, player: Player, operation_info,
+                            original_msg) -> bool:
         in_fold = False
         legal = self.checkBuyCardLegal(operation_info, player)
         if not legal:
             self.playerOperationInvalid(player)
-            return
+            return False
 
         self.boardcastMsg(original_msg)
 
@@ -449,6 +459,8 @@ class GameRoom:
             new_card_msg = message_helper.packNewCard(player.player_id,
                                                       new_card_number)
             self.boardcastMsg(new_card_msg)
+
+        return True
 
     def checkAvailableNobleCards(self, player: Player) -> bool:
         new_turn = True
