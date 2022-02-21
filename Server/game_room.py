@@ -208,7 +208,7 @@ class GameRoom:
                 return False
 
             if v > 0:
-                if v < op_chips + player_chips:
+                if op_chips > 0 and v < op_chips + player_chips:
                     logging.info("too much {} buying card".format(k))
                     return False
 
