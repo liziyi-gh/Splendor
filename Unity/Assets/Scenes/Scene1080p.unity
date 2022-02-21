@@ -8783,6 +8783,9 @@ MonoBehaviour:
   - {fileID: 5590061781029988126, guid: 076905be2458c45419405868dfafa4a9, type: 3}
   - {fileID: -5800740609635101999, guid: 076905be2458c45419405868dfafa4a9, type: 3}
   - {fileID: 3631980304963433270, guid: 076905be2458c45419405868dfafa4a9, type: 3}
+  - {fileID: 21300000, guid: 2e7d39b9aedd06a41ad44c63533065de, type: 3}
+  - {fileID: 21300000, guid: ccf392f7978dba34dbbb4dae09625a92, type: 3}
+  - {fileID: 21300000, guid: 43230cf8350296040aac260af4520e9c, type: 3}
   cardBackSprites:
   - {fileID: 21300000, guid: 2e7d39b9aedd06a41ad44c63533065de, type: 3}
   - {fileID: 21300000, guid: ccf392f7978dba34dbbb4dae09625a92, type: 3}

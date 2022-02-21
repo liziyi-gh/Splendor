@@ -30,7 +30,8 @@ public class ShowDetail : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             if (i < player.foldCards_num)
             {
-                panel.transform.GetChild(1).GetChild(i).GetComponent<Image>().sprite = gameManager.allCardSprites[player.foldCards[i]];
+                int card_id = player.foldCards[i] > 10000 ? player.foldCards[i] - 9900 : player.foldCards[i];
+                panel.transform.GetChild(1).GetChild(i).GetComponent<Image>().sprite = gameManager.allCardSprites[card_id];
                 panel.transform.GetChild(1).GetChild(i).GetComponent<Image>().color = Color.white;
             }
             else
