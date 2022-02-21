@@ -508,11 +508,11 @@ class GameRoom:
             golden_dict = {{"golden_number": 0}}
 
         new_body["operation_info"].append(golden_dict)
-        real_new_card_msg = message_helper.packNewCard(player.player_id,
-                                                       new_card.number)
-        new_card_msg = message_helper.packNewCard(player.player_id, card_number)
+        new_card_msg = message_helper.packPlayerOperation(new_body)
+        new_body["operation_info"][0]["card_number"] = new_card.number
+        real_new_card_msg = message_helper.packPlayerOperation(new_body)
 
         self.boardcastDiffrentMsg(new_card_msg, real_new_card_msg, player,
-                                      API_ID.PLAYER_OPERATION)
+                                      API_ID.NEW_CARD)
 
         return True

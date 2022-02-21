@@ -22,7 +22,8 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
         try:
             header_data = client_sock.recv(HEADER_LENGTH)
         except ConnectionResetError as e:
-            logging.info("socket {} reset connection".format(socket))
+            logging.info("socket {} reset connection".format(client_sock))
+            client_sock.close()
             return
         if len(header_data) < HEADER_LENGTH:
             logging.error("header data length less than {}".format(HEADER_LENGTH))
