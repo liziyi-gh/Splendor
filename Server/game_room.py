@@ -203,6 +203,10 @@ class GameRoom:
                 op_chips = operation_chips_dict[k]
             except KeyError:
                 op_chips = 0
+            if v == 0 and op_chips > 0:
+                logging.info("extra {} buying card".format(k))
+                return False
+
             if v > 0:
                 if v < op_chips + player_chips:
                     logging.info("too much {} buying card".format(k))
@@ -223,6 +227,10 @@ class GameRoom:
             except KeyError:
                 logging.info("need more chips to buy card")
                 return False
+
+        if need_golden_number < 0:
+            logging.info("too much chips to buy card")
+            return False
 
         return True
 
