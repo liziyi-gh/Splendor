@@ -97,6 +97,8 @@ class CardBoard():
 
             return -1
         else:
+            if card_number in [10001, 10002, 10003]:
+                return -1
             new_card_number = self.addNewCardToBoard(card.level, card)
             return new_card_number
 
