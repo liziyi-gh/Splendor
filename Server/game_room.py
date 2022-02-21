@@ -97,12 +97,25 @@ class GameRoom:
         logging.debug("Finish boardcast msg, api id {}".format(api_id))
 
     @thread_safe
+    def boardcastDiffrentMsg(self,
+                             msg,
+                             special_msg,
+                             special_player: Player,
+                             api_id=None):
+        for player in self.players:
+            if player is not special_player:
+                player.sendMsg(msg)
+
+        special_player.sendMsg(special_msg)
+        logging.debug("Finish boardcast msg, api id {}".format(api_id))
+
+    @thread_safe
     def playerReady(self, header: Header):
         player_id = header.player_id
         player = self.findPlayerByID(player_id)
         player.setReady()
         msg = message_helper.packPlayerReady(player_id)
-        self.boardcastMsg(msg)
+        self.boardcastMsg(msg, API_ID.PLAYER_READY)
         if len(self.players) > 1:
             for player in self.players:
                 if not player.ready:
@@ -215,7 +228,6 @@ class GameRoom:
 
     @thread_safe
     def checkFoldCardLegal(self, operation_info, player: Player) -> bool:
-        # FIXME: card number like 10001, 10002, 10003
         if len(player.fold_cards) >= 3:
             return False
 
@@ -254,27 +266,25 @@ class GameRoom:
             self.doOperationGetGems(player, operation_info, original_msg)
             if self.checkChipsNumberLegal(player):
                 self.startNewTurn()
-                return
+            return
 
         if operation_type == Operation.FOLD_CARD:
             self.doOperationFoldCards(player, operation_info, body)
             if self.checkChipsNumberLegal(player):
                 self.startNewTurn()
-                return
+            return
 
         if operation_type == Operation.DISCARD_GEMS:
+            # TODO: change this like other operation
             if self.doOperationDiscardGems(player, operation_info, body):
                 self.startNewTurn()
-                return
+            return
 
         if operation_type == Operation.BUY_CARD:
             self.doOperationBuyCards(player, operation_info, original_msg)
             if self.checkAvailableNobleCards(player):
                 self.startNewTurn()
-                return
-
-        # FIXME: important !!!
-        # how to start new turn
+            return
 
     @thread_safe
     def doPlayerGetNoble(self, header: Header, body):
@@ -376,7 +386,7 @@ class GameRoom:
 
         return new_turn
 
-    def doOperationFoldCards(self, player, operation_info, body):
+    def doOperationFoldCards(self, player: Player, operation_info, body):
         legal = self.checkFoldCardLegal(operation_info, player)
         if not legal:
             self.playerOperationInvalid(player)
@@ -398,13 +408,19 @@ class GameRoom:
 
         new_body["operation_info"].append(golden_dict)
         msg = message_helper.packPlayerOperation(new_body)
+        real_new_card_msg = message_helper.packNewCard(player.player_id,
+                                                       new_card_number)
         new_card_msg = message_helper.packNewCard(player.player_id,
-                                                  new_card_number)
+                                                  card_number)
 
         self.boardcastMsg(msg)
-        self.boardcastMsg(new_card_msg)
+        if card_number not in [10001, 10002, 10003]:
+            self.boardcastMsg(real_new_card_msg)
+        else:
+            self.boardcastDiffrentMsg(new_card_msg, new_card_msg, player,
+                                      API_ID.PLAYER_OPERATION)
 
-    def doOperationBuyCards(self, player, operation_info, original_msg):
+    def doOperationBuyCards(self, player: Player, operation_info, original_msg):
         in_fold = False
         legal = self.checkBuyCardLegal(operation_info, player)
         if not legal:
@@ -434,8 +450,9 @@ class GameRoom:
                                                       new_card_number)
             self.boardcastMsg(new_card_msg)
 
-    def checkAvailableNobleCards(self, player) -> bool:
+    def checkAvailableNobleCards(self, player: Player) -> bool:
         new_turn = True
+        # TODO: fix this, player and card_board should independent
         available_cards = self.card_board.checkAvailbaleNobleCard(player)
         if len(available_cards) > 0:
             logging.debug("Available noble cards > 0")
