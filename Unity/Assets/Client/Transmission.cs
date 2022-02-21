@@ -24,7 +24,7 @@ namespace Transmission
 
         public static void Connect()
         {
-            string host = "175.178.115.8";
+            string host = "127.0.0.1";
             int port = 13204;
 
             IPAddress ip = IPAddress.Parse(host);
@@ -205,7 +205,7 @@ namespace Transmission
                     case API_ID.DISCARD_GEMS:
                         body_msg = Tools.MsgDISCARD_GEMS(body_str);
                         body_msg.player_id = head_msg.player_id;
-                        //
+                        GameManager.DiscardGems();
                         break;
 
                     default:

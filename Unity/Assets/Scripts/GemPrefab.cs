@@ -28,12 +28,12 @@ public class GemPrefab : MonoBehaviour
         }
     }
 
-    public void SetDir(Transform gem, Transform targetPoint, bool isReverse)
+    public void SetDir(Transform gem, Transform targetPoint, bool isGettingGems)
     {
         GetComponent<Image>().sprite = gem.GetComponent<Image>().sprite;
         GetComponent<Image>().color = Color.white;
         GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-        if (isReverse) { Transform temp = gem; gem = targetPoint; targetPoint = temp; }
+        if (!isGettingGems) { Transform temp = gem; gem = targetPoint; targetPoint = temp; }
         transform.SetParent(gem, false);
         targetPosition = targetPoint.position - gem.position;
     }
