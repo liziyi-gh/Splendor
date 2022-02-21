@@ -5,7 +5,6 @@ import random
 import logging
 
 from Server import message_helper
-from Server import operation
 from Server.api_id import API_ID
 from Server.gemstone import Gemstone
 from Server.constants import Header
@@ -191,40 +190,39 @@ class GameRoom:
             if card is None:
                 return False
 
-        card_chips = copy.deepcopy(card.chips)
-        golden_number = 0
+        operation_chips_dict = {
+            item["gems_type"]:item["gems_number"] for item in operation_info[1:]
+        }
         need_golden_number = 0
-
-        for item in operation_info[1:]:
-            gems_type = item["gems_type"]
-            chips_number = item["gems_number"]
-
-            if gems_type == Gemstone.GOLDEN:
-                golden_number = chips_number
-            else:
-                # chips in operation
-                if card_chips[gems_type] == 0 and chips_number > 0:
-                    logging.debug(
-                        "wrong gemstone in buy card".format(card_number))
+        logging.debug("player chips is")
+        logging.debug(json.dumps(player.chips))
+        for k, v in card.chips.items():
+            op_chips = 0
+            player_chips = player.getGemstoneNumber(k)
+            try:
+                op_chips = operation_chips_dict[k]
+            except KeyError:
+                op_chips = 0
+            if v > 0:
+                if v < op_chips + player_chips:
+                    logging.info("too much {} buying card".format(k))
                     return False
-                card_chips[gems_type] -= chips_number
-                # gemstone in player card
-                card_chips[gems_type] -= player.getGemstoneNumber(gems_type)
-                if card_chips[gems_type] < 0 and card_chips[
-                        gems_type] < player.getGemstoneNumber(gems_type):
-                    logging.debug(
-                        "too much {} chips when buy card".format(gems_type))
-                    return False
-                need_golden_number += chips_number
 
-            if player.chips[gems_type] < chips_number:
+                need_golden_number = need_golden_number + v - op_chips - player_chips
+
+        if need_golden_number > 0:
+            try:
+                if need_golden_number < operation_chips_dict[Gemstone.GOLDEN]:
+                    logging.info("need more chips to buy card")
+                    return False
+
+                if need_golden_number > operation_chips_dict[Gemstone.GOLDEN]:
+                    logging.info("too much chips to buy card")
+                    return False
+
+            except KeyError:
+                logging.info("need more chips to buy card")
                 return False
-        if golden_number < need_golden_number:
-            logging.debug("need more golden chips")
-
-        if golden_number > need_golden_number:
-            logging.debug("too much golden chips")
-            return False
 
         return True
 
