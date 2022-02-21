@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Players;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -44,11 +45,6 @@ namespace JsonClasses
             operation_type = type;
             operation_info = new JArray();
         }
-
-        public void AddOperatonInfo<T>(T jo)
-        {
-            operation_info.Add(jo);
-        }
     }
 
     public class JsonPLAYER_OPERATION_DISCARD_GEMS
@@ -60,7 +56,8 @@ namespace JsonClasses
         public JsonPLAYER_OPERATION_DISCARD_GEMS(ulong id)
         {
             player_id = id;
-            operation_type = "discard_gems";
+            operation_type = Operation.DISCARD_GEMS;
+            operation_info = new JObject();
         }
     }
 

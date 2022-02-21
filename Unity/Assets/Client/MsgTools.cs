@@ -182,24 +182,26 @@ namespace MsgTools
                 case Operation.GET_GEMS:
                     foreach (var i in typeof(GEM).GetFields())
                         if (msg.gems[i.Name.ToLower()] != 0)
-                            dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("gems_type", i.Name.ToLower()), new JProperty("gems_number", msg.gems[i.Name.ToLower()])));
+                            dataPLAYER_OPERATION.operation_info.Add(new JObject(new JProperty("gems_type", i.Name.ToLower()),
+                                                                                new JProperty("gems_number", msg.gems[i.Name.ToLower()])));
                     break;
 
                 case Operation.BUY_CARD:
-                    dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("card_number", msg.card_id)));
+                    dataPLAYER_OPERATION.operation_info.Add(new JObject(new JProperty("card_number", msg.card_id)));
 
                     foreach (var i in typeof(GEM).GetFields())
                         if (msg.gems[i.Name.ToLower()] != 0)
-                            dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("gems_type", i.Name.ToLower()), new JProperty("gems_number", msg.gems[i.Name.ToLower()])));
+                            dataPLAYER_OPERATION.operation_info.Add(new JObject(new JProperty("gems_type", i.Name.ToLower()),
+                                                                                new JProperty("gems_number", msg.gems[i.Name.ToLower()])));
                     break;
 
                 case Operation.FOLD_CARD:
-                    dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("card_number", msg.card_id)));
+                    dataPLAYER_OPERATION.operation_info.Add(new JObject(new JProperty("card_number", msg.card_id)));
                     break;
 
                 case Operation.FOLD_CARD_UNKNOWN:
-                    dataPLAYER_OPERATION.AddOperatonInfo<JObject>(new JObject(new JProperty("card_level", msg.card_level),
-                                                                              new JProperty("card_number", msg.card_id)));
+                    dataPLAYER_OPERATION.operation_info.Add(new JObject(new JProperty("card_level", msg.card_level),
+                                                                        new JProperty("card_number", msg.card_id)));
                     break;
 
                 case Operation.DISCARD_GEMS:
