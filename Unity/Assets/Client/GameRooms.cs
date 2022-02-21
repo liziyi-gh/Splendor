@@ -34,6 +34,7 @@ namespace GameRooms
         {
             players_number = msg.players_number;
             players_sequence = msg.players_sequence;
+
             int gems_num = 7;
             if (players_number == 3) gems_num = 5;
             if (players_number == 2) gems_num = 4;
@@ -46,6 +47,7 @@ namespace GameRooms
                 { GEM.RUBY, gems_num },
                 { GEM.GOLDEN, 5 }
             };
+
             cards_last_num = new Dictionary<string, int>
             {
                 {CardLevelType.levelOneCards, 40 },
@@ -60,12 +62,14 @@ namespace GameRooms
                 {CardLevelType.levelThreeCards, msg.levelThreeCards_info },
                 {CardLevelType.nobles, msg.nobles_info }
             };
+
             players = new List<Player>();
             for (int i = 0; i < players_number; i++)
             {
                 players.Add(new Player());
                 players[i].id = players_sequence[i];
             }
+            
             reInit = true;
         }
 

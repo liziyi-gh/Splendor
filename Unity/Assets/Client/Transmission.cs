@@ -18,7 +18,6 @@ using Players;
 
 namespace Transmission
 {
-
     public static class Client
     {
         public static Socket? socket;
@@ -50,11 +49,7 @@ namespace Transmission
                 byte[] buffer = new byte[1024];
                 int head_len = socket.Receive(buffer, 0, 28, 0);
 
-                if (head_len == 0)
-                {
-                    socket.Close();
-                    Logging.LogClose();
-                }
+                if (head_len == 0) Shutdown();
 
                 Msgs head_msg = Tools.MsgHeadUnpack(buffer);
 
@@ -251,6 +246,12 @@ namespace Transmission
             log.LogMsgSend(buffer.ToArray());
 
             socket.Send(buffer.ToArray());
+        }
+
+        public static void Shutdown()
+        {
+            socket.Close();
+            Logging.LogClose();
         }
     }
 }
