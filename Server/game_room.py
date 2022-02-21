@@ -273,7 +273,7 @@ class GameRoom:
                     self.startNewTurn()
             return
 
-        if operation_type == Operation.FOLD_CARD or operation_type:
+        if operation_type == Operation.FOLD_CARD:
             if self.doOperationFoldCards(player, operation_info, body):
                 if self.checkChipsNumberLegal(player):
                     self.startNewTurn()
