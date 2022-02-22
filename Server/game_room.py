@@ -314,7 +314,7 @@ class GameRoom:
         card = self.card_board.getCardByNumber(card_number)
         player.addCard(card)
         self.card_board.removeCardByNumberThenAddNewCard(card_number)
-        msg = message_helper.packPlayerOperation(body)
+        msg = message_helper.packUniversial(body, API_ID.PLAYER_GET_NOBLE)
         self.boardcastMsg(msg)
         self.startNewTurn()
 

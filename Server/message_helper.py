@@ -133,3 +133,9 @@ def packDiscardGems(player_id : int, number_to_discard : int):
     header_data = packHeader(API_ID.DISCARD_GEMS, player_id, len(body_data))
 
     return header_data + body_data
+
+def packUniversial(body, api_id: int):
+    body_data = json.dumps(body).encode()
+    header_data = packHeader(api_id, 0, len(body_data))
+
+    return header_data + body_data
