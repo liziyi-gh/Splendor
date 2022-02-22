@@ -314,6 +314,8 @@ class GameRoom:
         card = self.card_board.getCardByNumber(card_number)
         player.addCard(card)
         self.card_board.removeCardByNumberThenAddNewCard(card_number)
+        msg = message_helper.packPlayerOperation(body)
+        self.boardcastMsg(msg)
         self.startNewTurn()
 
     @thread_safe
