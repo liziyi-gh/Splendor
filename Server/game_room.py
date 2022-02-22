@@ -196,35 +196,48 @@ class GameRoom:
         need_golden_number = 0
         logging.debug("player chips is")
         logging.debug(json.dumps(player.chips))
-        for k, v in card.chips.items():
+        for k, needed_chip in card.chips.items():
             op_chips = 0
-            player_chips = player.getGemstoneNumber(k)
+            player_gems = player.getGemstoneNumber(k)
+            logging.debug("player {} number is {}".format(k, player_gems))
             try:
                 op_chips = operation_chips_dict[k]
             except KeyError:
                 op_chips = 0
-            if v == 0 and op_chips > 0:
+
+            if op_chips < 0:
+                return False
+
+            if needed_chip == 0 and op_chips > 0:
                 logging.info("extra {} buying card".format(k))
                 return False
 
-            if v > 0:
-                if op_chips > 0 and v < op_chips + player_chips:
+            if needed_chip > 0:
+                if op_chips > 0 and needed_chip < op_chips + player_gems:
                     logging.info("too much {} buying card".format(k))
                     return False
 
-                need_golden_number = need_golden_number + v - op_chips - player_chips
+                if op_chips == 0 and needed_chip <= player_gems:
+                    continue
 
-        if need_golden_number > 0:
-            try:
-                if need_golden_number < operation_chips_dict[Gemstone.GOLDEN]:
-                    logging.info("need more chips to buy card")
-                    return False
+                logging.debug("need {} number is {}".format(k, needed_chip))
+                tmp = needed_chip - op_chips - player_gems
+                if tmp > 0:
+                    need_golden_number = need_golden_number + tmp
 
-                if need_golden_number > operation_chips_dict[Gemstone.GOLDEN]:
-                    logging.info("too much chips to buy card")
-                    return False
+        logging.debug("need golden number is {}".format(need_golden_number))
 
-            except KeyError:
+        try:
+            if need_golden_number < operation_chips_dict[Gemstone.GOLDEN]:
+                logging.info("too much chips to buy card")
+                return False
+
+            if need_golden_number > operation_chips_dict[Gemstone.GOLDEN]:
+                logging.info("need more chips to buy card")
+                return False
+
+        except KeyError:
+            if need_golden_number > 0:
                 logging.info("need more chips to buy card")
                 return False
 
