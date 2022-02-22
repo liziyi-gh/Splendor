@@ -42,14 +42,15 @@ public class GameManager : MonoBehaviour
     Transform nobles;
     Transform cards;
     Transform foldCards;
-    Transform gemPrefabs;
+
 
     [Header("预制体")]
     [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject gemPrefab;
+    [SerializeField] GameObject cardPrefab;
 
     [Header("Sprite")]
     public List<Sprite> allCardSprites;
-    [SerializeField] List<Sprite> cardBackSprites;
 
     ulong playerID = 0;
     Player player;
@@ -76,7 +77,6 @@ public class GameManager : MonoBehaviour
         nobles = GameObject.Find("Nobles").transform;
         cards = GameObject.Find("CardGroup").transform;
         foldCards = GameObject.Find("FoldCards").transform;
-        gemPrefabs = GameObject.Find("GemPrefabs").transform;
         discardText = GameObject.Find("DiscardGemText").GetComponent<Text>();
 
         //连接服务器；
@@ -314,12 +314,15 @@ public class GameManager : MonoBehaviour
 
             case "buy_card":
                 StartCoroutine(TransGems(msgs));
+                TransCard(msgs);
                 break;
 
             case "fold_card":
+                TransCard(msgs);
                 break;
 
             case "fold_card_unknown":
+                TransCard(msgs);
                 break;
 
             case "discard_gems":
@@ -340,15 +343,32 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < msgs.gems[gem]; i++)
             {
+                GameObject gemObject = ObjectPool.Instance.GetObject(gemPrefab);
                 if (msgs.player_id == playerID)
-                    gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
-                        money.GetChild(Array.IndexOf(gems, gem)),isGettingGems);
-                else                
-                    gemPrefabs.GetChild(0).GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
-                        GameObject.Find("Player" + msgs.player_id.ToString()).transform,isGettingGems);                                
+                    gemObject.GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
+                        money.GetChild(Array.IndexOf(gems, gem)), isGettingGems);
+                else
+                    gemObject.GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
+                        GameObject.Find("Player" + msgs.player_id.ToString()).transform, isGettingGems);
                 yield return new WaitForSeconds(0.1f);
             }
         }        
+    }
+
+    void TransCard(Msgs msgs)
+    {
+        GameObject cardObject = ObjectPool.Instance.GetObject(cardPrefab);
+        cardObject.GetComponent<GemPrefab>().SetDir(GetCard(msgs.card_id),
+            GameObject.Find("Player" + msgs.player_id.ToString()).transform, true);
+    }
+
+    Transform GetCard(int card_id)
+    {
+        if (card_id > 10000) card_id -= 9900;
+        for (int i = 0; i < cards.childCount; i++)
+            if (allCardSprites[card_id] == cards.GetChild(i).GetComponent<Image>().sprite)
+                return cards.GetChild(i);
+        return null;
     }
 
     public void ChooseNoble(Msgs msgs)
@@ -461,9 +481,9 @@ public class GameManager : MonoBehaviour
                 int foldCardLevel = player.foldCards[i] < 41 ? 0 : 1;
                 if (player.foldCards[i] > 60)
                     foldCardLevel = 2;
-                foldCards.GetChild(i).GetComponent<Image>().sprite = cardBackSprites[foldCardLevel];
+                foldCards.GetChild(i).GetComponent<Image>().sprite = allCardSprites[101+foldCardLevel];
                 foldCards.GetChild(i).GetComponent<Image>().color = Color.white;
-                foldCards.GetChild(i).GetComponent<Recover>().cardback = cardBackSprites[foldCardLevel];
+                foldCards.GetChild(i).GetComponent<Recover>().cardback = allCardSprites[101+foldCardLevel];
                 foldCards.GetChild(i).GetComponent<Recover>().card = allCardSprites[player.foldCards[i]];
             }
             else            
