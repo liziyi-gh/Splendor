@@ -497,14 +497,19 @@ class GameRoom:
 
         return new_turn
 
-    def checkFoldUnknownCardLegal(self, card_number) -> bool:
+    def checkFoldUnknownCardLegal(self, player: Player, card_number) -> bool:
+        if len(player.fold_cards) >= 3:
+            logging.info(
+                "fold card illegal, player already have {} fold cards".format(
+                    len(player.fold_cards)))
+            return False
         return card_number in [10001, 10002, 10003]
 
     def doOperationFoldUnkownCards(self, player: Player, operation_info,
                                    body) -> bool:
         card_number = operation_info[0]["card_number"]
         card_level = card_number - 10000
-        legal = self.checkFoldUnknownCardLegal(card_number)
+        legal = self.checkFoldUnknownCardLegal(player, card_number)
         if not legal:
             self.playerOperationInvalid(player)
             return False
