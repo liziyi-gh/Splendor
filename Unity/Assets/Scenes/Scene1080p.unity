@@ -6897,7 +6897,7 @@ GameObject:
   - component: {fileID: 1014743853}
   - component: {fileID: 1014743852}
   m_Layer: 5
-  m_Name: DiscardGemText
+  m_Name: PromptText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6955,7 +6955,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\xD7\u6301\u6709\u7B79\u7801\u6570\u6700\u591A\u4E3A10\xD7"
+  m_Text: 
 --- !u!222 &1014743853
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8065,7 +8065,6 @@ MonoBehaviour:
   highLight2: {fileID: 1621687763}
   playerPrefab: {fileID: 8376969738406461185, guid: fdf15230faf16f440aae602caef7ad55, type: 3}
   gemPrefab: {fileID: 8723845515829334801, guid: 2adc1f9225fbec9498ff6319d2068d91, type: 3}
-  cardPrefab: {fileID: 216553939628022844, guid: 68e0a41155a10c74b8ed58164bd3f94a, type: 3}
   allCardSprites:
   - {fileID: 21300000, guid: 48b7d8ba369fada43b63496d34ffa969, type: 3}
   - {fileID: 8053899242462091416, guid: d8a7b05de66168b4588f73dae10c8e67, type: 3}

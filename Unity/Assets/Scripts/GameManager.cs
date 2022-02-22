@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     public State state = State.unready;
     [SerializeField] GameObject highLight1, highLight2;
-    Text discardText;
+    Text promptText;
 
     //组件Transform
     Transform stones;
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         nobles = GameObject.Find("Nobles").transform;
         cards = GameObject.Find("CardGroup").transform;
         foldCards = GameObject.Find("FoldCards").transform;
-        discardText = GameObject.Find("DiscardGemText").GetComponent<Text>();
+        promptText = GameObject.Find("PromptText").GetComponent<Text>();
 
         //连接服务器；
         Client.Connect();
@@ -109,24 +109,24 @@ public class GameManager : MonoBehaviour
                         Logging.LogAny("UI shows GameScene");
                         ResetPlayerUI();
                         LoadGameRoomInfomation();
-                        break;
-                    case "NewTurn":
-                        PlayerNewTurn(toDoList[toDo].player_id);
-                        break;
+                        break;                    
                     case "OperationInvalid":
                         Reset();
                         break;
                     case "PlayerOperation":
                         PlayerOperate(toDoList[toDo]);
                         break;
-                    case "NewCard":
-                        LoadGameRoomInfomation();
-                        break;
                     case "PlayerGetNoble":
                         ChooseNoble(toDoList[toDo]);
                         break;
+                    case "NewCard":
+                        LoadGameRoomInfomation(true);
+                        break;                    
                     case "DiscardGems":
                         Discard();
+                        break;
+                    case "NewTurn":
+                        PlayerNewTurn(toDoList[toDo].player_id);
                         break;
                 }
             }
@@ -324,10 +324,10 @@ public class GameManager : MonoBehaviour
                 break;
 
             case "discard_gems":
-                discardText.color = Color.clear;
+                promptText.color = Color.clear;
                 break;
         }
-        LoadGameRoomInfomation();
+        LoadGameRoomInfomation(true);
     }
 
     IEnumerator TransGems(Msgs msgs)
@@ -391,16 +391,21 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < cards.childCount; i++)
             if (allCardSprites[card_id] == cards.GetChild(i).GetComponent<Image>().sprite)
                 return cards.GetChild(i);
+        for (int i = 0; i < GameRoom.cards_info[CardLevelType.nobles].Length; i++)
+            if (allCardSprites[card_id] == nobles.GetChild(i).GetComponent<Image>().sprite)
+                return nobles.GetChild(i);
         return null;
     }
 
     public void ChooseNoble(Msgs msgs)
     {
         if (msgs.nobles_id.Count == 1)
-        {
-            //动画；           
+        {            
+            GameObject cardObject = ObjectPool.Instance.GetObject(gemPrefab);            
+            cardObject.GetComponent<GemPrefab>().SetDir(GetCard(msgs.nobles_id[0]), GameObject.Find("Player" + msgs.player_id.ToString()).transform, true);
 
-            for (int i = 0; i < 5; i++)
+            promptText.color = Color.clear;
+            for (int i = 0; i < GameRoom.cards_info[CardLevelType.nobles].Length; i++)
                 nobles.GetChild(i).GetComponent<Image>().color = Color.white;
 
             LoadGameRoomInfomation();
@@ -408,10 +413,12 @@ public class GameManager : MonoBehaviour
         else
         {
             state = State.choosingNoble;
-            for (int i = 0; i < 5; i++)
+            promptText.color = Color.white;
+            promptText.text = "✔请选择一张贵族牌✔";
+            for (int i = 0; i < GameRoom.cards_info[CardLevelType.nobles].Length; i++)
             {
                 Image image = nobles.GetChild(i).GetComponent<Image>();
-                image.color = Color.gray;
+                if(image.color!=Color.clear) image.color = Color.gray;
                 foreach (int noble_id in msgs.nobles_id)                                   
                     if (allCardSprites[noble_id] == image.sprite)
                         image.color = Color.white;
@@ -421,7 +428,8 @@ public class GameManager : MonoBehaviour
 
     public void Discard()
     {
-        discardText.color = Color.white;
+        promptText.color = Color.white;
+        promptText.text = "❌持有筹码数最多为10❌";
         state = State.discardingGems;
     }
 
@@ -480,7 +488,7 @@ public class GameManager : MonoBehaviour
         current.toDoList.Add("DiscardGems", new Msgs());
     }
 
-    public void LoadGameRoomInfomation()
+    public void LoadGameRoomInfomation(bool dontLoadNoble=false)
     {
         player = GameRoom.GetPlayer(playerID);
 
@@ -526,17 +534,21 @@ public class GameManager : MonoBehaviour
                 cardImage.color = Color.clear;
             else
                 cardImage.color = Color.white;
-        }            
-
-        for (int i = 0; i < GameRoom.cards_info[CardLevelType.nobles].Length; i++)
-        {
-            Image image = nobles.GetChild(i).GetComponent<Image>();
-            image.sprite = allCardSprites[GameRoom.cards_info[CardLevelType.nobles][i]];
-            if(image.sprite==allCardSprites[0])
-                image.color = Color.clear;
-            else
-                image.color = Color.white;                
         }
+
+        if (!dontLoadNoble)
+        {
+            for (int i = 0; i < GameRoom.cards_info[CardLevelType.nobles].Length; i++)
+            {
+                Image image = nobles.GetChild(i).GetComponent<Image>();
+                image.sprite = allCardSprites[GameRoom.cards_info[CardLevelType.nobles][i]];
+                if (image.sprite == allCardSprites[0])
+                    image.color = Color.clear;
+                else
+                    image.color = Color.white;
+            }
+        }
+        
 
         cards.GetChild(0).GetChild(0).GetComponent<Text>().text = Mathf.Max(0,GameRoom.cards_last_num[CardLevelType.levelOneCards]-4).ToString();
         cards.GetChild(5).GetChild(0).GetComponent<Text>().text = Mathf.Max(0, GameRoom.cards_last_num[CardLevelType.levelTwoCards] - 4).ToString();
