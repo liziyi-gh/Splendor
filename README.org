@@ -199,6 +199,22 @@ golden_number 为1则拿走一个黄金，为0则不拿。
 #+end_src
 即玩家1选择盖住1级牌库的1张牌
 
+服务器广播会是
+#+begin_src json
+  {
+    "player_id": 1,
+    "operation_type": "fold_card_unknown",
+    "operation_info": [
+      {
+      "card_level": 1,
+      "card_number" : 10001,
+      "golden_number": 1
+      }
+    ]
+  }
+
+#+end_src
+
 示例5:
 #+begin_src json
   {
