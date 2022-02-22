@@ -43,7 +43,7 @@ namespace Transmission
             th.Start();
         }
 
-        public static void Receive(Socket socket)
+        private static void Receive(Socket socket)
         {
             while (true)
             {
@@ -88,88 +88,7 @@ namespace Transmission
                         break;
 
                     case API_ID.PLAYER_OPERATION:
-                        JObject tmp = JObject.Parse(body_str);
-                        if ((string)tmp["operation_type"] == Operation.DISCARD_GEMS) body_msg = Tools.MsgPLAYER_OPERATION_DISCARD_GEMS(body_str);
-                        else body_msg = Tools.MsgPLAYER_OPERATION(body_str);
-
-                        CardPosition cardPos = GameRoom.GetCardPosition(body_msg.card_id);
-                        int player_pos = Array.IndexOf(GameRoom.players_sequence, body_msg.player_id);
-
-                        switch (body_msg.operation_type)
-                        {
-                            case Operation.GET_GEMS:
-                                foreach (var i in typeof(GEM).GetFields())
-                                {
-                                    GameRoom.gems_last_num[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
-                                    GameRoom.players[player_pos].gems[i.Name.ToLower()] += body_msg.gems[i.Name.ToLower()];
-                                }
-                                break;
-
-                            case Operation.BUY_CARD:
-                                foreach (var i in typeof(GEM).GetFields())
-                                {
-                                    GameRoom.gems_last_num[i.Name.ToLower()] += body_msg.gems[i.Name.ToLower()];
-                                    GameRoom.players[player_pos].gems[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
-                                }
-
-                                if (cardPos.cardIndex == CardPosition.MISSING)
-                                {
-                                    int foldCardPos = Array.IndexOf(GameRoom.players[player_pos].foldCards.ToArray(), body_msg.card_id);
-                                    if (foldCardPos != CardPosition.MISSING)
-                                    {
-                                        GameRoom.players[player_pos].foldCards.Remove(body_msg.card_id);
-                                        GameRoom.players[player_pos].foldCards_num--;
-                                    }
-                                    else
-                                    {
-                                        int cardCode = Tools.CardLevelConvertToUnknownCardcode(cardPos.cardLevel);
-
-                                        GameRoom.players[player_pos].foldCards.RemoveAt(Array.IndexOf(GameRoom.players[player_pos].foldCards.ToArray(), cardCode));
-                                        GameRoom.players[player_pos].foldCards_num--;
-                                    }
-                                }
-                                else
-                                {
-                                    GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
-                                    GameRoom.cards_last_num[cardPos.cardLevel] --;
-                                }
-
-                                GameRoom.players[player_pos].cards.Add(body_msg.card_id);
-                                GameRoom.players[player_pos].cards_type[Tools.ReadCardType(body_msg.card_id)] ++;
-                                GameRoom.players[player_pos].point += Tools.ReadCardPoint(body_msg.card_id);
-                                break;
-
-                            case Operation.FOLD_CARD:
-                                GameRoom.cards_info[cardPos.cardLevel][cardPos.cardIndex] = 0;
-                                GameRoom.cards_last_num[cardPos.cardLevel] --;
-                                GameRoom.gems_last_num[GEM.GOLDEN] -= body_msg.gems[GEM.GOLDEN];
-
-                                GameRoom.players[player_pos].gems[GEM.GOLDEN] += body_msg.gems[GEM.GOLDEN];
-                                GameRoom.players[player_pos].foldCards_num++;
-                                GameRoom.players[player_pos].foldCards.Add(body_msg.card_id);
-                                break;
-
-                            case Operation.FOLD_CARD_UNKNOWN:
-                                GameRoom.cards_last_num[cardPos.cardLevel] --;
-                                GameRoom.gems_last_num[GEM.GOLDEN] -= body_msg.gems[GEM.GOLDEN];
-
-                                GameRoom.players[player_pos].gems[GEM.GOLDEN] += body_msg.gems[GEM.GOLDEN];
-                                GameRoom.players[player_pos].foldCards_num++;
-                                GameRoom.players[player_pos].foldCards.Add(body_msg.card_id);
-                                break;
-
-                            case Operation.DISCARD_GEMS:
-                                foreach (var i in typeof(GEM).GetFields())
-                                {
-                                    GameRoom.gems_last_num[i.Name.ToLower()] += body_msg.gems[i.Name.ToLower()];
-                                    GameRoom.players[player_pos].gems[i.Name.ToLower()] -= body_msg.gems[i.Name.ToLower()];
-                                }
-                                break;
-
-                            default:
-                                break;
-                        }    
-                        
+                        GameRoom.UpdatePLAYER_OPERATION(out body_msg, head_msg, body_str);
                         GameManager.PlayerOperation(body_msg);
                         break;
 
@@ -191,7 +110,7 @@ namespace Transmission
                             GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].point += 3;
                             GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].nobles.Add(body_msg.nobles_id[0]);
                         }
-                        
+
                         GameManager.PlayerGetNoble(body_msg);
                         break;
 
@@ -208,7 +127,6 @@ namespace Transmission
 
                     default:
                         break;
-                        //
                 }
             }
         }
@@ -239,7 +157,7 @@ namespace Transmission
                 default:
                     break;
             }
-            
+
             Logging log = new Logging();
             log.LogMsgSend(buffer.ToArray());
 

@@ -17,12 +17,12 @@ namespace Logger
     public static class LogSwitch
     {
         public const string RECEIVE = "Receive";
-        public const string SEND = "Send   ";
+        public const string SEND = "Send    ";
     }
 
     public class Logging
     {
-        
+
         private static string path;
         private static StreamWriter log;
         private readonly object balanceLock = new Object();
@@ -52,11 +52,11 @@ namespace Logger
 
         public static void LogInit()
         {
-            
+
             int num = 1;
-            while(File.Exists(PathName(num))&&IsOccupied(PathName(num))) num++;
+            while(File.Exists(PathName(num)) && IsOccupied(PathName(num))) num++;
             path = PathName(num);
-            
+
             log = new StreamWriter(path, true, System.Text.Encoding.Default);
             log.AutoFlush = true;
         }
@@ -74,10 +74,12 @@ namespace Logger
             {
                 if (msg.api_id == API_ID.NEW_TURN) log.WriteLine("-------------------------------------------------------");
                 log.WriteLine(logSwitch+"-->API:{0}, Player:{1}, MsgLength:{2}", msg.api_id, msg.player_id, msg.msg_len);
-                if (body_msg != "")
+                if (body_msg.Count() > 0)
                 {
-                    //JObject jsonMsg = JObject.Parse(body_msg);
-                    log.WriteLine("    "+body_msg);
+                    JObject jsonMsg = JObject.Parse(body_msg);
+                    foreach (var item in jsonMsg.Properties())
+                        log.WriteLine("    "+item);
+                    //log.WriteLine("    "+body_msg);
 
                 }
             }
