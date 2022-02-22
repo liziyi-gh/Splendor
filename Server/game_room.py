@@ -309,7 +309,7 @@ class GameRoom:
     @thread_safe
     def doPlayerGetNoble(self, header: Header, body):
         player = self.findPlayerByID(header.player_id)
-        card_number = body["noble_number"]
+        card_number = body["noble_number"][0]
         # FIXME: check legal
         card = self.card_board.getCardByNumber(card_number)
         player.addCard(card)
