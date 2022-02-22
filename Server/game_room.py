@@ -310,6 +310,7 @@ class GameRoom:
     def doPlayerGetNoble(self, header: Header, body):
         player = self.findPlayerByID(header.player_id)
         card_number = body["noble_number"]
+        # FIXME: check legal
         card = self.card_board.getCardByNumber(card_number)
         player.addCard(card)
         self.card_board.removeCardByNumberThenAddNewCard(card_number)
@@ -512,13 +513,13 @@ class GameRoom:
 
         new_body = copy.deepcopy(body)
         if self.chips[Gemstone.GOLDEN] > 0:
-            golden_dict = {"golden_number": 1}
+            golden_number = 1
             player.chips[Gemstone.GOLDEN] += 1
             self.chips[Gemstone.GOLDEN] -= 1
         else:
-            golden_dict = {{"golden_number": 0}}
+            golden_number = 0
 
-        new_body["operation_info"].append(golden_dict)
+        new_body["operation_info"][0]["golden_number"] = golden_number
         new_card_msg = message_helper.packPlayerOperation(new_body)
         new_body["operation_info"][0]["card_number"] = new_card.number
         real_new_card_msg = message_helper.packPlayerOperation(new_body)
