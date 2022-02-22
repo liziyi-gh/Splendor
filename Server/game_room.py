@@ -459,11 +459,11 @@ class GameRoom:
 
         new_body["operation_info"].append(golden_dict)
         msg = message_helper.packPlayerOperation(new_body)
-        new_card_msg = message_helper.packNewCard(player.player_id,
-                                                  new_card_number)
-
         self.boardcastMsg(msg)
-        self.boardcastMsg(new_card_msg)
+
+        if new_card_number != 0:
+            new_card_msg = message_helper.packNewCard(player.player_id, new_card_number)
+            self.boardcastMsg(new_card_msg)
 
         return True
 
@@ -492,11 +492,10 @@ class GameRoom:
         player.addCard(card)
 
         if not in_fold:
-            new_card_number = self.card_board.removeCardByNumberThenAddNewCard(
-                card_number)
-            new_card_msg = message_helper.packNewCard(player.player_id,
-                                                      new_card_number)
-            self.boardcastMsg(new_card_msg)
+            new_card_number = self.card_board.removeCardByNumberThenAddNewCard(card_number)
+            if new_card_number != 0:
+                new_card_msg = message_helper.packNewCard(player.player_id, new_card_number)
+                self.boardcastMsg(new_card_msg)
 
         return True
 
@@ -541,7 +540,11 @@ class GameRoom:
         if not legal:
             self.playerOperationInvalid(player)
             return False
+        # this because card_board.nextCardInRepo has side effect
         new_card = self.card_board.nextCardInRepo(card_level)
+        if new_card.card_type is None:
+            self.playerOperationInvalid(player)
+            return False
         player.addFoldCard(new_card)
 
         new_body = copy.deepcopy(body)

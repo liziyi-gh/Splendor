@@ -24,7 +24,7 @@ class CardBoard():
         self.level_one_cards = []
         self.level_two_cards = []
         self.level_three_cards = []
-        for i in range(self.WIDTH_OF_CARD_IN_BOARD):
+        for _ in range(self.WIDTH_OF_CARD_IN_BOARD):
             self.addNewCardToBoard(1)
             self.addNewCardToBoard(2)
             self.addNewCardToBoard(3)
@@ -38,6 +38,8 @@ class CardBoard():
 
         logging.debug(
             "Can not find next level{} card in repo".format(card_level))
+
+        return Card(None)
 
     def addPlayer(self):
         new_card = self.nextCardInRepo(0)
@@ -62,7 +64,7 @@ class CardBoard():
             logging.error("Could not find card by number {}".format(card_number))
             return None
 
-    def addNewCardToBoard(self, card_level, original_card=None):
+    def addNewCardToBoard(self, card_level, original_card=None) -> int:
         def addCardHelper(new_card, card_list: List[Card], original_card=None):
             if original_card is not None:
                 position = card_list.index(original_card)
