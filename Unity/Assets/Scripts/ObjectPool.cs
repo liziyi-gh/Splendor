@@ -32,6 +32,7 @@ public class ObjectPool
             if (pool == null)
             {
                 pool = new GameObject("ObjectPool");
+                pool.transform.SetParent(GameObject.Find("Canvas").transform);
             }
             GameObject childPool = GameObject.Find(prefab.name + "Pool");
             if (!childPool)

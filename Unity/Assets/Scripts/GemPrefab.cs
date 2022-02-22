@@ -5,24 +5,34 @@ using UnityEngine.UI;
 
 public class GemPrefab : MonoBehaviour
 {
-    Vector2 targetPosition;   
-
+    Vector2 target;
+    float percent;
+    Vector2 oriSize;
     
     void Update()
     {        
-        if ((GetComponent<RectTransform>().anchoredPosition - targetPosition).magnitude < 5f)
-            ObjectPool.Instance.PushObject(gameObject);        
+        if (percent>1)
+            ObjectPool.Instance.PushObject(gameObject);
         else
-            GetComponent<RectTransform>().anchoredPosition += targetPosition * Time.deltaTime;        
+        {
+            percent += Time.deltaTime;
+            GetComponent<RectTransform>().anchoredPosition += target * Time.deltaTime;
+            float sizeScale = 1 - percent * 0.6f;
+            GetComponent<RectTransform>().sizeDelta = oriSize * sizeScale;
+        }  
     }
 
-    public void SetDir(Transform gem, Transform targetPoint, bool isGettingGems)
+    public void SetDir(Transform gem, Transform targetPoint, bool isGettingGems,Sprite sprite=null)
     {
         if (!gem) return;
-        GetComponent<Image>().sprite = gem.GetComponent<Image>().sprite;
-        GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+        if (sprite) GetComponent<Image>().sprite = sprite;
+        else GetComponent<Image>().sprite = gem.GetComponent<Image>().sprite;
+        oriSize = gem.GetComponent<RectTransform>().sizeDelta*0.9f;
+        GetComponent<RectTransform>().sizeDelta = oriSize;
         if (!isGettingGems) { Transform temp = gem; gem = targetPoint; targetPoint = temp; }
-        transform.SetParent(gem, false);
-        targetPosition = targetPoint.position - gem.position;        
+        transform.position = Vector3.zero;
+        percent = 0;
+        GetComponent<RectTransform>().anchoredPosition = gem.position-transform.position;        
+        target = targetPoint.position - gem.position;
     }
 }

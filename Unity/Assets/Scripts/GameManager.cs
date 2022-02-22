@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
     [Header("预制体")]
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject gemPrefab;
-    [SerializeField] GameObject cardPrefab;
 
     [Header("Sprite")]
     public List<Sprite> allCardSprites;
@@ -305,15 +304,14 @@ public class GameManager : MonoBehaviour
 
     //玩家操作；
     public void PlayerOperate(Msgs msgs)
-    {        
+    {
+        StartCoroutine(TransGems(msgs));
         switch (msgs.operation_type)
         {
             case "get_gems":
-                StartCoroutine(TransGems(msgs));
                 break;
 
             case "buy_card":
-                StartCoroutine(TransGems(msgs));
                 TransCard(msgs);
                 break;
 
@@ -327,7 +325,6 @@ public class GameManager : MonoBehaviour
 
             case "discard_gems":
                 discardText.color = Color.clear;
-                StartCoroutine(TransGems(msgs));
                 break;
         }
         LoadGameRoomInfomation();
@@ -346,7 +343,7 @@ public class GameManager : MonoBehaviour
                 GameObject gemObject = ObjectPool.Instance.GetObject(gemPrefab);
                 if (msgs.player_id == playerID)
                     gemObject.GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
-                        money.GetChild(Array.IndexOf(gems, gem)), isGettingGems);
+                        money.GetChild(Array.IndexOf(gems, gem)).GetChild(1), isGettingGems);
                 else
                     gemObject.GetComponent<GemPrefab>().SetDir(stones.GetChild(Array.IndexOf(gems, gem)),
                         GameObject.Find("Player" + msgs.player_id.ToString()).transform, isGettingGems);
@@ -357,9 +354,35 @@ public class GameManager : MonoBehaviour
 
     void TransCard(Msgs msgs)
     {
-        GameObject cardObject = ObjectPool.Instance.GetObject(cardPrefab);
-        cardObject.GetComponent<GemPrefab>().SetDir(GetCard(msgs.card_id),
-            GameObject.Find("Player" + msgs.player_id.ToString()).transform, true);
+        GameObject cardObject = ObjectPool.Instance.GetObject(gemPrefab);
+        if (msgs.player_id == playerID)
+        {
+            switch (msgs.operation_type)
+            {
+                case "buy_card":
+                    cardObject.GetComponent<GemPrefab>().SetDir(GetCard(msgs.card_id), money, true);
+                    break;
+                case "fold_card":
+                    cardObject.GetComponent<GemPrefab>().SetDir(GetCard(msgs.card_id), foldCards.GetChild(1), true);
+                    break;
+                case "fold_card_unknown":
+                    int cardPos= msgs.card_id < 41 ? 0 : (msgs.card_id < 71 ? 5 : 10);
+                    cardObject.GetComponent<GemPrefab>().SetDir(cards.GetChild(cardPos), foldCards.GetChild(1), true);
+                    break;
+            }
+        }
+        else
+        {
+            Sprite sprite = null;
+            if(msgs.operation_type != "buy_card" && msgs.card_id<=100)
+            {
+                sprite = msgs.card_id < 41? allCardSprites[101]
+                    : (msgs.card_id < 71? allCardSprites[102]:allCardSprites[103]);                
+            }
+            cardObject.GetComponent<GemPrefab>().SetDir(GetCard(msgs.card_id),
+            GameObject.Find("Player" + msgs.player_id.ToString()).transform, true, sprite);
+        }
+            
     }
 
     Transform GetCard(int card_id)
@@ -478,9 +501,7 @@ public class GameManager : MonoBehaviour
         {
             if (i < player.foldCards_num)
             {
-                int foldCardLevel = player.foldCards[i] < 41 ? 0 : 1;
-                if (player.foldCards[i] > 60)
-                    foldCardLevel = 2;
+                int foldCardLevel = player.foldCards[i] < 41 ? 0 : player.foldCards[i] > 60 ? 2 : 1;
                 foldCards.GetChild(i).GetComponent<Image>().sprite = allCardSprites[101+foldCardLevel];
                 foldCards.GetChild(i).GetComponent<Image>().color = Color.white;
                 foldCards.GetChild(i).GetComponent<Recover>().cardback = allCardSprites[101+foldCardLevel];
@@ -532,8 +553,4 @@ public class GameManager : MonoBehaviour
         Client.Shutdown();
         Application.Quit();
     }
-    
-    
-
-    
 }
