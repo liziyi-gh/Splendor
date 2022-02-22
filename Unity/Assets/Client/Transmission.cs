@@ -50,7 +50,7 @@ namespace Transmission
                 byte[] buffer = new byte[1024];
                 int head_len = socket.Receive(buffer, 0, 28, 0);
 
-                if (head_len == 0) Shutdown();
+                if (head_len == 0) { Shutdown(); return; }
 
                 Msgs head_msg = Tools.MsgHeadUnpack(buffer);
 
@@ -102,15 +102,7 @@ namespace Transmission
 
                     case API_ID.PLAYER_GET_NOBLE:
                         body_msg= Tools.MsgPLAYER_GET_NOBLE(body_str);
-
-                        if (body_msg.nobles_id.Count() == 1)
-                        {
-                            GameRoom.cards_info[CardLevelType.nobles][Array.IndexOf(GameRoom.cards_info[CardLevelType.nobles], body_msg.nobles_id[0])] = 0;
-
-                            GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].point += 3;
-                            GameRoom.players[Array.IndexOf(GameRoom.players_sequence, body_msg.player_id)].nobles.Add(body_msg.nobles_id[0]);
-                        }
-
+                        GameRoom.UpdatePLAYER_GET_NOBLE(body_msg);
                         GameManager.PlayerGetNoble(body_msg);
                         break;
 

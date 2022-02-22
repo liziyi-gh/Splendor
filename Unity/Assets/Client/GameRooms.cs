@@ -198,5 +198,15 @@ namespace GameRooms
                     break;
             }
         }
+
+        public static void UpdatePLAYER_GET_NOBLE(Msgs bosy_msg)
+        {
+            if (body_msg.nobles_id.Count() != 1) return;
+
+            cards_info[CardLevelType.nobles][Array.IndexOf(cards_info[CardLevelType.nobles], body_msg.nobles_id[0])] = 0;
+
+            players[Array.IndexOf(players_sequence, body_msg.player_id)].point += 3;
+            players[Array.IndexOf(players_sequence, body_msg.player_id)].nobles.Add(body_msg.nobles_id[0]);
+        }
     }
 }
