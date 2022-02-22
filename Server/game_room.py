@@ -282,6 +282,8 @@ class GameRoom:
                     return
                 if not self.checkAvailableNobleCards(player):
                     return
+            else:
+                return
 
         if operation_type == Operation.FOLD_CARD:
             if self.doOperationFoldCards(player, operation_info, body):
@@ -289,6 +291,8 @@ class GameRoom:
                     return
                 if not self.checkAvailableNobleCards(player):
                     return
+            else:
+                return
 
         if operation_type == Operation.FOLD_CARD_UNKNOWN:
             if self.doOperationFoldUnkownCards(player, operation_info, body):
@@ -296,6 +300,8 @@ class GameRoom:
                     return
                 if not self.checkAvailableNobleCards(player):
                     return
+            else:
+                return
 
         if operation_type == Operation.DISCARD_GEMS:
             if not self.doOperationDiscardGems(player, operation_info, body):
@@ -305,6 +311,8 @@ class GameRoom:
             if self.doOperationBuyCards(player, operation_info, original_msg):
                 if not self.checkAvailableNobleCards(player):
                     return
+            else:
+                return
 
         self.startNewTurn()
 
