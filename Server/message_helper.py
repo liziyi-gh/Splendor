@@ -94,7 +94,7 @@ def packPlayerOperation(body):
 def packPlayerGetNoble(player_id: int, card: Card):
     tmp_dict = {
         "player_id": player_id,
-        "noble_number": card.number,
+        "noble_number": [card.number],
     }
 
     body_data = json.dumps(tmp_dict).encode()
