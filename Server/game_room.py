@@ -278,33 +278,35 @@ class GameRoom:
 
         if operation_type == Operation.GET_GEMS:
             if self.doOperationGetGems(player, operation_info, original_msg):
-                if self.checkChipsNumberLegal(player):
-                    self.startNewTurn()
-            return
+                if not self.checkChipsNumberLegal(player):
+                    return
+                if not self.checkAvailableNobleCards(player):
+                    return
 
         if operation_type == Operation.FOLD_CARD:
             if self.doOperationFoldCards(player, operation_info, body):
-                if self.checkChipsNumberLegal(player):
-                    self.startNewTurn()
-            return
+                if not self.checkChipsNumberLegal(player):
+                    return
+                if not self.checkAvailableNobleCards(player):
+                    return
 
         if operation_type == Operation.FOLD_CARD_UNKNOWN:
             if self.doOperationFoldUnkownCards(player, operation_info, body):
-                if self.checkChipsNumberLegal(player):
-                    self.startNewTurn()
-            return
+                if not self.checkChipsNumberLegal(player):
+                    return
+                if not self.checkAvailableNobleCards(player):
+                    return
 
         if operation_type == Operation.DISCARD_GEMS:
-            # TODO: change this like other operation
-            if self.doOperationDiscardGems(player, operation_info, body):
-                self.startNewTurn()
-            return
+            if not self.doOperationDiscardGems(player, operation_info, body):
+                return
 
         if operation_type == Operation.BUY_CARD:
             if self.doOperationBuyCards(player, operation_info, original_msg):
-                if self.checkAvailableNobleCards(player):
-                    self.startNewTurn()
-            return
+                if not self.checkAvailableNobleCards(player):
+                    return
+
+        self.startNewTurn()
 
     @thread_safe
     def doPlayerGetNoble(self, header: Header, body):
@@ -312,6 +314,9 @@ class GameRoom:
         card_number = body["noble_number"][0]
         # FIXME: check legal
         card = self.card_board.getCardByNumber(card_number)
+        if not player.checkAvailbaleNobleCard(card):
+            self.playerOperationInvalid(player)
+            return False
         player.addCard(card)
         self.card_board.removeCardByNumberThenAddNewCard(card_number)
         msg = message_helper.packUniversial(body, API_ID.PLAYER_GET_NOBLE)
