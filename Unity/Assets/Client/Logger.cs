@@ -99,7 +99,8 @@ namespace Logger
 
         public static void LogClose()
         {
-            log.Close();
+            if(log!=null)
+                log.Close();
         }
     }
 }
