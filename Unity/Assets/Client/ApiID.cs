@@ -14,6 +14,7 @@ namespace ApiID
                           NEW_PLAYER = 8,
                           PLAYER_GET_NOBLE = 9,
                           NEW_CARD = 10,
-                          DISCARD_GEMS = 11;
+                          DISCARD_GEMS = 11,
+                          WINNER = 12;
     }
 }
