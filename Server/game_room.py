@@ -366,7 +366,7 @@ class GameRoom:
                 return
 
         if operation_type == Operation.BUY_CARD:
-            if self.try_buy_cards(player, operation_info, original_msg):
+            if self.try_buy_card(player, operation_info, original_msg):
                 if not self.check_available_noble_cards(player):
                     return
             else:
@@ -421,8 +421,8 @@ class GameRoom:
             self.chips[key] = chips_num
 
         msg = message_helper.pack_game_start(players_number,
-                                           self.players_sequence,
-                                           self.card_board)
+                                             self.players_sequence,
+                                             self.card_board)
         self.boardcast_msg(msg)
         self.started = True
         logging.info("Game start!")
@@ -489,7 +489,7 @@ class GameRoom:
 
         return True
 
-    def check_chips_number_legal(self, player: Player):
+    def check_chips_number_legal(self, player: Player) -> bool:
         new_turn = True
         player_chips_number = player.get_all_chips_number()
         if player_chips_number > 10:
@@ -532,7 +532,7 @@ class GameRoom:
 
         return True
 
-    def try_buy_cards(self, player: Player, operation_info,
+    def try_buy_card(self, player: Player, operation_info,
                             original_msg) -> bool:
         in_fold = False
         legal = self.check_buy_card_legal(operation_info, player)
@@ -597,6 +597,7 @@ class GameRoom:
                 "fold card illegal, player already have {} fold cards".format(
                     len(player.fold_cards)))
             return False
+
         return card_number in [10001, 10002, 10003]
 
     def try_fold_card_unknown(self, player: Player, operation_info,
@@ -604,17 +605,21 @@ class GameRoom:
         card_number = operation_info[0]["card_number"]
         card_level = card_number - 10000
         legal = self.check_fold_unknown_card_legal(player, card_number)
+
         if not legal:
             self.player_operation_invalid(player)
             return False
+
         # this because card_board.nextCardInRepo has side effect
         new_card = self.card_board.get_next_card_in_repo(card_level)
+
         if new_card.card_type is None:
             self.player_operation_invalid(player)
             return False
-        player.add_fold_card(new_card)
 
+        player.add_fold_card(new_card)
         new_body = copy.deepcopy(body)
+
         if self.chips[Gemstone.GOLDEN] > 0:
             golden_number = 1
             player.chips[Gemstone.GOLDEN] += 1
@@ -624,6 +629,7 @@ class GameRoom:
 
         new_body["operation_info"][0]["golden_number"] = golden_number
         new_card_msg = message_helper.pack_player_operation(new_body)
+
         new_body["operation_info"][0]["card_number"] = new_card.number
         real_new_card_msg = message_helper.pack_player_operation(new_body)
 
