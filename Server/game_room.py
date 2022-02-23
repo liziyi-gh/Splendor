@@ -39,6 +39,7 @@ class GameRoom:
         self.current_player_id = 0
         self.current_expected_operation = None
         self.started = False
+        self.last_turn = False
         logging.debug("Game room initialize")
 
     def __str__(self):
@@ -60,6 +61,35 @@ class GameRoom:
         }
         str = json.dumps(tmp_dict, indent=2)
         return str
+
+    def check_game_stop(self) -> bool:
+        is_last_player = self.current_player_id == self.players_sequence[-1]
+        if self.last_turn and is_last_player:
+            return True
+
+        for player in self.players:
+            if player.points >= 15:
+                self.last_turn == True
+                if is_last_player:
+                    return True
+                else:
+                    return False
+
+        return False
+
+    def find_winner(self) -> int:
+        possible_winners = []
+        for player in self.players:
+            if player.points >= 15:
+                possible_winners.append(player)
+
+        min_cards = 10000 # a number bigger than all cards
+        winner = 0
+        for player in possible_winners:
+            if len(player.cards)  < min_cards:
+                winner = player
+
+        return winner.player_id
 
     @thread_safe
     def generatePlayerSequence(self):
@@ -337,6 +367,13 @@ class GameRoom:
             else:
                 return
 
+        if self.check_game_stop():
+            winner_id = self.find_winner()
+            msg = message_helper.pack_winner(winner_id)
+            self.boardcastMsg(msg)
+
+            return
+
         self.startNewTurn()
 
     @thread_safe
@@ -352,6 +389,14 @@ class GameRoom:
         self.card_board.removeCardByNumberThenAddNewCard(card_number)
         msg = message_helper.packUniversial(body, API_ID.PLAYER_GET_NOBLE)
         self.boardcastMsg(msg)
+
+        if self.check_game_stop():
+            winner_id = self.find_winner()
+            msg = message_helper.pack_winner(winner_id)
+            self.boardcastMsg(msg)
+
+            return
+
         self.startNewTurn()
 
     @thread_safe
