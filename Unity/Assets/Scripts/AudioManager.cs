@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -7,15 +8,19 @@ public class AudioManager : MonoBehaviour
 {
     static AudioManager current;
 
-    public AudioClip bgmAudio, pickGemAudio;
+    public AudioClip pickGemAudio;
 
     AudioSource bgmSource;
-    AudioSource pickGemSource;    
+    AudioSource pickGemSource;
+
+    string path;
 
     private void Start()
     {
-        
+             
     }
+
+    
     private void Awake()
     {
         if (current != null)
@@ -28,8 +33,15 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(this);
 
         bgmSource = gameObject.AddComponent<AudioSource>();
-        pickGemSource = gameObject.AddComponent<AudioSource>();        
-        PlayBgmAudio();
+        pickGemSource = gameObject.AddComponent<AudioSource>();
+
+        path = Application.dataPath;
+        int i = path.LastIndexOf("/");
+        path = path.Substring(0, i);
+        path += "/Audio/BGM.mp3";
+        StartCoroutine(Load(path));
+
+        
         
     }
 
@@ -41,8 +53,7 @@ public class AudioManager : MonoBehaviour
     }
 
     public static void PlayBgmAudio()
-    {
-        current.bgmSource.clip = current.bgmAudio;
+    {        
         current.bgmSource.volume = 0.15f;
         current.bgmSource.Play();
         current.bgmSource.loop = true;
@@ -58,5 +69,27 @@ public class AudioManager : MonoBehaviour
                 else audio.Play();
             }            
         }
-    } 
+    }
+
+    
+    private IEnumerator Load(string path)
+    {
+        if (File.Exists(path))
+        {
+            path = "file:///" + path;
+            WWW www = new WWW(path);
+
+            yield return www;
+
+            if(www.isDone && www.error == null)
+            {
+                bgmSource.clip = www.GetAudioClip();
+                PlayBgmAudio();
+            }
+            else
+            {
+                print(www.error);
+            }            
+        }
+    }
 }
