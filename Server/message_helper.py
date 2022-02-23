@@ -25,6 +25,13 @@ def packHeader(api_id, player_id, body_len=0):
                        HEADER_LENGTH + body_len, 0)
 
 
+def packUniversial(body, api_id: int, player_id=0):
+    body_data = json.dumps(body).encode()
+    header_data = packHeader(api_id, player_id, len(body_data))
+
+    return header_data + body_data
+
+
 def packInitResp(new_player_id, allocated_player_id):
     tmp_dict = {
         "allocated_player_id":
@@ -32,10 +39,7 @@ def packInitResp(new_player_id, allocated_player_id):
         "other_player_id":
         [id for id in allocated_player_id if id != new_player_id],
     }
-    body_data = json.dumps(tmp_dict).encode()
-    header_data = packHeader(API_ID.INIT_RESP, new_player_id, len(body_data))
-
-    return header_data + body_data
+    return packUniversial(tmp_dict, API_ID.INIT_RESP, new_player_id)
 
 
 def packPlayerOperationInvalid(player_id):
@@ -64,18 +68,14 @@ def packGameStart(players_number, players_sequence, card_board: CardBoard):
         "levelThreeCards_info":
         [card.number for card in card_board.level_three_cards],
     }
-    body_data = json.dumps(tmp_dict).encode()
-    header_data = packHeader(API_ID.GAME_START, 0, len(body_data))
 
-    return header_data + body_data
+    return packUniversial(tmp_dict, API_ID.GAME_START)
 
 
 def packNewTurn(player_id: int):
     tmp_dict = {"new_turn_player": player_id}
-    body_data = json.dumps(tmp_dict).encode()
-    header_data = packHeader(API_ID.NEW_TURN, 0, len(body_data))
 
-    return header_data + body_data
+    return packUniversial(tmp_dict, API_ID.NEW_TURN)
 
 
 def packNewPlayer(player_id: int):
@@ -85,10 +85,7 @@ def packNewPlayer(player_id: int):
 
 
 def packPlayerOperation(body):
-    body_data = json.dumps(body).encode()
-    header_data = packHeader(API_ID.PLAYER_OPERATION, 0, len(body_data))
-
-    return header_data + body_data
+    return packUniversial(body, API_ID.PLAYER_OPERATION)
 
 
 def packPlayerGetNoble(player_id: int, card: Card):
@@ -97,10 +94,7 @@ def packPlayerGetNoble(player_id: int, card: Card):
         "noble_number": [card.number],
     }
 
-    body_data = json.dumps(tmp_dict).encode()
-    header_data = packHeader(API_ID.PLAYER_GET_NOBLE, player_id, len(body_data))
-
-    return header_data + body_data
+    return packUniversial(tmp_dict, API_ID.PLAYER_GET_NOBLE, player_id,)
 
 
 def packAskPlayerGetNoble(player_id: int, cards: List[Card]):
@@ -109,33 +103,20 @@ def packAskPlayerGetNoble(player_id: int, cards: List[Card]):
         "noble_number": [card.number for card in cards],
     }
 
-    body_data = json.dumps(tmp_dict).encode()
-    header_data = packHeader(API_ID.PLAYER_GET_NOBLE, player_id, len(body_data))
-
-    return header_data + body_data
+    return packUniversial(tmp_dict, API_ID.PLAYER_GET_NOBLE, player_id)
 
 
 def packNewCard(player_id : int, card_number : int):
     tmp_dict = {
         "card_number": card_number,
     }
-    body_data = json.dumps(tmp_dict).encode()
-    header_data = packHeader(API_ID.NEW_CARD, player_id, len(body_data))
 
-    return header_data + body_data
+    return packUniversial(tmp_dict, API_ID.NEW_CARD, player_id)
 
 
 def packDiscardGems(player_id : int, number_to_discard : int):
     tmp_dict = {
         "number_to_discard": number_to_discard
     }
-    body_data = json.dumps(tmp_dict).encode()
-    header_data = packHeader(API_ID.DISCARD_GEMS, player_id, len(body_data))
 
-    return header_data + body_data
-
-def packUniversial(body, api_id: int):
-    body_data = json.dumps(body).encode()
-    header_data = packHeader(api_id, 0, len(body_data))
-
-    return header_data + body_data
+    return packUniversial(tmp_dict, API_ID.DISCARD_GEMS, player_id)

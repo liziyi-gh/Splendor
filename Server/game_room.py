@@ -33,6 +33,7 @@ class GameRoom:
         self.next_player_id = 0
         self.current_player_id = 0
         self.current_expected_operation = None
+        self.started = False
         logging.debug("Game room initialize")
 
     def __str__(self):
@@ -361,6 +362,7 @@ class GameRoom:
                                            self.players_sequence,
                                            self.card_board)
         self.boardcastMsg(msg)
+        self.started = True
         logging.info("Game start!")
         self.startNewTurn()
 

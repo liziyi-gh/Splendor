@@ -8,11 +8,31 @@ from Server.game_room import GameRoom
 from Server.message_helper import unpackHeader, unpackBody
 from Server.api_id import API_ID
 
-
 ALL_CLIENT_SOCK = []
 ALL_CLIENT_SOCK_LOCK = threading.Lock()
 FIRST_TIME = True
 FIRST_TIME_LOCK = threading.Lock()
+GAME_ROOM_LIST = []
+
+
+# FIXME may be thread-unsafe but can not use func_helper.thread_safe
+def getCurrentGameroom() -> GameRoom:
+    # FIXME: cause memory leak
+    # gabage collection
+    global GAME_ROOM_LIST
+    if GAME_ROOM_LIST == []:
+        new_game_room = GameRoom()
+        GAME_ROOM_LIST.append(new_game_room)
+        logging.info("Create new room!")
+        return new_game_room
+    else:
+        tmp_room = GAME_ROOM_LIST[-1]
+        if tmp_room.started or len(tmp_room.allocated_id) >= 4:
+            new_game_room = GameRoom()
+            GAME_ROOM_LIST.append(new_game_room)
+            return new_game_room
+        else:
+            return tmp_room
 
 
 def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
@@ -21,12 +41,13 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
     while True:
         try:
             header_data = client_sock.recv(HEADER_LENGTH)
-        except ConnectionResetError as e:
+        except ConnectionResetError:
             logging.info("socket {} reset connection".format(client_sock))
             client_sock.close()
             return
         if len(header_data) < HEADER_LENGTH:
-            logging.error("header data length less than {}".format(HEADER_LENGTH))
+            logging.error(
+                "header data length less than {}".format(HEADER_LENGTH))
             with ALL_CLIENT_SOCK_LOCK:
                 ALL_CLIENT_SOCK.remove(client_sock)
             client_sock.close()
@@ -59,7 +80,7 @@ def handleClient(current_game_room: GameRoom, client_sock: socket.socket,
         logging.debug(str(current_game_room))
 
 
-def startListen(current_game_room: GameRoom):
+def startListen():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind(SERVER_ADDRESS)
     sock.listen()
@@ -69,6 +90,7 @@ def startListen(current_game_room: GameRoom):
         with ALL_CLIENT_SOCK_LOCK:
             ALL_CLIENT_SOCK.append(client_sock)
         logging.info("New socket connect")
+        current_game_room = getCurrentGameroom()
         t = threading.Thread(target=handleClient,
                              args=(current_game_room, client_sock, addr))
         t.setDaemon(False)
@@ -78,10 +100,8 @@ def startListen(current_game_room: GameRoom):
             FIRST_TIME = False
 
 
-
 def init_log():
-    logging.basicConfig(filename="./server.log",
-                        level=logging.DEBUG)
+    logging.basicConfig(filename="./server.log", level=logging.DEBUG)
     logging.info("___________________________________________________________")
     logging.info("Server starting")
     logging.info("___________________________________________________________")
@@ -89,8 +109,7 @@ def init_log():
 
 def start():
     init_log()
-    current_game_room = GameRoom()
-    t = threading.Thread(target=startListen, args=(current_game_room,))
+    t = threading.Thread(target=startListen)
     t.setDaemon(True)
     t.start()
     while True:
