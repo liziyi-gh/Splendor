@@ -125,7 +125,7 @@ class GameRoom:
         self.players.append(new_player)
         self.card_board.add_player()
         init_resp_msg = message_helper.pack_init_resp(new_player_id,
-                                                    self.allocated_id)
+                                                      self.allocated_id)
         new_player.send_msg(init_resp_msg)
         new_player_msg = message_helper.pack_new_player(new_player_id)
         self.boardcast_msg(new_player_msg, API_ID.NEW_PLAYER)
@@ -139,10 +139,10 @@ class GameRoom:
 
     @thread_safe
     def boardcast_diffrent_msg(self,
-                             msg,
-                             special_msg,
-                             special_player: Player,
-                             api_id=None):
+                               msg,
+                               special_msg,
+                               special_player: Player,
+                               api_id=None):
         for player in self.players:
             if player is not special_player:
                 player.sendMsg(msg)
@@ -494,15 +494,14 @@ class GameRoom:
         player_chips_number = player.get_all_chips_number()
         if player_chips_number > 10:
             msg = message_helper.pack_discard_gems(player.player_id,
-                                                 player_chips_number - 10)
+                                                   player_chips_number - 10)
             player.send_msg(msg)
             self.current_expected_operation = Operation.DISCARD_GEMS
             new_turn = False
 
         return new_turn
 
-    def try_fold_card(self, player: Player, operation_info,
-                             body) -> bool:
+    def try_fold_card(self, player: Player, operation_info, body) -> bool:
         legal = self.check_fold_card_legal(operation_info, player)
         if not legal:
             self.player_operation_invalid(player)
@@ -526,14 +525,14 @@ class GameRoom:
         self.boardcast_msg(msg)
 
         if new_card_number != 0:
-            new_card_msg = message_helper.pack_new_card(player.player_id,
-                                                      new_card_number)
+            new_card_msg = message_helper.pack_new_card(
+                player.player_id, new_card_number)
             self.boardcast_msg(new_card_msg)
 
         return True
 
     def try_buy_card(self, player: Player, operation_info,
-                            original_msg) -> bool:
+                     original_msg) -> bool:
         in_fold = False
         legal = self.check_buy_card_legal(operation_info, player)
         if not legal:
@@ -557,9 +556,11 @@ class GameRoom:
         player.add_card(card)
 
         if not in_fold:
-            new_card_number = self.card_board.remove_card_by_number_then_add_new_card(card_number)
+            new_card_number = self.card_board.remove_card_by_number_then_add_new_card(
+                card_number)
             if new_card_number != 0:
-                new_card_msg = message_helper.pack_new_card(player.player_id, new_card_number)
+                new_card_msg = message_helper.pack_new_card(
+                    player.player_id, new_card_number)
                 self.boardcast_msg(new_card_msg)
 
         return True
@@ -575,8 +576,10 @@ class GameRoom:
             if len(available_cards) == 1:
                 card = available_cards[0]
                 player.add_card(card)
-                self.card_board.remove_card_by_number_then_add_new_card(card.number)
-                msg = message_helper.pack_player_get_noble(player.player_id, card)
+                self.card_board.remove_card_by_number_then_add_new_card(
+                    card.number)
+                msg = message_helper.pack_player_get_noble(
+                    player.player_id, card)
                 logging.info("Player {} get noble card {}".format(
                     player.player_id, card.number))
                 self.boardcast_msg(msg)
@@ -591,7 +594,8 @@ class GameRoom:
 
         return new_turn
 
-    def check_fold_unknown_card_legal(self, player: Player, card_number) -> bool:
+    def check_fold_unknown_card_legal(self, player: Player,
+                                      card_number) -> bool:
         if len(player.fold_cards) >= 3:
             logging.info(
                 "fold card illegal, player already have {} fold cards".format(
@@ -601,7 +605,7 @@ class GameRoom:
         return card_number in [10001, 10002, 10003]
 
     def try_fold_card_unknown(self, player: Player, operation_info,
-                                   body) -> bool:
+                              body) -> bool:
         card_number = operation_info[0]["card_number"]
         card_level = card_number - 10000
         legal = self.check_fold_unknown_card_legal(player, card_number)
@@ -634,7 +638,7 @@ class GameRoom:
         real_new_card_msg = message_helper.pack_player_operation(new_body)
 
         self.boardcast_diffrent_msg(new_card_msg, real_new_card_msg, player,
-                                  API_ID.NEW_CARD)
+                                    API_ID.NEW_CARD)
 
         return True
 
@@ -648,7 +652,8 @@ class GameRoom:
             raise ClientDisconnect() from e
 
         if len(header_data) < HEADER_LENGTH:
-            logging.error("header data length less than {}".format(HEADER_LENGTH))
+            logging.error(
+                "header data length less than {}".format(HEADER_LENGTH))
             client_socket.remove(client_sock)
             client_sock.close()
 
@@ -656,7 +661,8 @@ class GameRoom:
 
         header = unpack_header(header_data)
         msg_body_len = header.msg_len - HEADER_LENGTH
-        logging.debug("Receive new msg, api id {}, msg length {}".format(header.api_id, header.msg_len))
+        logging.debug("Receive new msg, api id {}, msg length {}".format(
+            header.api_id, header.msg_len))
         body = None
         if msg_body_len > 0:
             body_data = client_sock.recv(msg_body_len)
