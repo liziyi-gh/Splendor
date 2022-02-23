@@ -14,7 +14,7 @@ GAME_ROOM_LIST = []
 
 
 # FIXME may be thread-unsafe but can not use func_helper.thread_safe
-def getCurrentGameroom() -> GameRoom:
+def get_current_gameroom() -> GameRoom:
     # FIXME: cause memory leak
     # gabage collection
     global GAME_ROOM_LIST
@@ -32,7 +32,7 @@ def getCurrentGameroom() -> GameRoom:
         else:
             return tmp_room
 
-def startListen():
+def start_listen():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind(SERVER_ADDRESS)
     sock.listen()
@@ -41,8 +41,8 @@ def startListen():
         client_sock, addr = sock.accept()
         client_socket.append(client_sock)
         logging.info("New socket connect")
-        current_game_room = getCurrentGameroom()
-        t = threading.Thread(target=current_game_room.handleClient,
+        current_game_room = get_current_gameroom()
+        t = threading.Thread(target=current_game_room.handle_client,
                              args=(client_sock, addr))
         t.setDaemon(False)
         t.start()
@@ -62,7 +62,7 @@ def init_log():
 
 def start():
     init_log()
-    t = threading.Thread(target=startListen)
+    t = threading.Thread(target=start_listen)
     t.setDaemon(True)
     t.start()
     while True:

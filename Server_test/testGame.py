@@ -16,7 +16,7 @@ def test_packHeader1():
     expected_header = struct.pack(HEADER_FORMAT, api_id, player_id, HEADER_LENGTH+body_len, reserve)
 
     # When
-    header = message_helper.packHeader(player_id, api_id, body_len)
+    header = message_helper.pack_header(player_id, api_id, body_len)
 
     # Then
     assert(header == expected_header)
@@ -30,7 +30,7 @@ def test_packHeader2():
 
     # When
     with pytest.raises(struct.error):
-        _ = message_helper.packHeader(player_id, api_id, body_len)
+        _ = message_helper.pack_header(player_id, api_id, body_len)
 
     # Then
 
@@ -45,7 +45,7 @@ def test_unpackHeader():
     header_data = struct.pack(HEADER_FORMAT, api_id, player_id, HEADER_LENGTH+body_len, reserve)
 
     # When
-    header = message_helper.unpackHeader(header_data)
+    header = message_helper.unpack_header(header_data)
 
     # Then
     assert(isinstance(header, Header))

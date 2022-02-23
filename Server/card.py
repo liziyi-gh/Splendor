@@ -12,8 +12,8 @@ class Card:
 
     @classmethod
     def createFromJson(cls, j_dict):
-        # TODO: refactor this
         card_type = j_dict["card_type"]
+
         if card_type == CardType.NOBLE:
             return cls(card_type,
                        j_dict["number"],

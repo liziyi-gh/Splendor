@@ -41,7 +41,7 @@ class Player:
         # FIXME: method will in tmp?
         return json.dumps(tmp)
 
-    def sendMsg(self, msg):
+    def send_msg(self, msg) -> None:
         self.sock.send(msg)
         header_data = struct.unpack(HEADER_FORMAT, msg[0:HEADER_LENGTH])
         logging.debug("Send msg to player {}, api {}, body is".format(
@@ -51,11 +51,11 @@ class Player:
             body = json.loads(body_data.decode())
             logging.debug(body)
 
-    def setReady(self):
+    def set_ready(self):
         logging.info("Player {} ready".format(self.player_id))
         self.ready = True
 
-    def addCard(self, card: Card):
+    def add_card(self, card: Card) -> None:
         if card.level == 0:
             # Noble card
             self.points += card.points
@@ -71,12 +71,12 @@ class Player:
         logging.info("Player {} got card {}".format(self.player_id,
                                                     card.number))
 
-    def addFoldCard(self, card: Card):
+    def add_fold_card(self, card: Card) -> None:
         self.fold_cards.append(card)
         logging.info("Player {} fold card {}".format(self.player_id,
                                                      card.number))
 
-    def checkAvailbaleNobleCard(self, card: Card) -> bool:
+    def check_availbale_noble_card(self, card: Card) -> bool:
         for gemstone in card.chips.keys():
             gem_numbers = getattr(self, gemstone)
             if gem_numbers < card.chips[gemstone]:
@@ -84,14 +84,14 @@ class Player:
 
         return True
 
-    def getAllChipsNumber(self) -> int:
+    def get_all_chips_number(self) -> int:
         ans = 0
         for _, v in self.chips.items():
             ans += v
 
         return ans
 
-    def cardInFold(self, card_number):
+    def card_in_fold(self, card_number) -> bool:
         for card in self.fold_cards:
             if card.number == card_number:
                 logging.debug(
@@ -101,8 +101,8 @@ class Player:
 
         return False
 
-    def getCardInFoldCards(self, card_number) -> Card:
-        legal = self.cardInFold(card_number)
+    def get_card_in_fold_cards(self, card_number) -> Card:
+        legal = self.card_in_fold(card_number)
         if not legal:
             logging.error("card {} is not in player {} fold cards".format(
                 card_number, self.player_id))
@@ -112,8 +112,6 @@ class Player:
 
         return None
 
-    def getGemstoneNumber(self, gemstone_str):
-        # replace getattr for search purpose
-        tmp = getattr(self, gemstone_str)
-
-        return tmp
+    def get_gemstone_number(self, gemstone_str) -> int:
+        # replace getattr just for search purpose
+        return getattr(self, gemstone_str)
