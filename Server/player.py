@@ -65,6 +65,7 @@ class Player:
                 self.fold_cards.remove(card)
 
             setattr(self, card.gem_type, getattr(self, card.gem_type) + 1)
+            self.points += card.points
 
         self.cards.append(card)
         logging.info("Player {} got card {}".format(self.player_id,
