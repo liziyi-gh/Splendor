@@ -119,7 +119,7 @@ namespace Transmission
 
                     case API_ID.WINNER:
                         Shutdown();
-                        //
+                        GameManager.GetWinner(head_msg);
                         break;
 
                     default:

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using MsgStruct;
 using Transmission;
 using Gems;
@@ -25,6 +26,7 @@ public enum State
     waiting,
     choosingNoble,
     discardingGems,
+    endGame,
 }
 
 public class GameManager : MonoBehaviour
@@ -127,6 +129,9 @@ public class GameManager : MonoBehaviour
                         break;
                     case "NewTurn":
                         PlayerNewTurn(toDoList[toDo].player_id);
+                        break;
+                    case "GG":
+                        EndGame(toDoList[toDo].player_id);
                         break;
                 }
             }
@@ -239,6 +244,10 @@ public class GameManager : MonoBehaviour
                     sendMsg.gems[gems[i]] = int.Parse(money.GetChild(i).GetChild(1).GetChild(1).GetComponent<Text>().text);
                 Client.Send(sendMsg);
                 break;
+
+            case State.endGame:
+                SceneManager.LoadScene(0);
+                break;
         }
     }
 
@@ -330,6 +339,8 @@ public class GameManager : MonoBehaviour
         LoadGameRoomInfomation(true);
     }
 
+
+    //筹码动画；
     IEnumerator TransGems(Msgs msgs)
     {
         bool isGettingGems = true;
@@ -352,6 +363,7 @@ public class GameManager : MonoBehaviour
         }        
     }
 
+    //卡片动画；
     void TransCard(Msgs msgs)
     {
         GameObject cardObject = ObjectPool.Instance.GetObject(gemPrefab);
@@ -397,6 +409,7 @@ public class GameManager : MonoBehaviour
         return null;
     }
 
+    //选择贵族牌；
     public void ChooseNoble(Msgs msgs)
     {
         if (msgs.nobles_id.Count == 1)
@@ -426,12 +439,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //弃置筹码；
     public void Discard()
     {
         promptText.color = Color.white;
         promptText.text = "❌持有筹码数最多为10❌";
         state = State.discardingGems;
     }
+
+    //决出胜负；
+    public void EndGame(ulong winnerID)
+    {
+        promptText.text = winnerID == playerID ? "你赢了!" : "太可惜了…";
+        promptText.text += "点击确定按钮开启下一局~";
+        promptText.color = Color.white;
+        state = State.endGame;
+    }
+
+    //———————————————分割线—————————————————
+
 
     //获得自己玩家ID和其他玩家ID；
     public static void GetPlayerID(Msgs msgs)
@@ -487,6 +513,14 @@ public class GameManager : MonoBehaviour
     {
         current.toDoList.Add("DiscardGems", new Msgs());
     }
+
+    public static void GetWinner(Msgs msgs)
+    {
+        current.toDoList.Add("GG", msgs);
+    }
+
+    //———————————————分割线—————————————————
+
 
     public void LoadGameRoomInfomation(bool dontLoadNoble=false)
     {
