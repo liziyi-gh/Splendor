@@ -24,8 +24,8 @@ namespace Transmission
 
         public static void Connect()
         {
-            string host = "127.0.0.1";
-            //string host = "175.178.115.8";
+            //string host = "127.0.0.1";
+            string host = "175.178.115.8";
             int port = 13204;
 
             IPAddress ip = IPAddress.Parse(host);
