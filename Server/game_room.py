@@ -370,6 +370,7 @@ class GameRoom:
         if self.check_game_stop():
             winner_id = self.find_winner()
             msg = message_helper.pack_winner(winner_id)
+            logging.info("player {} win".format(msg, API_ID.WINNER))
             self.boardcastMsg(msg)
 
             return
@@ -393,7 +394,8 @@ class GameRoom:
         if self.check_game_stop():
             winner_id = self.find_winner()
             msg = message_helper.pack_winner(winner_id)
-            self.boardcastMsg(msg)
+            logging.info("player {} win".format(msg))
+            self.boardcastMsg(msg, API_ID.WINNER)
 
             return
 
