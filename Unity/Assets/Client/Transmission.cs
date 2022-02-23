@@ -117,6 +117,10 @@ namespace Transmission
                         GameManager.DiscardGems();
                         break;
 
+                    case API_ID.WINNER:
+                        //
+                        break;
+
                     default:
                         break;
                 }
