@@ -54,6 +54,9 @@ public class Stone : MonoBehaviour, IPointerClickHandler
 
             //状态切换为【拿筹码中】
             gameManeger.state=State.takingMoney;
+
+            //播放音效
+            AudioManager.PlayPickGemAudio();
         }
 
         //右键把拿的放回去
