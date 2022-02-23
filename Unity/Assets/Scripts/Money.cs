@@ -32,6 +32,9 @@ public class Money : MonoBehaviour, IPointerClickHandler
             holdingText.color = Color.red;
             takingText.text = (int.Parse(takingText.text) + 1).ToString();
             takingText.color = Color.yellow;
+
+            //播放音效
+            AudioManager.PlayPickGemAudio();
         }
 
         //右键减码
