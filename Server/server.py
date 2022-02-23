@@ -7,7 +7,6 @@ from Server.constants import HEADER_LENGTH, SERVER_ADDRESS
 from Server.game_room import GameRoom
 from Server.message_helper import unpackHeader, unpackBody
 from Server.api_id import API_ID
-from Server.func_helper import thread_safe
 
 ALL_CLIENT_SOCK = []
 ALL_CLIENT_SOCK_LOCK = threading.Lock()
@@ -16,7 +15,7 @@ FIRST_TIME_LOCK = threading.Lock()
 GAME_ROOM_LIST = []
 
 
-@thread_safe
+# FIXME may be thread-unsafe but can not use func_helper.thread_safe
 def getCurrentGameroom() -> GameRoom:
     # FIXME: cause memory leak
     # gabage collection
@@ -24,6 +23,7 @@ def getCurrentGameroom() -> GameRoom:
     if GAME_ROOM_LIST == []:
         new_game_room = GameRoom()
         GAME_ROOM_LIST.append(new_game_room)
+        logging.info("Create new room!")
         return new_game_room
     else:
         tmp_room = GAME_ROOM_LIST[-1]
