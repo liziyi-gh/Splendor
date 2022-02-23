@@ -79,8 +79,6 @@ namespace Logger
                     JObject jsonMsg = JObject.Parse(body_msg);
                     foreach (var item in jsonMsg.Properties())
                         log.WriteLine("    "+item);
-                    //log.WriteLine("    "+body_msg);
-
                 }
             }
         }
@@ -99,8 +97,7 @@ namespace Logger
 
         public static void LogClose()
         {
-            if(log!=null)
-                log.Close();
+            if (log != null) log.Close();
         }
     }
 }
