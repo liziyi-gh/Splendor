@@ -389,9 +389,6 @@ class GameRoom:
         card = self.card_board.get_card_by_number(card_number)
 
         if not player.check_availbale_noble_card(card):
-            return False
-
-        if not player.check_availbale_noble_card(card):
             self.player_operation_invalid(player)
             return False
 
