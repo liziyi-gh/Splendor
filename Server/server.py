@@ -91,7 +91,7 @@ def startListen():
             ALL_CLIENT_SOCK.append(client_sock)
         logging.info("New socket connect")
         current_game_room = getCurrentGameroom()
-        t = threading.Thread(target=handleClient,
+        t = threading.Thread(target=current_game_room.handleClient,
                              args=(current_game_room, client_sock, addr))
         t.setDaemon(False)
         t.start()
