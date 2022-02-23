@@ -1,4 +1,4 @@
 while true; do
     echo "new server"
-    python startServer.py
+    python3 startServer.py
 done
