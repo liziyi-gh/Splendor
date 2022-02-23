@@ -7,11 +7,16 @@ import logging
 from Server import message_helper
 from Server.api_id import API_ID
 from Server.gemstone import Gemstone
-from Server.constants import Header
+from Server.constants import Header, HEADER_LENGTH
 from Server.player import Player
 from Server.operation import Operation
 from Server.card_board import CardBoard
 from Server.func_helper import thread_safe
+from Server.message_helper import unpackHeader, unpackBody
+from Server import client_socket
+
+class ClientDisconnect(RuntimeError):
+    pass
 
 
 class GameRoom:
@@ -78,9 +83,13 @@ class GameRoom:
 
         logging.error("Could not allocated new player ID")
 
+        return -1
+
     @thread_safe
     def addPlayer(self, sock: socket.socket):
         new_player_id = self.newPlayerID()
+        if new_player_id < 0:
+            return False
         new_player = Player(sock, new_player_id)
         self.players.append(new_player)
         self.card_board.addPlayer()
@@ -566,3 +575,56 @@ class GameRoom:
                                   API_ID.NEW_CARD)
 
         return True
+
+    def receiveMsg(self, client_sock: socket.socket):
+        try:
+            header_data = client_sock.recv(HEADER_LENGTH)
+        except ConnectionResetError as e:
+            logging.info("socket {} reset connection".format(client_sock))
+            client_sock.close()
+
+            raise ClientDisconnect() from e
+
+        if len(header_data) < HEADER_LENGTH:
+            logging.error("header data length less than {}".
+                          format(HEADER_LENGTH))
+            client_socket.remove(client_sock)
+            client_sock.close()
+
+            raise ClientDisconnect()
+
+        header = unpackHeader(header_data)
+        msg_body_len = header.msg_len - HEADER_LENGTH
+        logging.debug("Receive new msg, api id {}, msg length {}".
+                      format(header.api_id, header.msg_len))
+        body = None
+        if msg_body_len > 0:
+            body_data = client_sock.recv(msg_body_len)
+            body = unpackBody(body_data)
+            logging.debug("body is {}".format(body_data.decode()))
+
+        return header, body
+
+    def handleClient(self, client_sock: socket.socket, addr):
+        logging.info("Start handling new socket, addr is {}".format(addr))
+        while True:
+            try:
+                header, body = self.receiveMsg(client_sock)
+            except ConnectionResetError:
+                return
+            # TODO: check player_id match socket?
+            # TODO: what if socket change?
+            if header.api_id == API_ID.INIT:
+                self.addPlayer(client_sock)
+
+            if header.api_id == API_ID.PLAYER_READY:
+                self.playerReady(header)
+
+            if header.api_id == API_ID.PLAYER_OPERATION:
+                self.doPlayerOperation(header, body)
+
+            if header.api_id == API_ID.PLAYER_GET_NOBLE:
+                self.doPlayerGetNoble(header, body)
+
+            logging.debug("current game room info is:")
+            logging.debug(str(self))
