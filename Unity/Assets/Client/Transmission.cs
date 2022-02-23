@@ -118,6 +118,7 @@ namespace Transmission
                         break;
 
                     case API_ID.WINNER:
+                        Shutdown();
                         //
                         break;
 
