@@ -199,7 +199,7 @@ namespace GameRooms
             }
         }
 
-        public static void UpdatePLAYER_GET_NOBLE(Msgs bosy_msg)
+        public static void UpdatePLAYER_GET_NOBLE(Msgs body_msg)
         {
             if (body_msg.nobles_id.Count() != 1) return;
 
