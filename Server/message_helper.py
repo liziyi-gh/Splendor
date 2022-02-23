@@ -94,7 +94,7 @@ def packPlayerGetNoble(player_id: int, card: Card):
         "noble_number": [card.number],
     }
 
-    return packUniversial(tmp_dict, API_ID.PLAYER_GET_NOBLE, player_id,)
+    return packUniversial(tmp_dict, API_ID.PLAYER_GET_NOBLE, player_id)
 
 
 def packAskPlayerGetNoble(player_id: int, cards: List[Card]):
@@ -106,7 +106,7 @@ def packAskPlayerGetNoble(player_id: int, cards: List[Card]):
     return packUniversial(tmp_dict, API_ID.PLAYER_GET_NOBLE, player_id)
 
 
-def packNewCard(player_id : int, card_number : int):
+def packNewCard(player_id: int, card_number: int):
     tmp_dict = {
         "card_number": card_number,
     }
@@ -114,9 +114,11 @@ def packNewCard(player_id : int, card_number : int):
     return packUniversial(tmp_dict, API_ID.NEW_CARD, player_id)
 
 
-def packDiscardGems(player_id : int, number_to_discard : int):
-    tmp_dict = {
-        "number_to_discard": number_to_discard
-    }
+def packDiscardGems(player_id: int, number_to_discard: int):
+    tmp_dict = {"number_to_discard": number_to_discard}
 
     return packUniversial(tmp_dict, API_ID.DISCARD_GEMS, player_id)
+
+
+def pack_winner(player_id: int):
+    return packHeader(API_ID.WINNER, player_id)
