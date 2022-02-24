@@ -4,7 +4,7 @@ import socket
 import random
 import logging
 
-from Server import message_helper
+from Server import allocated_id, message_helper
 from Server.api_id import API_ID
 from Server.gemstone import Gemstone
 from Server.constants import Header, HEADER_LENGTH
@@ -25,7 +25,6 @@ class GameRoom:
     def __init__(self) -> None:
         self.players = []
         self.allocated_id = []
-        self.allow_player_id = (1, 2, 3, 4)
         self.card_board = CardBoard()
         self.chips = {
             Gemstone.GOLDEN: 5,
@@ -107,14 +106,14 @@ class GameRoom:
 
     @thread_safe
     def new_player_ID(self) -> int:
-        for i in self.allow_player_id:
-            if i not in self.allocated_id:
-                self.allocated_id.append(i)
-                return i
+        tmp = allocated_id.new_player_id()
 
-        logging.error("Could not allocated new player ID")
+        if tmp == -1:
+            logging.error("Could not allocated new player ID")
 
-        return -1
+        self.allocated_id.append(tmp)
+
+        return tmp
 
     @thread_safe
     def add_player(self, sock: socket.socket):
