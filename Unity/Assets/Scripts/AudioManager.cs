@@ -17,43 +17,42 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-             
+
     }
 
-    
+
     private void Awake()
     {
         if (current != null)
-        {                        
+        {
             Destroy(gameObject);
             return;
         }
-            
+
         current = this;
         DontDestroyOnLoad(this);
 
         bgmSource = gameObject.AddComponent<AudioSource>();
         pickGemSource = gameObject.AddComponent<AudioSource>();
 
-        path = Application.dataPath;
-        int i = path.LastIndexOf("/");
-        path = path.Substring(0, i);
-        path += "/Audio/BGM.mp3";
-        StartCoroutine(Load(path));
+        path = "./Audio";
+        Directory.CreateDirectory(path);
+        var files = Directory.GetFiles(path);
+        if (files.Length > 0) StartCoroutine(Load(files[0]));
 
-        
-        
+
+
     }
 
     public static void PlayPickGemAudio()
     {
         current.pickGemSource.clip = current.pickGemAudio;
         current.pickGemSource.volume = 0.45f;
-        current.pickGemSource.Play();        
+        current.pickGemSource.Play();
     }
 
     public static void PlayBgmAudio()
-    {        
+    {
         current.bgmSource.volume = 0.15f;
         current.bgmSource.Play();
         current.bgmSource.loop = true;
@@ -67,10 +66,10 @@ public class AudioManager : MonoBehaviour
             {
                 if (audio.isPlaying) audio.Pause();
                 else audio.Play();
-            }            
+            }
         }
     }
-    
+
     private IEnumerator Load(string path)
     {
         if (File.Exists(path))
@@ -88,7 +87,7 @@ public class AudioManager : MonoBehaviour
             else
             {
                 print(www.error);
-            }            
+            }
         }
     }
 }
