@@ -60,13 +60,10 @@ public class AudioManager : MonoBehaviour
 
     public static void audioButton()
     {
-        foreach(AudioSource audio in current.GetComponents<AudioSource>())
+        if (current.bgmSource.clip)
         {
-            if (audio.clip)
-            {
-                if (audio.isPlaying) audio.Pause();
-                else audio.Play();
-            }
+            if (current.bgmSource.isPlaying) current.bgmSource.Pause();
+            else current.bgmSource.Play();
         }
     }
 

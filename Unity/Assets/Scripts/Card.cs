@@ -20,6 +20,12 @@ public class Card : MonoBehaviour, IPointerClickHandler
         Gold = GameObject.Find("YellowStone");
     }
 
+    private void Update()
+    {
+        if(highLight.activeSelf && isCoverCard && transform==highLight.transform.parent)
+            GetComponent<Image>().sprite = GetComponent<Recover>().card;
+    }
+
     public void OnPointerClick(PointerEventData pointerEventData)
     {
         //初始状态、买卡状态、盖卡状态时可进行【买卡/盖卡】操作；
@@ -38,6 +44,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
             //高光显示选中的卡；
             HighlightTheCard(Color.green);
+
+            //播放音效
+            AudioManager.PlayPickGemAudio();
 
             //reset黄金筹码池UI；
             Gold.GetComponent<Stone>().resetAll();
@@ -59,6 +68,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
             //高光显示选中的卡；
             HighlightTheCard(Color.red);
+
+            //播放音效
+            AudioManager.PlayPickGemAudio();
 
             //改变黄金数量显示；
             if (gameManager.state != State.flipingCard)
