@@ -518,7 +518,7 @@ class GameRoom:
             player.chips[Gemstone.GOLDEN] += 1
             self.chips[Gemstone.GOLDEN] -= 1
         else:
-            golden_dict = {{"golden_number": 0}}
+            golden_dict = {"golden_number": 0}
 
         new_body["operation_info"].append(golden_dict)
         msg = message_helper.pack_player_operation(new_body)
