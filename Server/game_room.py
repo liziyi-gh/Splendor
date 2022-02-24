@@ -133,7 +133,7 @@ class GameRoom:
     @thread_safe
     def boardcast_msg(self, msg, api_id=None):
         for player in self.players:
-            player.sendMsg(msg)
+            player.send_msg(msg)
 
         logging.debug("Finish boardcast msg, api id {}".format(api_id))
 
@@ -145,7 +145,7 @@ class GameRoom:
                                api_id=None):
         for player in self.players:
             if player is not special_player:
-                player.sendMsg(msg)
+                player.send_msg(msg)
 
         special_player.send_msg(special_msg)
         logging.debug("Finish boardcast msg, api id {}".format(api_id))
