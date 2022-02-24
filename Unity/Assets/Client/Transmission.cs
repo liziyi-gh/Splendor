@@ -164,6 +164,9 @@ namespace Transmission
         public static void Shutdown()
         {
             socket.Close();
+            Logging.LogAny("--------------------------------------");
+            Logging.LogAny("Client Closed");
+            Logging.LogAny("--------------------------------------");
             Logging.LogClose();
         }
     }
