@@ -13,7 +13,9 @@ from Server.operation import Operation
 from Server.card_board import CardBoard
 from Server.func_helper import thread_safe
 from Server.message_helper import unpack_header, unpack_body
-from Server import client_socket
+from Server.global_vars import sel
+
+GAME_ROOM_LIST = []
 
 
 class ClientDisconnect(RuntimeError):
@@ -91,12 +93,10 @@ class GameRoom:
 
         return winner.player_id
 
-    @thread_safe
     def generate_player_sequence(self):
-        random.shuffle(self.allocated_id)
-        self.players_sequence = self.allocated_id
+        random.shuffle(self.players)
+        self.players_sequence = [tmp.player_id for tmp in self.players]
 
-    @thread_safe
     def find_player_by_ID(self, player_id) -> Player:
         for player in self.players:
             if player.player_id == player_id:
@@ -104,7 +104,11 @@ class GameRoom:
 
         logging.error("Could not find player by ID {}".format(player_id))
 
-    @thread_safe
+    def find_player_by_sock(self, sock):
+        for player in self.players:
+            if player.sock == sock:
+                return player
+
     def new_player_ID(self) -> int:
         tmp = allocated_id.new_player_id()
 
@@ -115,7 +119,6 @@ class GameRoom:
 
         return tmp
 
-    @thread_safe
     def add_player(self, sock: socket.socket):
         new_player_id = self.new_player_ID()
         if new_player_id < 0:
@@ -129,14 +132,12 @@ class GameRoom:
         new_player_msg = message_helper.pack_new_player(new_player_id)
         self.boardcast_msg(new_player_msg, API_ID.NEW_PLAYER)
 
-    @thread_safe
     def boardcast_msg(self, msg, api_id=None):
         for player in self.players:
             player.send_msg(msg)
 
-        logging.debug("Finish boardcast msg, api id {}".format(api_id))
+        logging.debug(f"Finish boardcast msg, api id {api_id}")
 
-    @thread_safe
     def boardcast_diffrent_msg(self,
                                msg,
                                special_msg,
@@ -147,9 +148,8 @@ class GameRoom:
                 player.send_msg(msg)
 
         special_player.send_msg(special_msg)
-        logging.debug("Finish boardcast msg, api id {}".format(api_id))
+        logging.debug(f"Finish boardcast msg, api id {api_id}")
 
-    @thread_safe
     def player_ready(self, header: Header):
         player_id = header.player_id
         player = self.find_player_by_ID(player_id)
@@ -162,7 +162,6 @@ class GameRoom:
                     return
             self.start_game()
 
-    @thread_safe
     def check_get_chips_legal(self, operation_info, player: Player) -> bool:
         player_chips_number = player.get_all_chips_number()
         room_chips_number = self.get_all_chips_number()
@@ -207,7 +206,6 @@ class GameRoom:
 
         return True
 
-    @thread_safe
     def check_discard_gems_legal(self, operation_info, player: Player) -> bool:
         discard_numbers = 0
         for k, v in operation_info.items():
@@ -220,7 +218,6 @@ class GameRoom:
 
         return True
 
-    @thread_safe
     def check_buy_card_legal(self, operation_info, player: Player) -> bool:
         card_number = operation_info[0]["card_number"]
 
@@ -240,7 +237,7 @@ class GameRoom:
         for k, needed_chip in card.chips.items():
             op_chips = 0
             player_gems = player.get_gemstone_number(k)
-            logging.debug("player {} number is {}".format(k, player_gems))
+            logging.debug(f"player {k} number is {player_gems}")
             try:
                 op_chips = operation_chips_dict[k]
             except KeyError:
@@ -250,23 +247,23 @@ class GameRoom:
                 return False
 
             if needed_chip == 0 and op_chips > 0:
-                logging.info("extra {} buying card".format(k))
+                logging.info(f"extra {k} buying card")
                 return False
 
             if needed_chip > 0:
                 if op_chips > 0 and needed_chip < op_chips + player_gems:
-                    logging.info("too much {} buying card".format(k))
+                    logging.info(f"too much {k} buying card")
                     return False
 
                 if op_chips == 0 and needed_chip <= player_gems:
                     continue
 
-                logging.debug("need {} number is {}".format(k, needed_chip))
+                logging.debug(f"need {k} number is {needed_chip}")
                 tmp = needed_chip - op_chips - player_gems
                 if tmp > 0:
                     need_golden_number = need_golden_number + tmp
 
-        logging.debug("need golden number is {}".format(need_golden_number))
+        logging.debug(f"need golden number is {need_golden_number}")
 
         try:
             if need_golden_number < operation_chips_dict[Gemstone.GOLDEN]:
@@ -288,30 +285,23 @@ class GameRoom:
 
         return True
 
-    @thread_safe
     def check_fold_card_legal(self, operation_info, player: Player) -> bool:
         if len(player.fold_cards) >= 3:
-            logging.info(
-                "fold card illegal, player already have {} fold cards".format(
-                    len(player.fold_cards)))
+            logging.info(f"fold card illegal, player already have {len(player.fold_cards)} fold cards")
             return False
 
         card_number = operation_info[0]["card_number"]
         if self.card_board.get_card_by_number(card_number) is None:
-            logging.info(
-                "fold card illegal, can not find card {} in card board".format(
-                    card_number))
+            logging.info(f"fold card illegal, can not find card {card_number} in card board")
             return False
 
         return True
 
-    @thread_safe
     def player_operation_invalid(self, player: Player):
-        logging.debug("Player {} Operation invalid".format(player.player_id))
+        logging.debug(f"Player {player.player_id} Operation invalid")
         msg = message_helper.pack_player_operation_invalid(player.player_id)
         player.send_msg(msg)
 
-    @thread_safe
     def do_player_operation(self, header: Header, body):
         player = self.find_player_by_ID(header.player_id)
         operation_type = body["operation_type"]
@@ -320,13 +310,11 @@ class GameRoom:
 
         if player.player_id != self.current_player_id:
             self.player_operation_invalid(player)
-            logging.error("Current turn is palyer {}".format(
-                self.current_player_id))
+            logging.error(f"Current turn is palyer {self.current_player_id}")
             return
 
         if self.current_expected_operation is not None and operation_type != self.current_expected_operation:
-            logging.debug("Expecting operation is {}".format(
-                self.current_expected_operation))
+            logging.debug(f"Expecting operation is {self.current_expected_operation}")
             self.player_operation_invalid(player)
             return
 
@@ -381,7 +369,6 @@ class GameRoom:
 
         self.start_new_turn()
 
-    @thread_safe
     def do_player_get_noble(self, header: Header, body):
         player = self.find_player_by_ID(header.player_id)
         card_number = body["noble_number"][0]
@@ -406,12 +393,11 @@ class GameRoom:
 
         self.start_new_turn()
 
-    @thread_safe
     def start_game(self):
         self.generate_player_sequence()
         self.current_player_id = self.players_sequence[0]
         self.next_player_id = self.players_sequence[0]
-        players_number = len(self.allocated_id)
+        players_number = len(self.players)
         chips_num_dict = {2: 4, 3: 5, 4: 7}
         chips_num = chips_num_dict[players_number]
         for key in self.chips.keys():
@@ -427,7 +413,6 @@ class GameRoom:
         logging.info("Game start!")
         self.start_new_turn()
 
-    @thread_safe
     def start_new_turn(self):
         self.current_player_id = self.next_player_id
         msg = message_helper.pack_new_turn(self.next_player_id)
@@ -439,7 +424,6 @@ class GameRoom:
         idx = 0 if idx == len(self.players_sequence) - 1 else idx + 1
         self.next_player_id = self.players_sequence[idx]
 
-    @thread_safe
     def get_all_chips_number(self) -> int:
         ans = 0
         for _, v in self.chips.items():
@@ -448,7 +432,6 @@ class GameRoom:
         ans -= self.chips[Gemstone.GOLDEN]
         return ans
 
-    @thread_safe
     def get_chips_left_type(self) -> int:
         ans = 0
         for k, v in self.chips.items():
@@ -645,16 +628,12 @@ class GameRoom:
         try:
             header_data = client_sock.recv(HEADER_LENGTH)
         except ConnectionResetError as e:
-            logging.info("socket {} reset connection".format(client_sock))
-            client_sock.close()
+            logging.info(f"socket {client_sock} reset connection")
 
             raise ClientDisconnect() from e
 
         if len(header_data) < HEADER_LENGTH:
-            logging.error(
-                "header data length less than {}".format(HEADER_LENGTH))
-            client_socket.remove(client_sock)
-            client_sock.close()
+            logging.error(f"header data length less than {HEADER_LENGTH}")
 
             raise ClientDisconnect()
 
@@ -670,26 +649,52 @@ class GameRoom:
 
         return header, body
 
-    def handle_client(self, client_sock: socket.socket, addr):
-        logging.info("Start handling new socket, addr is {}".format(addr))
-        while True:
-            try:
-                header, body = self.receive_msg(client_sock)
-            except ConnectionResetError:
-                return
-            # TODO: check player_id match socket?
-            # TODO: what if socket change?
-            if header.api_id == API_ID.INIT:
-                self.add_player(client_sock)
+    def handle_client(self, client_sock: socket.socket, mask):
+        logging.info("Start handling new socket")
+        try:
+            header, body = self.receive_msg(client_sock)
+        except ClientDisconnect:
+            client_sock.close()
+            sel.unregister(client_sock)
+            tmp_player = self.find_player_by_sock(client_sock)
+            if not self.started:
+                if tmp_player is not None:
+                    self.players.remove(tmp_player)
+                    self.allocated_id.remove(tmp_player.player_id)
+            return
+        # TODO: check player_id match socket?
+        # TODO: what if socket change?
+        if header.api_id == API_ID.INIT:
+            self.add_player(client_sock)
 
-            if header.api_id == API_ID.PLAYER_READY:
-                self.player_ready(header)
+        if header.api_id == API_ID.PLAYER_READY:
+            self.player_ready(header)
 
-            if header.api_id == API_ID.PLAYER_OPERATION:
-                self.do_player_operation(header, body)
+        if header.api_id == API_ID.PLAYER_OPERATION:
+            self.do_player_operation(header, body)
 
-            if header.api_id == API_ID.PLAYER_GET_NOBLE:
-                self.do_player_get_noble(header, body)
+        if header.api_id == API_ID.PLAYER_GET_NOBLE:
+            self.do_player_get_noble(header, body)
 
-            logging.debug("current game room info is:")
-            logging.debug(str(self))
+        logging.debug("current game room info is:")
+        logging.debug(str(self))
+
+
+# FIXME may be thread-unsafe but can not use func_helper.thread_safe
+def get_current_gameroom() -> GameRoom:
+    # FIXME: cause memory leak
+    # gabage collection
+    global GAME_ROOM_LIST
+    if GAME_ROOM_LIST == []:
+        new_game_room = GameRoom()
+        GAME_ROOM_LIST.append(new_game_room)
+        logging.info("Create new room!")
+        return new_game_room
+    else:
+        tmp_room = GAME_ROOM_LIST[-1]
+        if tmp_room.started or len(tmp_room.allocated_id) >= 4:
+            new_game_room = GameRoom()
+            GAME_ROOM_LIST.append(new_game_room)
+            return new_game_room
+        else:
+            return tmp_room

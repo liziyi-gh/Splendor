@@ -2,6 +2,7 @@ import json
 import logging
 import socket
 import struct
+from Server import allocated_id
 
 from Server.constants import HEADER_FORMAT, HEADER_LENGTH
 from Server.gemstone import Gemstone
@@ -41,18 +42,20 @@ class Player:
         # FIXME: method will in tmp?
         return json.dumps(tmp)
 
+    def __del__(self):
+        allocated_id.remove_player_id(self.player_id)
+
     def send_msg(self, msg) -> None:
         self.sock.send(msg)
         header_data = struct.unpack(HEADER_FORMAT, msg[0:HEADER_LENGTH])
-        logging.debug("Send msg to player {}, api {}, body is".format(
-            self.player_id, header_data[0]))
+        logging.debug(f"Send msg to player {self.player_id}, api {header_data[0]}, body is")
         if header_data[2] > HEADER_LENGTH:
             body_data = msg[HEADER_LENGTH:]
             body = json.loads(body_data.decode())
             logging.debug(body)
 
     def set_ready(self):
-        logging.info("Player {} ready".format(self.player_id))
+        logging.info(f"Player {self.player_id} ready")
         self.ready = True
 
     def add_card(self, card: Card) -> None:
@@ -68,13 +71,11 @@ class Player:
             self.points += card.points
 
         self.cards.append(card)
-        logging.info("Player {} got card {}".format(self.player_id,
-                                                    card.number))
+        logging.info(f"Player {self.player_id} got card {card.number}")
 
     def add_fold_card(self, card: Card) -> None:
         self.fold_cards.append(card)
-        logging.info("Player {} fold card {}".format(self.player_id,
-                                                     card.number))
+        logging.info(f"Player {self.player_id} fold card {card.number}")
 
     def check_availbale_noble_card(self, card: Card) -> bool:
         for gemstone in card.chips.keys():
@@ -95,8 +96,7 @@ class Player:
         for card in self.fold_cards:
             if card.number == card_number:
                 logging.debug(
-                    "Find card in player {} fold card by number {}".format(
-                        self.player_id, card_number))
+                    f"Find card in player {self.player_id} fold card by number {card_number}")
                 return True
 
         return False
@@ -104,8 +104,7 @@ class Player:
     def get_card_in_fold_cards(self, card_number) -> Card:
         legal = self.card_in_fold(card_number)
         if not legal:
-            logging.error("card {} is not in player {} fold cards".format(
-                card_number, self.player_id))
+            logging.error(f"card {card_number} is not in player {self.player_id} fold cards")
         for card in self.fold_cards:
             if card.number == card_number:
                 return card

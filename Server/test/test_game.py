@@ -6,6 +6,7 @@ from Server.api_id import API_ID
 from Server.card_board import CardBoard
 from Server.card import Card
 from Server.constants import HEADER_FORMAT, HEADER_LENGTH, Header
+from Server.test.client_mocker import Client
 
 def test_packHeader1():
     # Given
@@ -33,6 +34,7 @@ def test_packHeader2():
         _ = message_helper.pack_header(player_id, api_id, body_len)
 
     # Then
+    pass
 
 
 
@@ -58,3 +60,27 @@ def test_unpackHeader():
 def test_GameRoom_init():
     # Given
     room = game_room.GameRoom()
+
+    # When
+    pass
+
+    # Then
+    pass
+
+
+# From here below is context-related test
+
+
+def test_client_init():
+    # Given
+    client_1 = Client()
+
+    # When
+    init_resp_header, init_resp_body = client_1.init_with_server()
+    resp_api_id = init_resp_header.api_id
+    player_id = init_resp_header.player_id
+    expected_player_id = 0
+
+    # Then
+    assert(resp_api_id == API_ID.INIT_RESP)
+    assert(player_id == expected_player_id)

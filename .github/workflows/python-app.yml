@@ -5,7 +5,7 @@ name: Python application
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, master_server_dev]
   pull_request:
     branches: [ master ]
 
@@ -33,4 +33,5 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest Server_test/testGame.py
+        python3 startServer.py &
+        pytest Server/test/test_game.py

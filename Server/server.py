@@ -1,54 +1,28 @@
 import socket
-import threading
 import logging
-from time import sleep
+import selectors
 
 from Server.constants import SERVER_ADDRESS
-from Server.game_room import GameRoom
-from Server import client_socket
+from Server.global_vars import sel
+from Server.game_room import get_current_gameroom
 
 
-FIRST_TIME = True
-FIRST_TIME_LOCK = threading.Lock()
-GAME_ROOM_LIST = []
+def handle_accept(server_sock, mask):
+    client_sock, _ = server_sock.accept()
+    client_sock.setblocking(False)
+    logging.info("New socket connect")
+    current_game_room = get_current_gameroom()
+    sel.register(client_sock, selectors.EVENT_READ, current_game_room.handle_client)
 
-
-# FIXME may be thread-unsafe but can not use func_helper.thread_safe
-def get_current_gameroom() -> GameRoom:
-    # FIXME: cause memory leak
-    # gabage collection
-    global GAME_ROOM_LIST
-    if GAME_ROOM_LIST == []:
-        new_game_room = GameRoom()
-        GAME_ROOM_LIST.append(new_game_room)
-        logging.info("Create new room!")
-        return new_game_room
-    else:
-        tmp_room = GAME_ROOM_LIST[-1]
-        if tmp_room.started or len(tmp_room.allocated_id) >= 4:
-            new_game_room = GameRoom()
-            GAME_ROOM_LIST.append(new_game_room)
-            return new_game_room
-        else:
-            return tmp_room
 
 def start_listen():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind(SERVER_ADDRESS)
-    sock.listen()
+    sock.setblocking(False)
+    sock.listen(100)
     logging.info("Server address is {}".format(SERVER_ADDRESS))
-    while True:
-        client_sock, addr = sock.accept()
-        client_socket.append(client_sock)
-        logging.info("New socket connect")
-        current_game_room = get_current_gameroom()
-        t = threading.Thread(target=current_game_room.handle_client,
-                             args=(client_sock, addr))
-        t.setDaemon(False)
-        t.start()
-        with FIRST_TIME_LOCK:
-            global FIRST_TIME
-            FIRST_TIME = False
+    sel.register(sock, selectors.EVENT_READ, handle_accept)
+
 
 
 def init_log():
@@ -62,12 +36,9 @@ def init_log():
 
 def start():
     init_log()
-    t = threading.Thread(target=start_listen)
-    t.setDaemon(True)
-    t.start()
+    start_listen()
     while True:
-        sleep(1)
-        with FIRST_TIME_LOCK:
-            if not FIRST_TIME:
-                if client_socket.length() == 0:
-                    return
+        events = sel.select()
+        for key, mask in events:
+            callback = key.data
+            callback(key.fileobj, mask)
