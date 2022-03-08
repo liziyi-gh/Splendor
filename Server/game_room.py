@@ -11,7 +11,6 @@ from Server.constants import Header, HEADER_LENGTH
 from Server.player import Player
 from Server.operation import Operation
 from Server.card_board import CardBoard
-from Server.func_helper import thread_safe
 from Server.message_helper import unpack_header, unpack_body
 from Server.global_vars import sel
 
@@ -417,8 +416,7 @@ class GameRoom:
         self.current_player_id = self.next_player_id
         msg = message_helper.pack_new_turn(self.next_player_id)
         self.boardcast_msg(msg)
-        logging.info("Start new turn with player {}".format(
-            self.next_player_id))
+        logging.info(f"Start new turn with player {self.next_player_id}")
 
         idx = self.players_sequence.index(self.next_player_id)
         idx = 0 if idx == len(self.players_sequence) - 1 else idx + 1
@@ -562,8 +560,7 @@ class GameRoom:
                     card.number)
                 msg = message_helper.pack_player_get_noble(
                     player.player_id, card)
-                logging.info("Player {} get noble card {}".format(
-                    player.player_id, card.number))
+                logging.info(f"Player {player.player_id} get noble card {card.number}")
                 self.boardcast_msg(msg)
 
             if len(available_cards) > 1:
@@ -645,7 +642,7 @@ class GameRoom:
         if msg_body_len > 0:
             body_data = client_sock.recv(msg_body_len)
             body = unpack_body(body_data)
-            logging.debug("body is {}".format(body_data.decode()))
+            logging.debug(f"body is {body_data.decode()}")
 
         return header, body
 
