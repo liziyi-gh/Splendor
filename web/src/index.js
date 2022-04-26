@@ -1,12 +1,16 @@
 import { render } from "react-dom";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 import "./index.css";
+import { GamePage } from "./GamePage.jsx";
 
 const rootElement = document.getElementById("root");
 render(
   <BrowserRouter>
-    <App />
+    <Routes>
+      <Route path="/" element={<App />} />
+      <Route path="gamepage" element={<GamePage />} />
+    </Routes>
   </BrowserRouter>,
   rootElement
 );

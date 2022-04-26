@@ -1,15 +1,16 @@
 import React from "react";
-import { Router, Route, Link } from "react-router";
-import { GamePage } from "./GamePage.jsx";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./login.css";
 
-export class LoginForm extends React.Component {
+class __LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = { username: "", password: "" };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.loginUrl = "/api/login.json";
   }
 
   handleChange(event) {
@@ -19,12 +20,16 @@ export class LoginForm extends React.Component {
   }
 
   handleSubmit(event) {
-    alert(
-      "提交的用户名:" +
-        this.state.username +
-        "\n" +
-        "提交的密码:" +
-        this.state.password
+    axios.get(this.loginUrl).then(
+      (res) => {
+        const loginFeedback = res.data["loginFeedback"];
+        if (loginFeedback === true) {
+          this.props.navigate("gamepage", { replace: true });
+        }
+      },
+      (res) => {
+        alert("login timeout, please ensure you connected to internet");
+      }
     );
     event.preventDefault();
   }
@@ -55,3 +60,11 @@ export class LoginForm extends React.Component {
     );
   }
 }
+
+function LoginForm(props) {
+  let navigate = useNavigate();
+
+  return <__LoginForm {...props} navigate={navigate} />;
+}
+
+export default LoginForm;

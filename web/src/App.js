@@ -1,4 +1,4 @@
-import { LoginForm } from "./login.jsx";
+import LoginForm from "./login.jsx";
 import "./App.css";
 
 function App() {
@@ -9,6 +9,12 @@ function App() {
       <header className="App-header">
         {title}
         <LoginForm />
+        <nav
+          style={{
+            borderBottom: "solid 1px",
+            paddingBottom: "1rem",
+          }}
+        ></nav>
       </header>
     </div>
   );
