@@ -10,7 +10,8 @@ class __LoginForm extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.loginUrl = "/api/login.json";
+    // this.loginUrl = "/api/login.json";
+    this.loginUrl = "http://127.0.0.1:8000/login/";
   }
 
   handleChange(event) {
@@ -20,15 +21,30 @@ class __LoginForm extends React.Component {
   }
 
   handleSubmit(event) {
-    axios.get(this.loginUrl).then(
+    axios.post(this.loginUrl).then(
       (res) => {
         const loginFeedback = res.data["loginFeedback"];
         if (loginFeedback === true) {
           this.props.navigate("gamepage", { replace: true });
         }
       },
-      (res) => {
-        alert("login timeout, please ensure you connected to internet");
+      (error) => {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
+        console.log(error.config);
       }
     );
     event.preventDefault();
