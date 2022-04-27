@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
+import { Button } from "@mui/material";
 
 class __LoginForm extends React.Component {
   constructor(props) {
@@ -9,7 +10,7 @@ class __LoginForm extends React.Component {
     this.state = { username: "", password: "" };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSignIn = this.handleSignIn.bind(this);
     // this.loginUrl = "/api/login.json";
     this.loginUrl = "http://127.0.0.1:8000/login/";
   }
@@ -20,39 +21,46 @@ class __LoginForm extends React.Component {
     this.setState({ [input_type]: event.target.value });
   }
 
-  handleSubmit(event) {
-    axios.post(this.loginUrl).then(
-      (res) => {
-        const loginFeedback = res.data["loginFeedback"];
-        if (loginFeedback === true) {
-          this.props.navigate("gamepage", { replace: true });
+  handleSignIn(event) {
+    axios
+      .post(this.loginUrl, {
+        username: this.state.username,
+        password: this.state.password,
+      })
+      .then(
+        (res) => {
+          const loginFeedback = res.data["loginFeedback"];
+          if (loginFeedback === true) {
+            this.props.navigate("gamepage", { replace: true });
+          }
+        },
+        (error) => {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+          console.log(error.config);
         }
-      },
-      (error) => {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
-        }
-        console.log(error.config);
-      }
-    );
+      );
     event.preventDefault();
   }
 
+  handleSignUp(event) {}
+
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSignIn}>
         <label>
           用户名:
           <input
@@ -70,7 +78,12 @@ class __LoginForm extends React.Component {
             onChange={this.handleChange}
           />
           <br />
-          <input className="Login-button-blue" type="submit" value="sign-in" />
+          <Button onClick={this.handleSignIn} variant="contained">
+            登录
+          </Button>
+          <Button onClick={this.handleSignUp} variant="outlined">
+            注册
+          </Button>
         </label>
       </form>
     );
